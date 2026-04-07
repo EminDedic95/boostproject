@@ -14,6 +14,7 @@ const VIDEOS = [
   { title: 'SWOT analiza za pocetnike', step: 'DIO IV', duration: 'Uskoro dostupno' },
   { title: 'Analiza trzista i konkurencije', step: 'DIO V', duration: 'Uskoro dostupno' },
   { title: 'Finansijske projekcije korak po korak', step: 'DIO IX', duration: 'Uskoro dostupno' },
+  { title: 'Socijalno preduzetnistvo', step: 'DIO X', duration: 'Uskoro dostupno' },
 ]
 
 export default function Resources() {
