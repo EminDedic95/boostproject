@@ -1,8 +1,23 @@
 'use client'
 import React, { useState } from 'react'
 
+const CANVAS_TIPS: Record<string, { what: string, example: string }> = {
+  'Key Partners': { what: 'Ko su vasi kljucni partneri i dobavljaci? Ko vam pomaze u poslovanju?', example: 'Npr: Lokalni dobavljaci brasna, prevoznicke kompanije, serviseri opreme' },
+  'Key Activities': { what: 'Koje aktivnosti su najvaznije za funkcionisanje vaseg biznisa?', example: 'Npr: Pecenje hljeba, dostava, upravljanje narudzbamaomima' },
+  'Value Proposition': { what: 'Kakvu vrijednost nudite kupcima? Koji problem rjesavate?', example: 'Npr: Svjez domaci hljeb dostavljan svaki dan, bez konzervansa' },
+  'Customer Relationships': { what: 'Kako gradite i odrzavate odnose sa kupcima?', example: 'Npr: Licni kontakt, loyalty kartica, redovne dostave' },
+  'Customer Segments': { what: 'Ko su vasi kupci? Za koga kreirate vrijednost?', example: 'Npr: Porodice u Mostaru, restorani, kafici, hoteli' },
+  'Key Resources': { what: 'Koji resursi su vam potrebni za poslovanje?', example: 'Npr: Pecnica, vozilo za dostavu, iskusni pekar, prostor' },
+  'Channels': { what: 'Kako dopirjete do kupaca i isporucujete vrijednost?', example: 'Npr: Vlastita prodavnica, dostava na adresu, trznica' },
+  'Cost Structure': { what: 'Koji su vasi najveci troskovi? Sta kosta najvise?', example: 'Npr: Sirovine, plata radnika, najam prostora, struja' },
+  'Revenue Streams': { what: 'Kako zaradjujete novac? Koji su vasi izvori prihoda?', example: 'Npr: Prodaja u prodavnici, dostava, catering za firme' },
+}
+
 function CanvasBlock({ title, value, onChange, style }: { title: string, value: string, onChange: (v: string) => void, style?: React.CSSProperties }) {
   const [focused, setFocused] = useState(false)
+  const [showTip, setShowTip] = useState(false)
+  const tip = CANVAS_TIPS[title]
+
   return React.createElement('div', {
     style: {
       border: '1px solid #cbd5e0',
@@ -12,10 +27,24 @@ function CanvasBlock({ title, value, onChange, style }: { title: string, value: 
       flexDirection: 'column',
       transition: 'all 0.2s',
       boxShadow: focused ? '0 0 0 2px #C9A227' : 'none',
+      position: 'relative',
       ...style
     }
   },
-    React.createElement('div', { style: { fontSize: '10px', fontWeight: '700', color: '#1F4E79', letterSpacing: '0.06em', marginBottom: '6px', textTransform: 'uppercase' } }, title),
+    React.createElement('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' } },
+      React.createElement('div', { style: { fontSize: '10px', fontWeight: '700', color: '#1F4E79', letterSpacing: '0.06em', textTransform: 'uppercase' } }, title),
+      tip && React.createElement('button', {
+        onClick: (e: React.MouseEvent) => { e.stopPropagation(); setShowTip(!showTip) },
+        style: { width: '16px', height: '16px', borderRadius: '50%', background: showTip ? '#1F4E79' : '#EBF4FB', border: 'none', cursor: 'pointer', fontSize: '10px', fontWeight: '700', color: showTip ? 'white' : '#1F4E79', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }
+      }, '?')
+    ),
+    showTip && tip && React.createElement('div', {
+      style: { background: '#1a2740', color: 'white', borderRadius: '8px', padding: '10px 12px', marginBottom: '8px', fontSize: '11px', lineHeight: 1.5 }
+    },
+      React.createElement('p', { style: { margin: '0 0 6px', fontWeight: '600', color: '#C9A227' } }, 'Sta upisati?'),
+      React.createElement('p', { style: { margin: '0 0 6px' } }, tip.what),
+      React.createElement('p', { style: { margin: '0', color: 'rgba(255,255,255,0.6)', fontStyle: 'italic' } }, tip.example)
+    ),
     React.createElement('textarea', {
       value,
       onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value),
@@ -26,7 +55,7 @@ function CanvasBlock({ title, value, onChange, style }: { title: string, value: 
         flex: 1, border: 'none', outline: 'none', resize: 'none',
         background: 'transparent', fontSize: '12px', color: '#1a2740',
         lineHeight: 1.5, fontFamily: 'Segoe UI, sans-serif',
-        minHeight: focused ? '100px' : '60px', transition: 'min-height 0.2s'
+        minHeight: focused ? '80px' : '50px', transition: 'min-height 0.2s'
       }
     })
   )
@@ -73,11 +102,11 @@ function PestCell({ title, value, onChange, color }: { title: string, value: str
 }
 
 const STEP_LABELS = ['Biznis ideja', 'Canvas model', 'PEST analiza', 'SWOT analiza', 'Trziste', 'Marketing', 'Procesi i tim', 'Rizici', 'Finansije']
-const STEP_TAGS = ['DIO I', 'DIO II', 'DIO III', 'DIO IV', 'DIO V', 'DIO VI', 'DIO VII', 'DIO VII', 'DIO VIII']
+const STEP_TAGS = ['DIO I', 'DIO II', 'DIO III', 'DIO IV', 'DIO V', 'DIO VI', 'DIO VII', 'DIO VIII', 'DIO IX']
 const STEP_TITLES = ['Opisite svoju poslovnu ideju', 'Business Model Canvas', 'PEST Analiza', 'SWOT Analiza', 'Analiza trzista', 'Marketinski plan', 'Poslovni procesi i organizacija', 'Analiza rizika', 'Ekonomsko-finansijske projekcije']
 const STEP_DESCS = [
   'Ukratko opisite cime se vase preduzece bavi, koji problem rjesava i ko su vasi kupci.',
-  'Canvas model prikazuje kako vase preduzece kreira, isporucuje i zadrzava vrijednost kroz 9 kljucnih blokova. Kliknite na svaki blok i unesite informacije direktno.',
+  'Canvas model prikazuje kako vase preduzece kreira, isporucuje i zadrzava vrijednost kroz 9 kljucnih blokova. Kliknite na svaki blok i unesite informacije direktno. Kliknite ? za pomoc.',
   'Analiza eksternog okruzenja kroz Politicke, Ekonomske, Socijalne i Tehnoloske faktore.',
   'Analiza internih snaga i slabosti te vanjskih prilika i prijetnji vaseg biznisa.',
   'Istrazite trziste, konkurenciju i profil vaseg idealnog kupca.',
@@ -275,7 +304,8 @@ export default function Builder() {
       style: { background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 32px', height: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }
     },
       React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'BOOST Biznis Plan'),
-      React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '12px' } },
+      React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '16px' } },
+        React.createElement('a', { href: '/resources', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Resursi'),
         React.createElement('span', { style: { fontSize: '13px', color: '#6b7a99' } }, 'DIO ' + (current + 1) + ' od ' + totalSteps),
         React.createElement('div', { style: { width: '120px', height: '4px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' } },
           React.createElement('div', { style: { width: pct + '%', height: '100%', background: '#C9A227', borderRadius: '4px', transition: 'width 0.4s ease' } })
