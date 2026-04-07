@@ -1,20 +1,22 @@
+import React from 'react'
+
 export default function Home() {
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-[#f5f7fb]">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-[#1a2740] mb-4">
-          BOOST Biznis Plan
-        </h1>
-        <p className="text-[#6b7a99] text-lg mb-8">
-          AI vodič za izradu biznis plana
-        </p>
-        
-          href="/builder"
-          className="bg-[#C9A227] text-[#1a2740] font-bold px-8 py-3 rounded-full hover:bg-[#b8911f] transition-colors"
-        >
-          Počni izradu plana →
-        </a>
-      </div>
-    </main>
+  return React.createElement('main', {
+    style: {
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: '#f5f7fb'
+    }
+  },
+    React.createElement('div', { style: { textAlign: 'center' } },
+      React.createElement('h1', {
+        style: { fontSize: '2.5rem', fontWeight: 'bold', color: '#1a2740', marginBottom: '1rem' }
+      }, 'BOOST Biznis Plan'),
+      React.createElement('p', {
+        style: { color: '#6b7a99', fontSize: '1.1rem', marginBottom: '2rem' }
+      }, 'AI vodič za izradu biznis plana')
+    )
   )
 }
