@@ -172,7 +172,7 @@ export default function Builder() {
     setRisks(prev => prev.filter((_, idx) => idx !== i))
   }
 
-async function generatePDF() {
+  async function generatePDF() {
     setShowSaveModal(true)
   }
 
@@ -313,9 +313,7 @@ async function generatePDF() {
         )
       )
     ),
-
     React.createElement('div', { style: { display: 'grid', gridTemplateColumns: gridCols, overflow: 'hidden', transition: 'grid-template-columns 0.3s ease' } },
-
       React.createElement('aside', { style: { borderRight: '1px solid #e2e8f0', background: 'white', overflow: 'hidden', position: 'relative' } },
         React.createElement('button', {
           onClick: () => setSidebarOpen(!sidebarOpen),
@@ -335,7 +333,6 @@ async function generatePDF() {
           )
         )
       ),
-
       React.createElement('main', { style: { background: '#f5f7fb', overflowY: 'auto', padding: '32px 40px' } },
         React.createElement('div', { style: { maxWidth: '100%' } },
           React.createElement('span', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.06em' } }, STEP_TAGS[current]),
@@ -347,12 +344,11 @@ async function generatePDF() {
               ? React.createElement('button', { onClick: () => setCurrent(current - 1), style: { background: 'white', color: '#1a2740', border: '1px solid #e2e8f0', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer' } }, 'Nazad')
               : React.createElement('span', {}),
             current === totalSteps - 1
-              ? React.createElement('button', { onClick: generatePDF, style: { background: '#C9A227', color: '#1a2740', border: 'none', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer' } }, generating ? 'Generisem...' : 'Preuzmi biznis plan')
+              ? React.createElement('button', { onClick: generatePDF, style: { background: '#C9A227', color: '#1a2740', border: 'none', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer' } }, 'Preuzmi biznis plan')
               : React.createElement('button', { onClick: () => setCurrent(current + 1), style: { background: '#1a2740', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer' } }, 'Naprijed')
           )
         )
       ),
-
       React.createElement('aside', { style: { borderLeft: '1px solid #e2e8f0', background: 'white', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' } },
         React.createElement('button', {
           onClick: () => setAiOpen(!aiOpen),
@@ -380,7 +376,6 @@ async function generatePDF() {
         )
       )
     ),
-
     showSaveModal && React.createElement('div', {
       style: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }
     },
@@ -408,3 +403,5 @@ async function generatePDF() {
             )
       )
     )
+  )
+}
