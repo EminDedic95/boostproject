@@ -9,6 +9,7 @@ const TOOLS = [
   { title: 'Matrica konkurentske analize', desc: 'Uporedite sebe sa do 3 konkurenta po kljucnim kriterijima sa ocjenama.', href: '/tools/competitive', tag: 'ALAT' },
   { title: 'Problem-Solution Fit Canvas', desc: 'Provjerite da li vase rjesenje zaista adresira stvarni problem kupaca.', href: '/tools/psf', tag: 'ALAT' },
   { title: 'AARRR Funnel', desc: 'Mapirajte rast biznisa kroz Akviziciju, Aktivaciju, Zadrzavanje, Preporuke i Prihod.', href: '/tools/aarrr', tag: 'ALAT' },
+  { title: '7Ps Marketing Mix', desc: 'Definisite svih 7 elemenata marketinskog miksa: Proizvod, Cijena, Mjesto, Promocija, Ljudi, Procesi, Fizicki dokazi.', href: '/tools/7ps', tag: 'ALAT' },
   { title: 'Break-even Kalkulator', desc: 'Izracunajte tacku pokrica troskova za vas biznis.', href: '/tools/breakeven', tag: 'USKORO' },
 ]
 
