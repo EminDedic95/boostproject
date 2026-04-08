@@ -6,6 +6,7 @@ const TOOLS = [
   { title: 'PEST Analiza', desc: 'Analiza politickih, ekonomskih, socijalnih i tehnoloskih faktora.', href: '/tools/pest', tag: 'ALAT' },
   { title: 'Porterovih 5 sila', desc: 'Analizirajte konkurentske sile u vasoj industriji.', href: '/tools/porter', tag: 'ALAT' },
   { title: 'Value Proposition Canvas', desc: 'Uskladite svoju ponudu sa potrebama kupaca kroz 6 kljucnih elemenata.', href: '/tools/vpc', tag: 'ALAT' },
+  { title: 'Matrica konkurentske analize', desc: 'Uporedite sebe sa do 3 konkurenta po kljucnim kriterijima sa ocjenama.', href: '/tools/competitive', tag: 'ALAT' },
   { title: 'Break-even Kalkulator', desc: 'Izracunajte tacku pokrica troskova za vas biznis.', href: '/tools/breakeven', tag: 'USKORO' },
 ]
 
