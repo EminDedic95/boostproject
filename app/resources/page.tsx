@@ -7,6 +7,7 @@ const TOOLS = [
   { title: 'Porterovih 5 sila', desc: 'Analizirajte konkurentske sile u vasoj industriji.', href: '/tools/porter', tag: 'ALAT' },
   { title: 'Value Proposition Canvas', desc: 'Uskladite svoju ponudu sa potrebama kupaca kroz 6 kljucnih elemenata.', href: '/tools/vpc', tag: 'ALAT' },
   { title: 'Matrica konkurentske analize', desc: 'Uporedite sebe sa do 3 konkurenta po kljucnim kriterijima sa ocjenama.', href: '/tools/competitive', tag: 'ALAT' },
+  { title: 'Problem-Solution Fit Canvas', desc: 'Provjerite da li vase rjesenje zaista adresira stvarni problem kupaca.', href: '/tools/psf', tag: 'ALAT' },
   { title: 'Break-even Kalkulator', desc: 'Izracunajte tacku pokrica troskova za vas biznis.', href: '/tools/breakeven', tag: 'USKORO' },
 ]
 
