@@ -4,6 +4,7 @@ const TOOLS = [
   { title: 'Business Model Canvas', desc: 'Interaktivni Canvas model sa 9 blokova. Popunite i preuzmite kao PDF.', href: '/tools/canvas', tag: 'ALAT' },
   { title: 'SWOT Analiza', desc: 'Analizirajte snage, slabosti, prilike i prijetnje vaseg biznisa.', href: '/tools/swot', tag: 'ALAT' },
   { title: 'PEST Analiza', desc: 'Analiza politickih, ekonomskih, socijalnih i tehnoloskih faktora.', href: '/tools/pest', tag: 'ALAT' },
+  { title: 'Porterovih 5 sila', desc: 'Analizirajte konkurentske sile u vasoj industriji.', href: '/tools/porter', tag: 'ALAT' },
   { title: 'Break-even Kalkulator', desc: 'Izracunajte tacku pokrica troskova za vas biznis.', href: '/tools/breakeven', tag: 'USKORO' },
 ]
 
