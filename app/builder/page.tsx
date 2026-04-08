@@ -3,15 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 const CANVAS_TIPS: Record<string, { what: string, example: string }> = {
-  'Key Partners': { what: 'Ko su vasi kljucni partneri i dobavljaci? Ko vam pomaze u poslovanju?', example: 'Npr: Lokalni dobavljaci brasna, prevoznicke kompanije, serviseri opreme' },
-  'Key Activities': { what: 'Koje aktivnosti su najvaznije za funkcionisanje vaseg biznisa?', example: 'Npr: Pecenje hljeba, dostava, upravljanje narudzbamaomima' },
-  'Value Proposition': { what: 'Kakvu vrijednost nudite kupcima? Koji problem rjesavate?', example: 'Npr: Svjez domaci hljeb dostavljan svaki dan, bez konzervansa' },
-  'Customer Relationships': { what: 'Kako gradite i odrzavate odnose sa kupcima?', example: 'Npr: Licni kontakt, loyalty kartica, redovne dostave' },
-  'Customer Segments': { what: 'Ko su vasi kupci? Za koga kreirate vrijednost?', example: 'Npr: Porodice u Mostaru, restorani, kafici, hoteli' },
-  'Key Resources': { what: 'Koji resursi su vam potrebni za poslovanje?', example: 'Npr: Pecnica, vozilo za dostavu, iskusni pekar, prostor' },
-  'Channels': { what: 'Kako dopirjete do kupaca i isporucujete vrijednost?', example: 'Npr: Vlastita prodavnica, dostava na adresu, trznica' },
-  'Cost Structure': { what: 'Koji su vasi najveci troskovi? Sta kosta najvise?', example: 'Npr: Sirovine, plata radnika, najam prostora, struja' },
-  'Revenue Streams': { what: 'Kako zaradjujete novac? Koji su vasi izvori prihoda?', example: 'Npr: Prodaja u prodavnici, dostava, catering za firme' },
+  'Key Partners': { what: 'Ko su vasi kljucni partneri i dobavljaci?', example: 'Npr: Lokalni dobavljaci brasna, prevoznicke kompanije' },
+  'Key Activities': { what: 'Koje aktivnosti su najvaznije za vas biznis?', example: 'Npr: Pecenje hljeba, dostava, upravljanje narudzbamaomima' },
+  'Value Proposition': { what: 'Kakvu vrijednost nudite kupcima?', example: 'Npr: Svjez domaci hljeb dostavljan svaki dan' },
+  'Customer Relationships': { what: 'Kako gradite odnose sa kupcima?', example: 'Npr: Licni kontakt, loyalty kartica, redovne dostave' },
+  'Customer Segments': { what: 'Ko su vasi kupci?', example: 'Npr: Porodice u Mostaru, restorani, kafici' },
+  'Key Resources': { what: 'Koji resursi su vam potrebni?', example: 'Npr: Pecnica, vozilo za dostavu, iskusni pekar' },
+  'Channels': { what: 'Kako dopirjete do kupaca?', example: 'Npr: Vlastita prodavnica, dostava na adresu' },
+  'Cost Structure': { what: 'Koji su vasi najveci troskovi?', example: 'Npr: Sirovine, plata radnika, najam prostora' },
+  'Revenue Streams': { what: 'Kako zaradjujete novac?', example: 'Npr: Prodaja u prodavnici, dostava, catering' },
 }
 
 function CanvasBlock({ title, value, onChange, style }: { title: string, value: string, onChange: (v: string) => void, style?: React.CSSProperties }) {
@@ -135,23 +135,43 @@ export default function Builder() {
   const [saved, setSaved] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [aiOpen, setAiOpen] = useState(true)
+  const [showChoice, setShowChoice] = useState(false)
+  const [pendingData, setPendingData] = useState<Record<string, unknown> | null>(null)
 
   useEffect(() => {
     const s = localStorage.getItem('boost_plan')
     if (s) {
       const d = JSON.parse(s)
-      if (d.formData) setFormData(d.formData)
-      if (d.canvas) setCanvas(d.canvas)
-      if (d.pest) setPest(d.pest)
-      if (d.swot) setSwot(d.swot)
-      if (d.risks) setRisks(d.risks)
-      if (d.current) setCurrent(d.current)
+      const hasData = d.formData && Object.keys(d.formData).length > 0
+      if (hasData) {
+        setPendingData(d)
+        setShowChoice(true)
+      }
     }
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('boost_plan', JSON.stringify({ formData, canvas, pest, swot, risks, current }))
-  }, [formData, canvas, pest, swot, risks, current])
+    if (!showChoice) {
+      localStorage.setItem('boost_plan', JSON.stringify({ formData, canvas, pest, swot, risks, current }))
+    }
+  }, [formData, canvas, pest, swot, risks, current, showChoice])
+
+  function continueProgress() {
+    if (pendingData) {
+      if (pendingData.formData) setFormData(pendingData.formData as Record<string, string>)
+      if (pendingData.canvas) setCanvas(pendingData.canvas as Record<string, string>)
+      if (pendingData.pest) setPest(pendingData.pest as Record<string, string>)
+      if (pendingData.swot) setSwot(pendingData.swot as Record<string, string>)
+      if (pendingData.risks) setRisks(pendingData.risks as { risk: string, prob: string, impact: string, mitigation: string }[])
+      if (pendingData.current) setCurrent(pendingData.current as number)
+    }
+    setShowChoice(false)
+  }
+
+  function startFresh() {
+    localStorage.removeItem('boost_plan')
+    setShowChoice(false)
+  }
 
   const totalSteps = 9
   const pct = Math.round(((current + 1) / totalSteps) * 100)
@@ -401,6 +421,22 @@ export default function Builder() {
                 style: { width: '100%', background: saveEmail ? '#1a2740' : '#ccc', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px', cursor: saveEmail ? 'pointer' : 'not-allowed' }
               }, generating ? 'Generisem...' : 'Preuzmi biznis plan')
             )
+      )
+    ),
+    showChoice && React.createElement('div', {
+      style: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000 }
+    },
+      React.createElement('div', { style: { background: 'white', borderRadius: '16px', padding: '40px', maxWidth: '440px', width: '90%', textAlign: 'center' } },
+        React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold', marginBottom: '8px' } }, 'Dobrodosli nazad!'),
+        React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '32px', lineHeight: 1.6 } }, 'Imamo sacuvani napredak vaseg biznis plana. Zelite li nastaviti gdje ste stali ili poceti iznova?'),
+        React.createElement('button', {
+          onClick: continueProgress,
+          style: { width: '100%', background: '#1a2740', color: 'white', border: 'none', padding: '14px', borderRadius: '8px', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', marginBottom: '12px' }
+        }, 'Nastavi gdje sam stao'),
+        React.createElement('button', {
+          onClick: startFresh,
+          style: { width: '100%', background: 'white', color: '#e53e3e', border: '1px solid #e53e3e', padding: '14px', borderRadius: '8px', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer' }
+        }, 'Pocni iznova')
       )
     )
   )
