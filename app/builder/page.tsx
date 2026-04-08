@@ -408,7 +408,3 @@ async function generatePDF() {
             )
       )
     )
-      )
-    )
-  )
-}
