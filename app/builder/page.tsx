@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 const CANVAS_TIPS: Record<string, { what: string, example: string }> = {
   'Key Partners': { what: 'Ko su vasi kljucni partneri i dobavljaci? Ko vam pomaze u poslovanju?', example: 'Npr: Lokalni dobavljaci brasna, prevoznicke kompanije, serviseri opreme' },
@@ -157,8 +158,27 @@ export default function Builder() {
   const [swot, setSwot] = useState<Record<string, string>>({})
   const [risks, setRisks] = useState([{ risk: '', prob: '', impact: '', mitigation: '' }])
   const [generating, setGenerating] = useState(false)
+  const [showSaveModal, setShowSaveModal] = useState(false)
+  const [saveEmail, setSaveEmail] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [aiOpen, setAiOpen] = useState(true)
+
+  useEffect(() => {
+  const saved = localStorage.getItem('boost_plan')
+  if (saved) {
+    const d = JSON.parse(saved)
+    if (d.formData) setFormData(d.formData)
+    if (d.canvas) setCanvas(d.canvas)
+    if (d.pest) setPest(d.pest)
+    if (d.swot) setSwot(d.swot)
+    if (d.risks) setRisks(d.risks)
+    if (d.current) setCurrent(d.current)
+  }
+}, [])
+
+useEffect(() => {
+  localStorage.setItem('boost_plan', JSON.stringify({ formData, canvas, pest, swot, risks, current }))
+}, [formData, canvas, pest, swot, risks, current])
 
   const totalSteps = 9
   const pct = Math.round(((current + 1) / totalSteps) * 100)
@@ -180,21 +200,33 @@ export default function Builder() {
   }
 
   async function generatePDF() {
-    setGenerating(true)
-    const res = await fetch('/api/generate-pdf', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ formData, canvas, pest, swot, risks })
-    })
-    const html = await res.text()
-    const win = window.open('', '_blank')
-    if (win) {
-      win.document.write(html)
-      win.document.close()
-      setTimeout(() => win.print(), 500)
-    }
-    setGenerating(false)
+  setGenerating(true)
+  const res = await fetch('/api/generate-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ formData, canvas, pest, swot, risks })
+  })
+  const html = await res.text()
+  const win = window.open('', '_blank')
+  if (win) {
+    win.document.write(html)
+    win.document.close()
+    setTimeout(() => win.print(), 500)
   }
+  setGenerating(false)
+  setShowSaveModal(true)
+}
+
+async function savePlan() {
+  if (!saveEmail) return
+  await supabase.from('business_plans').insert({
+    company_name: formData['Naziv preduzeca'] || 'Bez naziva',
+    form_data: formData,
+    canvas, pest, swot, risks,
+    current_step: current,
+  })
+  setShowSaveModal(false)
+}
 
   function renderStep() {
     if (current === 1) {
@@ -369,7 +401,7 @@ export default function Builder() {
             React.createElement('div', { style: { background: '#f5f7fb', borderRadius: '12px', padding: '14px' } },
               React.createElement('p', { style: { fontSize: '13px', color: '#1a2740', lineHeight: 1.6, margin: 0 } }, 'Zdravo! Nalazite se na koraku ' + STEP_TITLES[current] + '. Postavite mi pitanje i pomoci cu vam na osnovu BOOST vodica.')
             )
-          ),
+        ),
           React.createElement('div', { style: { padding: '12px 16px', borderTop: '1px solid #e2e8f0' } },
             React.createElement('div', { style: { display: 'flex', gap: '8px' } },
               React.createElement('input', { type: 'text', placeholder: 'Postavite pitanje...', style: { flex: 1, padding: '10px 14px', borderRadius: '24px', border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none' } }),
@@ -377,6 +409,29 @@ export default function Builder() {
             )
           )
         )
+      )
+    ),
+    showSaveModal && React.createElement('div', {
+      style: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }
+    },
+      React.createElement('div', { style: { background: 'white', borderRadius: '16px', padding: '40px', maxWidth: '480px', width: '90%', textAlign: 'center' } },
+        React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold', marginBottom: '8px' } }, 'Vas biznis plan je spreman!'),
+        React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 } }, 'Unesite email da sacuvate plan i dobijete kopiju. Mozete i preskociti ovaj korak.'),
+        React.createElement('input', {
+          type: 'email',
+          placeholder: 'vasa@email.com',
+          value: saveEmail,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSaveEmail(e.target.value),
+          style: { width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', marginBottom: '12px', boxSizing: 'border-box' }
+        }),
+        React.createElement('button', {
+          onClick: savePlan,
+          style: { width: '100%', background: '#1a2740', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', marginBottom: '8px' }
+        }, 'Sacuvaj plan'),
+        React.createElement('button', {
+          onClick: () => setShowSaveModal(false),
+          style: { width: '100%', background: 'none', border: 'none', color: '#6b7a99', fontSize: '13px', cursor: 'pointer', padding: '8px' }
+        }, 'Preskoci')
       )
     )
   )
