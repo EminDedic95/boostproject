@@ -172,8 +172,19 @@ export default function Builder() {
     setRisks(prev => prev.filter((_, idx) => idx !== i))
   }
 
-  async function generatePDF() {
+async function generatePDF() {
+    setShowSaveModal(true)
+  }
+
+  async function savePlan() {
+    if (!saveEmail) return
     setGenerating(true)
+    await supabase.from('business_plans').insert({
+      company_name: formData['Naziv preduzeca'] || 'Bez naziva',
+      form_data: formData,
+      canvas, pest, swot, risks,
+      current_step: current,
+    })
     const res = await fetch('/api/generate-pdf', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -187,17 +198,6 @@ export default function Builder() {
       setTimeout(() => win.print(), 500)
     }
     setGenerating(false)
-    setShowSaveModal(true)
-  }
-
-  async function savePlan() {
-    if (!saveEmail) return
-    await supabase.from('business_plans').insert({
-      company_name: formData['Naziv preduzeca'] || 'Bez naziva',
-      form_data: formData,
-      canvas, pest, swot, risks,
-      current_step: current,
-    })
     setSaved(true)
     setTimeout(() => setShowSaveModal(false), 2000)
   }
@@ -389,26 +389,25 @@ export default function Builder() {
           ? React.createElement('div', {},
               React.createElement('div', { style: { fontSize: '48px', marginBottom: '16px' } }, 'v'),
               React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold' } }, 'Plan je sacuvan!'),
-              React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginTop: '8px' } }, 'Hvala! Vas biznis plan je sacuvan.')
+              React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginTop: '8px' } }, 'Vas PDF se otvara...')
             )
           : React.createElement('div', {},
-              React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold', marginBottom: '8px' } }, 'Vas biznis plan je spreman!'),
-              React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 } }, 'Unesite email da sacuvate plan. Mozete i preskociti ovaj korak.'),
+              React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold', marginBottom: '8px' } }, 'Unesite email za preuzimanje'),
+              React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 } }, 'Vas biznis plan ce biti sacuvan i mozete mu pristupiti u bilo kom trenutku.'),
               React.createElement('input', {
                 type: 'email', placeholder: 'vasa@email.com',
                 value: saveEmail,
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSaveEmail(e.target.value),
                 style: { width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', marginBottom: '12px', boxSizing: 'border-box' }
               }),
+              saveEmail === '' && React.createElement('p', { style: { color: '#e53e3e', fontSize: '12px', marginBottom: '8px' } }, 'Email je obavezan za preuzimanje plana.'),
               React.createElement('button', {
                 onClick: savePlan,
-                style: { width: '100%', background: '#1a2740', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', marginBottom: '8px' }
-              }, 'Sacuvaj plan'),
-              React.createElement('button', {
-                onClick: () => setShowSaveModal(false),
-                style: { width: '100%', background: 'none', border: 'none', color: '#6b7a99', fontSize: '13px', cursor: 'pointer', padding: '8px' }
-              }, 'Preskoci')
+                style: { width: '100%', background: saveEmail ? '#1a2740' : '#ccc', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px', cursor: saveEmail ? 'pointer' : 'not-allowed' }
+              }, generating ? 'Generisem...' : 'Preuzmi biznis plan')
             )
+      )
+    )
       )
     )
   )
