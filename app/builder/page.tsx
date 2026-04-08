@@ -18,19 +18,8 @@ function CanvasBlock({ title, value, onChange, style }: { title: string, value: 
   const [focused, setFocused] = useState(false)
   const [showTip, setShowTip] = useState(false)
   const tip = CANVAS_TIPS[title]
-
   return React.createElement('div', {
-    style: {
-      border: '1px solid #cbd5e0',
-      background: focused ? 'white' : '#fafafa',
-      padding: '10px',
-      display: 'flex',
-      flexDirection: 'column',
-      transition: 'all 0.2s',
-      boxShadow: focused ? '0 0 0 2px #C9A227' : 'none',
-      position: 'relative',
-      ...style
-    }
+    style: { border: '1px solid #cbd5e0', background: focused ? 'white' : '#fafafa', padding: '10px', display: 'flex', flexDirection: 'column', transition: 'all 0.2s', boxShadow: focused ? '0 0 0 2px #C9A227' : 'none', position: 'relative', ...style }
   },
     React.createElement('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' } },
       React.createElement('div', { style: { fontSize: '10px', fontWeight: '700', color: '#1F4E79', letterSpacing: '0.06em', textTransform: 'uppercase' } }, title),
@@ -47,17 +36,10 @@ function CanvasBlock({ title, value, onChange, style }: { title: string, value: 
       React.createElement('p', { style: { margin: '0', color: 'rgba(255,255,255,0.6)', fontStyle: 'italic' } }, tip.example)
     ),
     React.createElement('textarea', {
-      value,
-      onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value),
-      onFocus: () => setFocused(true),
-      onBlur: () => setFocused(false),
+      value, onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value),
+      onFocus: () => setFocused(true), onBlur: () => setFocused(false),
       placeholder: 'Unesite...',
-      style: {
-        flex: 1, border: 'none', outline: 'none', resize: 'none',
-        background: 'transparent', fontSize: '12px', color: '#1a2740',
-        lineHeight: 1.5, fontFamily: 'Segoe UI, sans-serif',
-        minHeight: focused ? '80px' : '50px', transition: 'min-height 0.2s'
-      }
+      style: { flex: 1, border: 'none', outline: 'none', resize: 'none', background: 'transparent', fontSize: '12px', color: '#1a2740', lineHeight: 1.5, fontFamily: 'Segoe UI, sans-serif', minHeight: focused ? '80px' : '50px', transition: 'min-height 0.2s' }
     })
   )
 }
@@ -65,12 +47,7 @@ function CanvasBlock({ title, value, onChange, style }: { title: string, value: 
 function SwotCell({ title, value, onChange, color }: { title: string, value: string, onChange: (v: string) => void, color: string }) {
   const [focused, setFocused] = useState(false)
   return React.createElement('div', {
-    style: {
-      border: '2px solid ' + color, borderRadius: '8px', padding: '12px',
-      background: focused ? 'white' : color + '12',
-      transition: 'all 0.2s', minHeight: focused ? '160px' : '120px',
-      boxShadow: focused ? '0 4px 16px rgba(0,0,0,0.1)' : 'none'
-    }
+    style: { border: '2px solid ' + color, borderRadius: '8px', padding: '12px', background: focused ? 'white' : color + '12', transition: 'all 0.2s', minHeight: focused ? '160px' : '120px', boxShadow: focused ? '0 4px 16px rgba(0,0,0,0.1)' : 'none' }
   },
     React.createElement('div', { style: { fontSize: '12px', fontWeight: '700', color, marginBottom: '8px' } }, title),
     React.createElement('textarea', {
@@ -85,12 +62,7 @@ function SwotCell({ title, value, onChange, color }: { title: string, value: str
 function PestCell({ title, value, onChange, color }: { title: string, value: string, onChange: (v: string) => void, color: string }) {
   const [focused, setFocused] = useState(false)
   return React.createElement('div', {
-    style: {
-      border: '2px solid ' + color, borderRadius: '8px', padding: '12px',
-      background: focused ? 'white' : color + '12',
-      transition: 'all 0.2s', minHeight: focused ? '160px' : '120px',
-      boxShadow: focused ? '0 4px 16px rgba(0,0,0,0.1)' : 'none'
-    }
+    style: { border: '2px solid ' + color, borderRadius: '8px', padding: '12px', background: focused ? 'white' : color + '12', transition: 'all 0.2s', minHeight: focused ? '160px' : '120px', boxShadow: focused ? '0 4px 16px rgba(0,0,0,0.1)' : 'none' }
   },
     React.createElement('div', { style: { fontSize: '12px', fontWeight: '700', color, marginBottom: '8px' } }, title),
     React.createElement('textarea', {
@@ -117,7 +89,7 @@ const STEP_DESCS = [
   'Procijenite prihode, troskove i finansijsku odrzivost vaseg biznisa.',
 ]
 
-const SIMPLE_FIELDS: Record<number, {label: string, placeholder: string, type: string}[]> = {
+const SIMPLE_FIELDS: Record<number, { label: string, placeholder: string, type: string }[]> = {
   0: [
     { label: 'Naziv preduzeca', placeholder: 'npr. Pekara Mostar d.o.o.', type: 'input' },
     { label: 'Opis poslovne ideje', placeholder: 'Opisite svoju ideju...', type: 'textarea' },
@@ -160,25 +132,26 @@ export default function Builder() {
   const [generating, setGenerating] = useState(false)
   const [showSaveModal, setShowSaveModal] = useState(false)
   const [saveEmail, setSaveEmail] = useState('')
+  const [saved, setSaved] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [aiOpen, setAiOpen] = useState(true)
 
   useEffect(() => {
-  const saved = localStorage.getItem('boost_plan')
-  if (saved) {
-    const d = JSON.parse(saved)
-    if (d.formData) setFormData(d.formData)
-    if (d.canvas) setCanvas(d.canvas)
-    if (d.pest) setPest(d.pest)
-    if (d.swot) setSwot(d.swot)
-    if (d.risks) setRisks(d.risks)
-    if (d.current) setCurrent(d.current)
-  }
-}, [])
+    const s = localStorage.getItem('boost_plan')
+    if (s) {
+      const d = JSON.parse(s)
+      if (d.formData) setFormData(d.formData)
+      if (d.canvas) setCanvas(d.canvas)
+      if (d.pest) setPest(d.pest)
+      if (d.swot) setSwot(d.swot)
+      if (d.risks) setRisks(d.risks)
+      if (d.current) setCurrent(d.current)
+    }
+  }, [])
 
-useEffect(() => {
-  localStorage.setItem('boost_plan', JSON.stringify({ formData, canvas, pest, swot, risks, current }))
-}, [formData, canvas, pest, swot, risks, current])
+  useEffect(() => {
+    localStorage.setItem('boost_plan', JSON.stringify({ formData, canvas, pest, swot, risks, current }))
+  }, [formData, canvas, pest, swot, risks, current])
 
   const totalSteps = 9
   const pct = Math.round(((current + 1) / totalSteps) * 100)
@@ -200,64 +173,65 @@ useEffect(() => {
   }
 
   async function generatePDF() {
-  setGenerating(true)
-  const res = await fetch('/api/generate-pdf', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ formData, canvas, pest, swot, risks })
-  })
-  const html = await res.text()
-  const win = window.open('', '_blank')
-  if (win) {
-    win.document.write(html)
-    win.document.close()
-    setTimeout(() => win.print(), 500)
+    setGenerating(true)
+    const res = await fetch('/api/generate-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ formData, canvas, pest, swot, risks })
+    })
+    const html = await res.text()
+    const win = window.open('', '_blank')
+    if (win) {
+      win.document.write(html)
+      win.document.close()
+      setTimeout(() => win.print(), 500)
+    }
+    setGenerating(false)
+    setShowSaveModal(true)
   }
-  setGenerating(false)
-  setShowSaveModal(true)
-}
 
-async function savePlan() {
-  if (!saveEmail) return
-  await supabase.from('business_plans').insert({
-    company_name: formData['Naziv preduzeca'] || 'Bez naziva',
-    form_data: formData,
-    canvas, pest, swot, risks,
-    current_step: current,
-  })
-  setShowSaveModal(false)
-}
+  async function savePlan() {
+    if (!saveEmail) return
+    await supabase.from('business_plans').insert({
+      company_name: formData['Naziv preduzeca'] || 'Bez naziva',
+      form_data: formData,
+      canvas, pest, swot, risks,
+      current_step: current,
+    })
+    setSaved(true)
+    setTimeout(() => setShowSaveModal(false), 2000)
+  }
 
   function renderStep() {
     if (current === 1) {
       return React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr 1fr 1fr', gridTemplateRows: '1fr 1fr auto', gap: '0', border: '2px solid #1a2740', height: '480px' } },
-        React.createElement(CanvasBlock, { title: 'Key Partners', value: canvas['partners'] || '', onChange: v => setCanvas(p => ({...p, partners: v})), style: { gridColumn: '1', gridRow: '1 / 3', borderRight: '1px solid #cbd5e0' } }),
-        React.createElement(CanvasBlock, { title: 'Key Activities', value: canvas['activities'] || '', onChange: v => setCanvas(p => ({...p, activities: v})), style: { gridColumn: '2', gridRow: '1', borderRight: '1px solid #cbd5e0', borderBottom: '1px solid #cbd5e0' } }),
-        React.createElement(CanvasBlock, { title: 'Value Proposition', value: canvas['value'] || '', onChange: v => setCanvas(p => ({...p, value: v})), style: { gridColumn: '3', gridRow: '1 / 3', borderRight: '1px solid #cbd5e0' } }),
-        React.createElement(CanvasBlock, { title: 'Customer Relationships', value: canvas['relationships'] || '', onChange: v => setCanvas(p => ({...p, relationships: v})), style: { gridColumn: '4', gridRow: '1', borderRight: '1px solid #cbd5e0', borderBottom: '1px solid #cbd5e0' } }),
-        React.createElement(CanvasBlock, { title: 'Customer Segments', value: canvas['segments'] || '', onChange: v => setCanvas(p => ({...p, segments: v})), style: { gridColumn: '5', gridRow: '1 / 3' } }),
-        React.createElement(CanvasBlock, { title: 'Key Resources', value: canvas['resources'] || '', onChange: v => setCanvas(p => ({...p, resources: v})), style: { gridColumn: '2', gridRow: '2', borderRight: '1px solid #cbd5e0' } }),
-        React.createElement(CanvasBlock, { title: 'Channels', value: canvas['channels'] || '', onChange: v => setCanvas(p => ({...p, channels: v})), style: { gridColumn: '4', gridRow: '2', borderRight: '1px solid #cbd5e0' } }),
-        React.createElement(CanvasBlock, { title: 'Cost Structure', value: canvas['costs'] || '', onChange: v => setCanvas(p => ({...p, costs: v})), style: { gridColumn: '1 / 4', gridRow: '3', borderTop: '1px solid #cbd5e0', borderRight: '1px solid #cbd5e0' } }),
-        React.createElement(CanvasBlock, { title: 'Revenue Streams', value: canvas['revenue'] || '', onChange: v => setCanvas(p => ({...p, revenue: v})), style: { gridColumn: '4 / 6', gridRow: '3', borderTop: '1px solid #cbd5e0' } })
+        React.createElement(CanvasBlock, { title: 'Key Partners', value: canvas['partners'] || '', onChange: v => setCanvas(p => ({ ...p, partners: v })), style: { gridColumn: '1', gridRow: '1 / 3', borderRight: '1px solid #cbd5e0' } }),
+        React.createElement(CanvasBlock, { title: 'Key Activities', value: canvas['activities'] || '', onChange: v => setCanvas(p => ({ ...p, activities: v })), style: { gridColumn: '2', gridRow: '1', borderRight: '1px solid #cbd5e0', borderBottom: '1px solid #cbd5e0' } }),
+        React.createElement(CanvasBlock, { title: 'Value Proposition', value: canvas['value'] || '', onChange: v => setCanvas(p => ({ ...p, value: v })), style: { gridColumn: '3', gridRow: '1 / 3', borderRight: '1px solid #cbd5e0' } }),
+        React.createElement(CanvasBlock, { title: 'Customer Relationships', value: canvas['relationships'] || '', onChange: v => setCanvas(p => ({ ...p, relationships: v })), style: { gridColumn: '4', gridRow: '1', borderRight: '1px solid #cbd5e0', borderBottom: '1px solid #cbd5e0' } }),
+        React.createElement(CanvasBlock, { title: 'Customer Segments', value: canvas['segments'] || '', onChange: v => setCanvas(p => ({ ...p, segments: v })), style: { gridColumn: '5', gridRow: '1 / 3' } }),
+        React.createElement(CanvasBlock, { title: 'Key Resources', value: canvas['resources'] || '', onChange: v => setCanvas(p => ({ ...p, resources: v })), style: { gridColumn: '2', gridRow: '2', borderRight: '1px solid #cbd5e0' } }),
+        React.createElement(CanvasBlock, { title: 'Channels', value: canvas['channels'] || '', onChange: v => setCanvas(p => ({ ...p, channels: v })), style: { gridColumn: '4', gridRow: '2', borderRight: '1px solid #cbd5e0' } }),
+        React.createElement(CanvasBlock, { title: 'Cost Structure', value: canvas['costs'] || '', onChange: v => setCanvas(p => ({ ...p, costs: v })), style: { gridColumn: '1 / 4', gridRow: '3', borderTop: '1px solid #cbd5e0', borderRight: '1px solid #cbd5e0' } }),
+        React.createElement(CanvasBlock, { title: 'Revenue Streams', value: canvas['revenue'] || '', onChange: v => setCanvas(p => ({ ...p, revenue: v })), style: { gridColumn: '4 / 6', gridRow: '3', borderTop: '1px solid #cbd5e0' } })
       )
     }
 
     if (current === 2) {
       return React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' } },
-        React.createElement(PestCell, { title: 'P — Politicki faktori', value: pest['p'] || '', onChange: v => setPest(prev => ({...prev, p: v})), color: '#2E75B6' }),
-        React.createElement(PestCell, { title: 'E — Ekonomski faktori', value: pest['e'] || '', onChange: v => setPest(prev => ({...prev, e: v})), color: '#C9A227' }),
-        React.createElement(PestCell, { title: 'S — Socijalni faktori', value: pest['s'] || '', onChange: v => setPest(prev => ({...prev, s: v})), color: '#2d7a4f' }),
-        React.createElement(PestCell, { title: 'T — Tehnoloski faktori', value: pest['t'] || '', onChange: v => setPest(prev => ({...prev, t: v})), color: '#7B2D8B' })
+        React.createElement(PestCell, { title: 'P — Politicki faktori', value: pest['p'] || '', onChange: v => setPest(prev => ({ ...prev, p: v })), color: '#2E75B6' }),
+        React.createElement(PestCell, { title: 'E — Ekonomski faktori', value: pest['e'] || '', onChange: v => setPest(prev => ({ ...prev, e: v })), color: '#C9A227' }),
+        React.createElement(PestCell, { title: 'S — Socijalni faktori', value: pest['s'] || '', onChange: v => setPest(prev => ({ ...prev, s: v })), color: '#2d7a4f' }),
+        React.createElement(PestCell, { title: 'T — Tehnoloski faktori', value: pest['t'] || '', onChange: v => setPest(prev => ({ ...prev, t: v })), color: '#7B2D8B' })
       )
     }
 
     if (current === 3) {
       return React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' } },
-        React.createElement(SwotCell, { title: 'Snage (Strengths)', value: swot['s'] || '', onChange: v => setSwot(prev => ({...prev, s: v})), color: '#2d7a4f' }),
-        React.createElement(SwotCell, { title: 'Slabosti (Weaknesses)', value: swot['w'] || '', onChange: v => setSwot(prev => ({...prev, w: v})), color: '#e53e3e' }),
-        React.createElement(SwotCell, { title: 'Prilike (Opportunities)', value: swot['o'] || '', onChange: v => setSwot(prev => ({...prev, o: v})), color: '#2E75B6' }),
-        React.createElement(SwotCell, { title: 'Prijetnje (Threats)', value: swot['t'] || '', onChange: v => setSwot(prev => ({...prev, t: v})), color: '#C9A227' })
+        React.createElement(SwotCell, { title: 'Snage (Strengths)', value: swot['s'] || '', onChange: v => setSwot(prev => ({ ...prev, s: v })), color: '#2d7a4f' }),
+        React.createElement(SwotCell, { title: 'Slabosti (Weaknesses)', value: swot['w'] || '', onChange: v => setSwot(prev => ({ ...prev, w: v })), color: '#e53e3e' }),
+        React.createElement(SwotCell, { title: 'Prilike (Opportunities)', value: swot['o'] || '', onChange: v => setSwot(prev => ({ ...prev, o: v })), color: '#2E75B6' }),
+        React.createElement(SwotCell, { title: 'Prijetnje (Threats)', value: swot['t'] || '', onChange: v => setSwot(prev => ({ ...prev, t: v })), color: '#C9A227' })
       )
     }
 
@@ -278,8 +252,7 @@ async function savePlan() {
                   ...(['risk', 'prob', 'impact', 'mitigation'] as const).map(field =>
                     React.createElement('td', { key: field, style: { padding: '8px', border: '1px solid #e2e8f0' } },
                       React.createElement('input', {
-                        type: 'text',
-                        value: row[field],
+                        type: 'text', value: row[field],
                         onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateRisk(i, field, e.target.value),
                         style: { width: '100%', border: 'none', outline: 'none', fontSize: '13px', background: 'transparent', fontFamily: 'Segoe UI, sans-serif' }
                       })
@@ -307,27 +280,23 @@ async function savePlan() {
           React.createElement('label', { style: { display: 'block', fontWeight: '600', color: '#1a2740', marginBottom: '8px', fontSize: '13px' } }, f.label),
           f.type === 'input'
             ? React.createElement('input', {
-                type: 'text', placeholder: f.placeholder,
-                value: formData[f.label] || '',
-                onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleFormChange(f.label, e.target.value),
-                style: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }
-              })
+              type: 'text', placeholder: f.placeholder,
+              value: formData[f.label] || '',
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleFormChange(f.label, e.target.value),
+              style: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }
+            })
             : React.createElement('textarea', {
-                placeholder: f.placeholder, rows: 3,
-                value: formData[f.label] || '',
-                onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => handleFormChange(f.label, e.target.value),
-                style: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }
-              })
+              placeholder: f.placeholder, rows: 3,
+              value: formData[f.label] || '',
+              onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => handleFormChange(f.label, e.target.value),
+              style: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }
+            })
         )
       )
     )
   }
 
-  const gridCols = [
-    sidebarOpen ? '220px' : '40px',
-    '1fr',
-    aiOpen ? '300px' : '40px'
-  ].join(' ')
+  const gridCols = [sidebarOpen ? '220px' : '40px', '1fr', aiOpen ? '300px' : '40px'].join(' ')
 
   return React.createElement('div', {
     style: { fontFamily: 'Segoe UI, sans-serif', height: '100vh', display: 'grid', gridTemplateRows: 'auto 1fr', overflow: 'hidden' }
@@ -401,7 +370,7 @@ async function savePlan() {
             React.createElement('div', { style: { background: '#f5f7fb', borderRadius: '12px', padding: '14px' } },
               React.createElement('p', { style: { fontSize: '13px', color: '#1a2740', lineHeight: 1.6, margin: 0 } }, 'Zdravo! Nalazite se na koraku ' + STEP_TITLES[current] + '. Postavite mi pitanje i pomoci cu vam na osnovu BOOST vodica.')
             )
-        ),
+          ),
           React.createElement('div', { style: { padding: '12px 16px', borderTop: '1px solid #e2e8f0' } },
             React.createElement('div', { style: { display: 'flex', gap: '8px' } },
               React.createElement('input', { type: 'text', placeholder: 'Postavite pitanje...', style: { flex: 1, padding: '10px 14px', borderRadius: '24px', border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none' } }),
@@ -411,27 +380,35 @@ async function savePlan() {
         )
       )
     ),
+
     showSaveModal && React.createElement('div', {
       style: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }
     },
       React.createElement('div', { style: { background: 'white', borderRadius: '16px', padding: '40px', maxWidth: '480px', width: '90%', textAlign: 'center' } },
-        React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold', marginBottom: '8px' } }, 'Vas biznis plan je spreman!'),
-        React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 } }, 'Unesite email da sacuvate plan i dobijete kopiju. Mozete i preskociti ovaj korak.'),
-        React.createElement('input', {
-          type: 'email',
-          placeholder: 'vasa@email.com',
-          value: saveEmail,
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSaveEmail(e.target.value),
-          style: { width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', marginBottom: '12px', boxSizing: 'border-box' }
-        }),
-        React.createElement('button', {
-          onClick: savePlan,
-          style: { width: '100%', background: '#1a2740', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', marginBottom: '8px' }
-        }, 'Sacuvaj plan'),
-        React.createElement('button', {
-          onClick: () => setShowSaveModal(false),
-          style: { width: '100%', background: 'none', border: 'none', color: '#6b7a99', fontSize: '13px', cursor: 'pointer', padding: '8px' }
-        }, 'Preskoci')
+        saved
+          ? React.createElement('div', {},
+              React.createElement('div', { style: { fontSize: '48px', marginBottom: '16px' } }, 'v'),
+              React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold' } }, 'Plan je sacuvan!'),
+              React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginTop: '8px' } }, 'Hvala! Vas biznis plan je sacuvan.')
+            )
+          : React.createElement('div', {},
+              React.createElement('h2', { style: { color: '#1a2740', fontSize: '22px', fontWeight: 'bold', marginBottom: '8px' } }, 'Vas biznis plan je spreman!'),
+              React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 } }, 'Unesite email da sacuvate plan. Mozete i preskociti ovaj korak.'),
+              React.createElement('input', {
+                type: 'email', placeholder: 'vasa@email.com',
+                value: saveEmail,
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSaveEmail(e.target.value),
+                style: { width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none', marginBottom: '12px', boxSizing: 'border-box' }
+              }),
+              React.createElement('button', {
+                onClick: savePlan,
+                style: { width: '100%', background: '#1a2740', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', marginBottom: '8px' }
+              }, 'Sacuvaj plan'),
+              React.createElement('button', {
+                onClick: () => setShowSaveModal(false),
+                style: { width: '100%', background: 'none', border: 'none', color: '#6b7a99', fontSize: '13px', cursor: 'pointer', padding: '8px' }
+              }, 'Preskoci')
+            )
       )
     )
   )
