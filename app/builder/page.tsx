@@ -662,8 +662,8 @@ export default function Builder() {
             React.createElement('div', { key: i, onClick: () => setCurrent(i), style: { display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 16px', borderLeft: i === current ? '3px solid #C9A227' : '3px solid transparent', background: i === current ? '#FFF8E7' : 'transparent', cursor: 'pointer' } },
               React.createElement('div', { style: { width: '22px', height: '22px', borderRadius: '50%', flexShrink: 0, background: i === current ? '#C9A227' : i < current ? '#2d7a4f' : '#f5f7fb', border: i === current ? 'none' : '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 'bold', color: i === current ? '#1a2740' : i < current ? 'white' : '#6b7a99' } }, i < current ? 'v' : s.n),
               React.createElement('div', {},
-                React.createElement('div', { style: { fontSize: '12px', color: i === current ? '#1a2740' : '#6b7a99', fontWeight: i === current ? '600' : '400', lineHeight: 1.3 } }, s.label),
-                React.createElement('div', { style: { fontSize: '10px', color: i === current ? '#C9A227' : '#9fa6b4', fontWeight: '600' } }, s.tag)
+                React.createElement('div', { style: { fontSize: '13px', color: i === current ? '#1a2740' : '#6b7a99', fontWeight: i === current ? '600' : '400', lineHeight: 1.3 } }, s.label),
+                React.createElement('div', { style: { fontSize: '11px', color: i === current ? '#C9A227' : '#9fa6b4', fontWeight: '600' } }, s.tag)
               )
             )
           )
