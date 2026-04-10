@@ -160,7 +160,7 @@ export default function Home() {
     React.createElement('div', { className: 'mobile-menu', id: 'lp-mobile-menu' },
       React.createElement('a', { href: '#kako' }, 'Kako funkcionise'),
       React.createElement('a', { href: '#alati' }, 'Alati i analize'),
-      React.createElement('a', { href: '/builder', className: 'nav-cta' }, 'Pocni besplatno')
+      React.createElement('a', { href: '/register', className: 'nav-cta' }, 'Pocni besplatno')
     ),
 
     React.createElement('section', { className: 'hero' },
@@ -170,7 +170,7 @@ export default function Home() {
         React.createElement('span', { className: 'hero-line' }),
         React.createElement('p', { className: 'hero-sub' }, 'Vodic koji vas korak po korak vodi kroz Canvas model, SWOT, PEST, finansijske projekcije i sve sto je potrebno za uspjesan biznis plan.'),
         React.createElement('div', { className: 'hero-actions' },
-          React.createElement('a', { href: '/builder', className: 'btn-primary' }, 'Pocni izradu biznis plana'),
+          React.createElement('a', { href: '/register', className: 'btn-primary' }, 'Pocni izradu biznis plana'),
           React.createElement('a', { href: '#kako', className: 'btn-secondary' }, 'Pogledaj kako radi')
         ),
         React.createElement('div', { className: 'hero-trust' },
