@@ -111,8 +111,6 @@ export default function Builder() {
   }, [])
 
   const totalSteps = STEPS.length
-
-  const totalSteps = STEPS.length
   const pct = Math.round(((current + 1) / totalSteps) * 100)
   const step = STEPS[current]
 
