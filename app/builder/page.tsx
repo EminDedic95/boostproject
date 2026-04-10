@@ -104,6 +104,14 @@ export default function Builder() {
   const [scenarios, setScenarios] = useState([['', '', ''], ['', '', ''], ['', '', ''], ['', '', '']])
   const [conclusion, setConclusion] = useState({ text: '', name: '', place: '', date: '' })
 
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) window.location.href = '/login'
+    })
+  }, [])
+
+  const totalSteps = STEPS.length
+
   const totalSteps = STEPS.length
   const pct = Math.round(((current + 1) / totalSteps) * 100)
   const step = STEPS[current]
