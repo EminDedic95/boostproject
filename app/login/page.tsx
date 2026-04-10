@@ -16,7 +16,7 @@ export default function LoginPage() {
     if (!email.trim() || !password.trim()) return setError('Unesite email i lozinku.')
     setLoading(true)
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
-    if (signInError) { setError(signInError.message); setLoading(false); return }    window.location.href = '/builder'
+    if (signInError) { setError(signInError.message); setLoading(false); return }    window.location.replace('/builder')
   }
 
   async function handleReset() {
