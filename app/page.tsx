@@ -209,7 +209,7 @@ export default function Home() {
         React.createElement('div', { className: 'section-header' },
           React.createElement('span', { className: 'section-badge reveal' }, 'Sve na jednom mjestu'),
           React.createElement('h2', { className: 'reveal' }, 'Sve što vam je potrebno za uspješan biznis plan'),
-          React.createElement('p', { className: 'reveal' }, 'Od poslovne ideje do gotovog dokumenta - AI vodi svaki korak, vi donosite odluke.')
+          React.createElement('p', { className: 'reveal' }, 'Od poslovne ideje do gotovog dokumenta - AI asistira na svakom koraku, Vi donosite odluke.')
         ),
         React.createElement('div', { className: 'features-grid' },
           ...[
