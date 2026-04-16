@@ -174,7 +174,7 @@ export default function Home() {
           React.createElement('a', { href: '#kako', className: 'btn-secondary' }, 'Pogledaj kako radi')
         ),
         React.createElement('div', { className: 'hero-trust' },
-          ...['Besplatno', 'Na B/H/S jezicima', 'Bez registracije', 'EU certificiran program'].map(t =>
+          ...['Besplatno', 'Na B/H/S jezicima', 'Bez registracije'].map(t =>
             React.createElement('div', { key: t, className: 'trust-item' },
               React.createElement('div', { className: 'trust-check' },
                 React.createElement('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '3' },
