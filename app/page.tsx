@@ -149,7 +149,7 @@ export default function Home() {
         React.createElement('div', { className: 'nav-links' },
           React.createElement('a', { href: '#kako' }, 'Kako funkcionise'),
           React.createElement('a', { href: '/resources' }, 'Resursi'),
-          React.createElement('a', { href: '/builder', className: 'nav-cta' }, 'Pocni besplatno')
+          React.createElement('a', { href: '/builder', className: 'nav-cta' }, 'Započni besplatno')
         ),
         React.createElement('button', { className: 'hamburger', id: 'lp-hamburger' },
           React.createElement('span'), React.createElement('span'), React.createElement('span')
@@ -160,7 +160,7 @@ export default function Home() {
     React.createElement('div', { className: 'mobile-menu', id: 'lp-mobile-menu' },
       React.createElement('a', { href: '#kako' }, 'Kako funkcionise'),
       React.createElement('a', { href: '#alati' }, 'Alati i analize'),
-      React.createElement('a', { href: '/register', className: 'nav-cta' }, 'Pocni besplatno')
+      React.createElement('a', { href: '/register', className: 'nav-cta' }, 'Započni besplatno')
     ),
 
     React.createElement('section', { className: 'hero' },
@@ -170,7 +170,7 @@ export default function Home() {
         React.createElement('span', { className: 'hero-line' }),
         React.createElement('p', { className: 'hero-sub' }, 'Vodic koji vas korak po korak vodi kroz Canvas model, SWOT, PEST, finansijske projekcije i sve sto je potrebno za uspjesan biznis plan.'),
         React.createElement('div', { className: 'hero-actions' },
-          React.createElement('a', { href: '/register', className: 'btn-primary' }, 'Pocni izradu biznis plana'),
+          React.createElement('a', { href: '/register', className: 'btn-primary' }, 'Započni izradu biznis plana'),
           React.createElement('a', { href: '#kako', className: 'btn-secondary' }, 'Pogledaj kako radi')
         ),
         React.createElement('div', { className: 'hero-trust' },
@@ -277,9 +277,9 @@ export default function Home() {
     ),
 
     React.createElement('section', { className: 'cta-band' },
-      React.createElement('h2', {}, 'Pocnite danas - potpuno besplatno'),
+      React.createElement('h2', {}, 'Započni danas - potpuno besplatno'),
       React.createElement('p', {}, 'Bez registracije. Na B/H/S jezicima. Podrska EU BOOST Balkans programa.'),
-      React.createElement('a', { href: '/builder', className: 'btn-white' }, 'Pocni izradu biznis plana'),
+      React.createElement('a', { href: '/builder', className: 'btn-white' }, 'Započni izradu biznis plana'),
       React.createElement('p', { className: 'cta-note' }, 'Besplatno - Na B/H/S jezicima - EU certificirano')
     ),
 
