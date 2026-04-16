@@ -174,7 +174,7 @@ export default function Home() {
           React.createElement('a', { href: '#kako', className: 'btn-secondary' }, 'Pogledaj kako radi')
         ),
         React.createElement('div', { className: 'hero-trust' },
-          ...['Besplatno', 'Na bosanskom jeziku', 'Bez registracije', 'EU certificiran program'].map(t =>
+          ...['Besplatno', 'Na B/H/S jezicima', 'Bez registracije', 'EU certificiran program'].map(t =>
             React.createElement('div', { key: t, className: 'trust-item' },
               React.createElement('div', { className: 'trust-check' },
                 React.createElement('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '3' },
@@ -278,9 +278,9 @@ export default function Home() {
 
     React.createElement('section', { className: 'cta-band' },
       React.createElement('h2', {}, 'Pocnite danas - potpuno besplatno'),
-      React.createElement('p', {}, 'Bez registracije. Na bosanskom jeziku. Podrska EU BOOST Balkans programa.'),
+      React.createElement('p', {}, 'Bez registracije. Na B/H/S jezicima. Podrska EU BOOST Balkans programa.'),
       React.createElement('a', { href: '/builder', className: 'btn-white' }, 'Pocni izradu biznis plana'),
-      React.createElement('p', { className: 'cta-note' }, 'Besplatno - Na bosanskom jeziku - EU certificirano')
+      React.createElement('p', { className: 'cta-note' }, 'Besplatno - Na B/H/S jezicima - EU certificirano')
     ),
 
     React.createElement('footer', {},
@@ -291,7 +291,7 @@ export default function Home() {
         React.createElement('a', { href: '#' }, 'Kontakt')
       ),
       React.createElement('div', { className: 'footer-divider' }),
-      React.createElement('p', { className: 'footer-copy' }, '2025 BOOST Balkans - Faculty of Economics Mostar - EU sufinancirani projekat')
+      React.createElement('p', { className: 'footer-copy' }, '2025 BOOST Balkans - ovaj projekt je sufinanciran od strane EU')
     )
   )
 }
