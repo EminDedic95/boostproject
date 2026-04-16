@@ -234,11 +234,11 @@ export default function Home() {
       React.createElement('div', { className: 'container' },
         React.createElement('div', { className: 'section-header' },
           React.createElement('span', { className: 'section-badge reveal' }, 'Poslovni alati'),
-          React.createElement('h2', { className: 'reveal' }, 'Sve analize ukljucene'),
-          React.createElement('p', { className: 'reveal' }, 'Svaki alat koji profesionalni konsultanti koriste pri izradi biznis plana - dostupan odmah, uz AI podrsku.')
+          React.createElement('h2', { className: 'reveal' }, 'Sve analize uključene'),
+          React.createElement('p', { className: 'reveal' }, 'Svaki alat koji profesionalni konsultanti koriste pri izradi biznis plana - dostupan odmah, uz AI podršku.')
         ),
         React.createElement('div', { className: 'tools-pills reveal' },
-          ...['Business Model Canvas', 'SWOT analiza', 'PEST analiza', 'Porterovih 5 sila', 'Finansijske projekcije', 'Analiza trzista', 'Marketinska strategija', 'Plan ljudskih resursa', 'Analiza rizika'].map(t =>
+          ...['Business Model Canvas', 'SWOT analiza', 'PEST analiza', 'Porterovih 5 sila', 'Finansijske projekcije', 'Analiza tržišta', 'Marketinška strategija', 'Plan ljudskih resursa', 'Analiza rizika'].map(t =>
             React.createElement('div', { key: t, className: 'tool-pill' },
               React.createElement('span', { className: 'tool-dot' }),
               t
