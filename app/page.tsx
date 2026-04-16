@@ -147,7 +147,7 @@ export default function Home() {
       React.createElement('div', { className: 'nav-inner' },
         React.createElement('a', { href: '/', className: 'nav-logo' }, 'BOOST Biznis Plan'),
         React.createElement('div', { className: 'nav-links' },
-          React.createElement('a', { href: '#kako' }, 'Kako funkcionise'),
+          React.createElement('a', { href: '#kako' }, 'Kako funkcioniše'),
           React.createElement('a', { href: '/resources' }, 'Resursi'),
           React.createElement('a', { href: '/builder', className: 'nav-cta' }, 'Započni besplatno')
         ),
@@ -168,10 +168,9 @@ export default function Home() {
         React.createElement('div', { className: 'hero-eu-badge' }, 'BOOST BALKANS x EU'),
         React.createElement('h1', {}, 'Izradi profesionalni ', React.createElement('em', {}, 'biznis plan'), ' uz AI'),
         React.createElement('span', { className: 'hero-line' }),
-        React.createElement('p', { className: 'hero-sub' }, 'Vodic koji vas korak po korak vodi kroz Canvas model, SWOT, PEST, finansijske projekcije i sve sto je potrebno za uspjesan biznis plan.'),
+        React.createElement('p', { className: 'hero-sub' }, 'Pretvorite svoju ideju u jasan, konkretan i održiv biznis plan.'),
         React.createElement('div', { className: 'hero-actions' },
           React.createElement('a', { href: '/register', className: 'btn-primary' }, 'Započni izradu biznis plana'),
-          React.createElement('a', { href: '#kako', className: 'btn-secondary' }, 'Pogledaj kako radi')
         ),
         React.createElement('div', { className: 'hero-trust' },
           ...['Besplatno', 'Na B/H/S jezicima', 'Bez registracije'].map(t =>
