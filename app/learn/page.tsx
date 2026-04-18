@@ -146,16 +146,9 @@ export default function LearnPage() {
       React.createElement('div', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '11px', fontWeight: '700', padding: '4px 14px', borderRadius: '20px', display: 'inline-block', marginBottom: '24px', letterSpacing: '0.08em' } }, 'PROCJENA ZNANJA'),
       React.createElement('h1', { style: { color: '#1a2740', fontSize: '32px', fontWeight: 'bold', marginBottom: '16px', lineHeight: 1.2 } }, 'Gdje se nalazite na preduzetniskom putu?'),
       React.createElement('p', { style: { color: '#6b7a99', fontSize: '16px', marginBottom: '48px', lineHeight: 1.7 } }, 'Odgovorite na 6 kratkih pitanja i dobit cete personalizovanu preporuku sta je vas sljedeci korak.'),
-      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '48px' } },
-        ...[
-          { n: '6', label: 'Pitanja', sub: 'Oko 2 minute' },
-          { n: '3', label: 'Profila', sub: 'Pocetnik, Srednji, Napredan' },
-          { n: '1', label: 'Preporuka', sub: 'Jasan sljedeci korak' },
-        ].map((item, i) => React.createElement('div', { key: i, style: { background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #e2e8f0', textAlign: 'center' } },
-          React.createElement('div', { style: { fontSize: '28px', fontWeight: '800', color: '#1a2740', marginBottom: '4px' } }, item.n),
-          React.createElement('div', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740', marginBottom: '2px' } }, item.label),
-          React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99' } }, item.sub)
-        ))
+      React.createElement('div', { style: { background: 'white', borderRadius: '16px', padding: '32px 40px', border: '1px solid #e2e8f0', marginBottom: '40px', textAlign: 'left' } },
+        React.createElement('p', { style: { color: '#1a2740', fontSize: '18px', fontWeight: '600', lineHeight: 1.6, margin: '0 0 16px' } }, 'Odgovorite na 6 pitanja i za 2 minute dobit cete personalizovanu preporuku — vas sljedeci korak na preduzetniskom putu.'),
+        React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', margin: 0, lineHeight: 1.6 } }, 'Na osnovu vasih odgovora sistem ce procijeniti gdje se nalazite i preporuciti da li trebate uciti, koristiti alate ili odmah zapoceti izradu biznis plana.')
       ),
       React.createElement('button', {
         onClick: () => setPhase('questions'),
@@ -194,51 +187,19 @@ export default function LearnPage() {
       ),
 
       level === 1 && React.createElement('div', {},
-        React.createElement('h2', { style: { color: '#1a2740', fontSize: '18px', fontWeight: '700', marginBottom: '20px' } }, 'Vasi preporuceni resursi'),
-
-        React.createElement('h3', { style: { color: '#1F4E79', fontSize: '13px', fontWeight: '700', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.06em' } }, 'Interaktivni alati'),
-        React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '24px' } },
-          ...RESOURCES.tools.map((tool, i) => React.createElement('a', { key: i, href: tool.href, style: { background: 'white', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0', textDecoration: 'none', display: 'block' } },
-            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' } },
-              React.createElement('span', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '9px', fontWeight: '700', padding: '2px 6px', borderRadius: '4px' } }, tool.tag),
-              React.createElement('span', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, tool.title)
+        React.createElement('div', { style: { background: 'white', borderRadius: '16px', padding: '40px', border: '1px solid #e2e8f0', marginBottom: '16px' } },
+          React.createElement('h2', { style: { color: '#1a2740', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' } }, 'Vas sljedeci korak: ucite prije nego gradite'),
+          React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', lineHeight: 1.7, marginBottom: '28px' } }, 'Preporucujemo da pocnete sa BOOST Vodicem za izradu biznis plana — kompletan materijal koji ce vas provesti kroz sve kljucne koncepte. Kada budete spremni, nasi alati i builder ce cekati.'),
+          React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' } },
+            React.createElement('a', { href: '/resources', style: { background: '#1a2740', color: 'white', padding: '14px 24px', borderRadius: '12px', fontWeight: 'bold', fontSize: '15px', textDecoration: 'none', display: 'block', textAlign: 'center' } },
+              React.createElement('div', { style: { fontSize: '11px', fontWeight: '600', color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.06em' } }, 'KORAK 1'),
+              'Preuzmi BOOST Vodic'
             ),
-            React.createElement('p', { style: { color: '#6b7a99', fontSize: '12px', margin: 0, lineHeight: 1.4 } }, tool.desc)
-          ))
-        ),
-
-        React.createElement('h3', { style: { color: '#c0392b', fontSize: '13px', fontWeight: '700', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.06em' } }, 'PDF Materijali'),
-        React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' } },
-          ...RESOURCES.pdfs.map((pdf, i) => React.createElement('div', { key: i, style: { background: 'white', borderRadius: '10px', padding: '14px 18px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
-            React.createElement('div', {},
-              React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' } },
-                React.createElement('span', { style: { background: pdf.tag === 'PDF' ? '#FFEBEB' : '#EBF4EB', color: pdf.tag === 'PDF' ? '#c0392b' : '#2d7a4f', fontSize: '9px', fontWeight: '700', padding: '2px 6px', borderRadius: '4px' } }, pdf.tag),
-                React.createElement('span', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, pdf.title)
-              ),
-              React.createElement('p', { style: { color: '#6b7a99', fontSize: '12px', margin: 0 } }, pdf.desc)
-            ),
-            React.createElement('button', { style: { background: '#1a2740', color: 'white', border: 'none', padding: '6px 16px', borderRadius: '16px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', flexShrink: 0, marginLeft: '12px' } }, 'Preuzmi')
-          ))
-        ),
-
-        React.createElement('h3', { style: { color: '#C9A227', fontSize: '13px', fontWeight: '700', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.06em' } }, 'Video tutorijali'),
-        React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '32px' } },
-          ...RESOURCES.videos.map((video, i) => React.createElement('div', { key: i, style: { background: 'white', borderRadius: '10px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
-            React.createElement('div', { style: { background: '#1a2740', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
-              React.createElement('div', { style: { width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
-                React.createElement('div', { style: { width: 0, height: 0, borderTop: '7px solid transparent', borderBottom: '7px solid transparent', borderLeft: '12px solid white', marginLeft: '3px' } })
-              )
-            ),
-            React.createElement('div', { style: { padding: '12px' } },
-              React.createElement('span', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '9px', fontWeight: '700', padding: '2px 6px', borderRadius: '10px' } }, video.step),
-              React.createElement('p', { style: { color: '#1a2740', fontSize: '12px', fontWeight: '600', margin: '6px 0 0', lineHeight: 1.3 } }, video.title)
+            React.createElement('a', { href: '/resources', style: { background: '#f5f7fb', color: '#1a2740', padding: '14px 24px', borderRadius: '12px', fontWeight: 'bold', fontSize: '15px', textDecoration: 'none', display: 'block', textAlign: 'center', border: '1px solid #e2e8f0' } },
+              React.createElement('div', { style: { fontSize: '11px', fontWeight: '600', color: '#6b7a99', marginBottom: '4px', letterSpacing: '0.06em' } }, 'KORAK 2'),
+              'Istrazite sve resurse'
             )
-          ))
-        ),
-
-        React.createElement('div', { style: { background: '#1a2740', borderRadius: '16px', padding: '28px', textAlign: 'center' } },
-          React.createElement('p', { style: { color: 'rgba(255,255,255,0.7)', fontSize: '14px', marginBottom: '16px' } }, 'Kad budete spremni, mozete zapoceti izradu vaseg biznis plana.'),
-          React.createElement('a', { href: '/builder', style: { background: '#C9A227', color: '#1a2740', padding: '12px 32px', borderRadius: '24px', fontWeight: 'bold', fontSize: '15px', textDecoration: 'none', display: 'inline-block' } }, 'Pocni izradu biznis plana')
+          )
         )
       ),
 
