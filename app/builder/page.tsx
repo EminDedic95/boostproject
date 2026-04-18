@@ -651,6 +651,7 @@ export default function Builder() {
       React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'BOOST Biznis Plan'),
       React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '16px' } },
         React.createElement('a', { href: '/resources', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Resursi'),
+        React.createElement('a', { href: '/profile', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Profil'),
         React.createElement('span', { style: { fontSize: '13px', color: '#6b7a99' } }, 'Korak ' + (current + 1) + ' od ' + totalSteps),
         React.createElement('div', { style: { width: '140px', height: '4px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' } },
           React.createElement('div', { style: { width: pct + '%', height: '100%', background: '#C9A227', borderRadius: '4px', transition: 'width 0.4s ease' } })
