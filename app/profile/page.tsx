@@ -2,17 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
-const STEPS = [
-  'Naslovna strana', 'Sazetak', 'Biznis ideja', 'Preduzetnik', 'Motivacija',
-  'Canvas model', 'Vizija i ciljevi', 'Misija', 'PEST analiza', 'Porterovih 5',
-  'SWOT', 'Analiza trzista', 'Marketing plan', 'Operacije', 'Pravna forma',
-  'Analiza rizika', 'Prihodi', 'Ulaganja', 'Finansije', 'KPI i scenariji', 'Zakljucak'
-]
-
-const MODULES = [
-  'Poslovna ideja', 'Canvas model', 'SWOT i PEST', 'Konkurencija',
-  'Trziste i kupci', 'Marketing', 'Finansije', 'Pravni okvir'
-]
+const STEPS_COUNT = 21
+const MODULES_COUNT = 8
 
 export default function ProfilePage() {
   const [user, setUser] = useState<{ id: string, email: string } | null>(null)
@@ -52,14 +43,11 @@ export default function ProfilePage() {
   if (loading) return React.createElement('div', {
     style: { fontFamily: 'Segoe UI, sans-serif', minHeight: '100vh', background: '#f5f7fb', display: 'flex', alignItems: 'center', justifyContent: 'center' }
   },
-    React.createElement('div', { style: { textAlign: 'center' } },
-      React.createElement('div', { style: { width: '40px', height: '40px', border: '3px solid #e2e8f0', borderTop: '3px solid #1a2740', borderRadius: '50%', margin: '0 auto 16px', animation: 'spin 1s linear infinite' } }),
-      React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px' } }, 'Ucitavanje...')
-    )
+    React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px' } }, 'Ucitavanje...')
   )
 
-  const planPct = Math.round((planStep / STEPS.length) * 100)
-  const learnPct = Math.round((learningDone / MODULES.length) * 100)
+  const planPct = Math.round((planStep / STEPS_COUNT) * 100)
+  const learnPct = Math.round((learningDone / MODULES_COUNT) * 100)
   const joinDate = profile?.created_at ? new Date(profile.created_at).toLocaleDateString('hr-HR') : '—'
   const firstName = profile?.name ? profile.name.split(' ')[0] : user?.email?.split('@')[0] || ''
 
@@ -80,40 +68,46 @@ export default function ProfilePage() {
       )
     ),
 
-    React.createElement('main', { style: { maxWidth: '900px', margin: '0 auto', padding: '48px 24px' } },
+    React.createElement('main', { style: { maxWidth: '820px', margin: '0 auto', padding: '64px 24px' } },
 
-      React.createElement('div', { style: { marginBottom: '40px' } },
-        React.createElement('h1', { style: { color: '#1a2740', fontSize: '30px', fontWeight: 'bold', marginBottom: '6px' } }, 'Zdravo, ' + firstName + '!'),
-        React.createElement('p', { style: { color: '#6b7a99', fontSize: '15px' } }, 'Sta zelite raditi danas?')
+      React.createElement('div', { style: { marginBottom: '48px' } },
+        React.createElement('h1', { style: { color: '#1a2740', fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' } }, 'Zdravo, ' + firstName + '!'),
+        React.createElement('p', { style: { color: '#6b7a99', fontSize: '16px' } }, 'Sta zelite raditi danas?')
       ),
 
-      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '40px' } },
+      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' } },
 
-        React.createElement('div', { style: { background: '#1a2740', borderRadius: '20px', padding: '36px', position: 'relative', overflow: 'hidden', cursor: 'pointer' }, onClick: () => window.location.href = '/builder' },
+        React.createElement('div', {
+          style: { background: '#1a2740', borderRadius: '20px', padding: '36px', position: 'relative', overflow: 'hidden', cursor: 'pointer' },
+          onClick: () => window.location.href = '/builder'
+        },
           React.createElement('div', { style: { position: 'absolute', top: '-20px', right: '-20px', width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(201,162,39,0.15)' } }),
           React.createElement('div', { style: { position: 'absolute', bottom: '-30px', right: '30px', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(201,162,39,0.1)' } }),
           React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', display: 'inline-block', marginBottom: '20px', letterSpacing: '0.06em' } }, 'BIZNIS PLAN'),
           React.createElement('h2', { style: { color: 'white', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', lineHeight: 1.2 } }, 'Izradi biznis plan'),
-          React.createElement('p', { style: { color: 'rgba(255,255,255,0.65)', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 } }, 'Korak-po-korak vodic kroz 21 sekciju profesionalnog biznis plana uz AI podrsku.'),
+          React.createElement('p', { style: { color: 'rgba(255,255,255,0.65)', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Korak-po-korak vodic kroz 21 sekciju profesionalnog biznis plana uz AI podrsku.'),
           planStep > 0
             ? React.createElement('div', {},
                 React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '6px' } },
                   React.createElement('span', { style: { fontSize: '12px', color: 'rgba(255,255,255,0.6)' } }, 'Napredak'),
                   React.createElement('span', { style: { fontSize: '12px', fontWeight: '700', color: '#C9A227' } }, planPct + '%')
                 ),
-                React.createElement('div', { style: { height: '4px', background: 'rgba(255,255,255,0.15)', borderRadius: '4px', overflow: 'hidden', marginBottom: '16px' } },
+                React.createElement('div', { style: { height: '4px', background: 'rgba(255,255,255,0.15)', borderRadius: '4px', overflow: 'hidden', marginBottom: '20px' } },
                   React.createElement('div', { style: { height: '100%', width: planPct + '%', background: '#C9A227', borderRadius: '4px' } })
                 ),
-                React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Nastavi — ' + (STEPS[planStep] || 'Zavrsi'))
+                React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Nastavi plan')
               )
-            : React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Zapocni izradu')
+            : React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Zapocni izradu')
         ),
 
-        React.createElement('div', { style: { background: 'white', borderRadius: '20px', padding: '36px', border: '1px solid #e2e8f0', position: 'relative', overflow: 'hidden', cursor: 'pointer' }, onClick: () => window.location.href = '/learn' },
-          React.createElement('div', { style: { position: 'absolute', top: '-20px', right: '-20px', width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(45,122,79,0.08)' } }),
-          React.createElement('div', { style: { background: '#f0faf4', color: '#2d7a4f', fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', display: 'inline-block', marginBottom: '20px', letterSpacing: '0.06em', border: '1px solid #2d7a4f30' } }, 'UCENJE'),
+        React.createElement('div', {
+          style: { background: 'white', borderRadius: '20px', padding: '36px', border: '1px solid #e2e8f0', position: 'relative', overflow: 'hidden', cursor: 'pointer' },
+          onClick: () => window.location.href = '/learn'
+        },
+          React.createElement('div', { style: { position: 'absolute', top: '-20px', right: '-20px', width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(45,122,79,0.06)' } }),
+          React.createElement('div', { style: { background: '#f0faf4', color: '#2d7a4f', fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', display: 'inline-block', marginBottom: '20px', letterSpacing: '0.06em', border: '1px solid rgba(45,122,79,0.2)' } }, 'UCENJE'),
           React.createElement('h2', { style: { color: '#1a2740', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', lineHeight: 1.2 } }, 'Putanja ucenja'),
-          React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 } }, 'Procijenite znanje, dobijte personalizovani plan ucenja sa teorijom, videima i kvizovima.'),
+          React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Procijenite znanje, dobijte personalizovani plan ucenja sa teorijom, videima i kvizovima.'),
           learningProfile
             ? React.createElement('div', {},
                 profileInfo && React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' } },
@@ -121,47 +115,39 @@ export default function ProfilePage() {
                   React.createElement('span', { style: { fontSize: '13px', fontWeight: '600', color: profileInfo.color } }, profileInfo.label)
                 ),
                 React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '6px' } },
-                  React.createElement('span', { style: { fontSize: '12px', color: '#6b7a99' } }, learningDone + ' od ' + MODULES.length + ' modula'),
+                  React.createElement('span', { style: { fontSize: '12px', color: '#6b7a99' } }, learningDone + ' od ' + MODULES_COUNT + ' modula'),
                   React.createElement('span', { style: { fontSize: '12px', fontWeight: '700', color: '#2d7a4f' } }, learnPct + '%')
                 ),
-                React.createElement('div', { style: { height: '4px', background: '#f5f7fb', borderRadius: '4px', overflow: 'hidden', marginBottom: '16px' } },
+                React.createElement('div', { style: { height: '4px', background: '#f5f7fb', borderRadius: '4px', overflow: 'hidden', marginBottom: '20px' } },
                   React.createElement('div', { style: { height: '100%', width: learnPct + '%', background: '#2d7a4f', borderRadius: '4px' } })
                 ),
-                React.createElement('div', { style: { background: '#1a2740', color: 'white', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Nastavi ucenje')
+                React.createElement('div', { style: { background: '#1a2740', color: 'white', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Nastavi ucenje')
               )
-            : React.createElement('div', { style: { background: '#1a2740', color: 'white', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Zapocni procjenu')
+            : React.createElement('div', { style: { background: '#1a2740', color: 'white', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Zapocni procjenu')
         )
       ),
 
-      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '40px' } },
-        React.createElement('a', { href: '/resources', style: { background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #e2e8f0', textDecoration: 'none', display: 'block', transition: 'all 0.2s' } },
-          React.createElement('div', { style: { fontSize: '20px', marginBottom: '8px' } }, 'RESURSI'),
-          React.createElement('div', { style: { fontSize: '14px', fontWeight: '600', color: '#1a2740', marginBottom: '4px' } }, 'Resursi i alati'),
-          React.createElement('div', { style: { fontSize: '12px', color: '#6b7a99' } }, 'Canvas, SWOT, PEST i jos alata')
+      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' } },
+        React.createElement('a', { href: '/resources', style: { background: 'white', borderRadius: '12px', padding: '18px 20px', border: '1px solid #e2e8f0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' } },
+          React.createElement('div', { style: { width: '36px', height: '36px', borderRadius: '10px', background: '#EBF4FB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#1F4E79', flexShrink: 0 } }, 'R'),
+          React.createElement('div', {},
+            React.createElement('div', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, 'Resursi i alati'),
+            React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99', marginTop: '2px' } }, 'Canvas, SWOT, PEST...')
+          )
         ),
-        React.createElement('a', { href: '/resources', style: { background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #e2e8f0', textDecoration: 'none', display: 'block' } },
-          React.createElement('div', { style: { fontSize: '20px', marginBottom: '8px' } }, 'PDF'),
-          React.createElement('div', { style: { fontSize: '14px', fontWeight: '600', color: '#1a2740', marginBottom: '4px' } }, 'PDF materijali'),
-          React.createElement('div', { style: { fontSize: '12px', color: '#6b7a99' } }, 'Vodici i templates za preuzimanje')
+        React.createElement('a', { href: '/resources', style: { background: 'white', borderRadius: '12px', padding: '18px 20px', border: '1px solid #e2e8f0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' } },
+          React.createElement('div', { style: { width: '36px', height: '36px', borderRadius: '10px', background: '#FFEBEB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#c0392b', flexShrink: 0 } }, 'PDF'),
+          React.createElement('div', {},
+            React.createElement('div', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, 'PDF materijali'),
+            React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99', marginTop: '2px' } }, 'Vodici i templates')
+          )
         ),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #e2e8f0', cursor: 'pointer' }, onClick: handleSignOut },
-          React.createElement('div', { style: { fontSize: '20px', marginBottom: '8px' } }, 'ODJAVA'),
-          React.createElement('div', { style: { fontSize: '14px', fontWeight: '600', color: '#1a2740', marginBottom: '4px' } }, 'Odjava'),
-          React.createElement('div', { style: { fontSize: '12px', color: '#6b7a99' } }, profile?.name + ' · clan od ' + joinDate)
-        )
-      ),
-
-      React.createElement('div', { style: { background: 'white', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0' } },
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '15px', fontWeight: '700', marginBottom: '16px' } }, 'Napredak biznis plana'),
-        React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' } },
-          ...STEPS.map((s, i) => {
-            const done = i < planStep
-            const active = i === planStep
-            return React.createElement('div', { key: i, style: { display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 10px', borderRadius: '8px', background: done ? '#f0faf4' : active ? '#FFF8E7' : '#f5f7fb', border: '1px solid ' + (done ? '#2d7a4f30' : active ? '#C9A22740' : '#e2e8f0'), cursor: 'pointer' }, onClick: () => window.location.href = '/builder' },
-              React.createElement('div', { style: { width: '16px', height: '16px', borderRadius: '50%', background: done ? '#2d7a4f' : active ? '#C9A227' : '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', color: 'white', fontWeight: 'bold', flexShrink: 0 } }, done ? 'v' : i + 1),
-              React.createElement('span', { style: { fontSize: '11px', color: done ? '#2d7a4f' : active ? '#1a2740' : '#6b7a99', fontWeight: active ? '700' : '400', lineHeight: 1.2 } }, s)
-            )
-          })
+        React.createElement('div', { style: { background: 'white', borderRadius: '12px', padding: '18px 20px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }, onClick: handleSignOut },
+          React.createElement('div', { style: { width: '36px', height: '36px', borderRadius: '10px', background: '#f5f7fb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#6b7a99', flexShrink: 0 } }, 'E'),
+          React.createElement('div', {},
+            React.createElement('div', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, profile?.name || firstName),
+            React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99', marginTop: '2px' } }, 'Clan od ' + joinDate + ' · Odjava')
+          )
         )
       )
     )
