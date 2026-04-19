@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import StepProdajniAsortiman, { SalesData } from '@/app/components/financial/StepProdajniAsortiman'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -103,6 +104,11 @@ export default function Builder() {
   const [kpi, setKpi] = useState([['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00']])
   const [scenarios, setScenarios] = useState([['', '', ''], ['', '', ''], ['', '', ''], ['', '', '']])
   const [conclusion, setConclusion] = useState({ text: '', name: '', place: '', date: '' })
+  const [salesData, setSalesData] = useState<SalesData>({
+  products: [],
+  growthG2: 1.10,
+  growthG3: 1.20,
+})
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -444,35 +450,10 @@ export default function Builder() {
       React.createElement('button', { onClick: () => setRisks(p => [...p, ['', '', '', '']]), style: { background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj rizik')
     )
 
-    if (n === 17) return React.createElement('div', {},
-      React.createElement('p', { style: { color: '#6b7a99', fontSize: '13px', marginBottom: '12px' } }, 'Unesite sve proizvode/usluge sa kolicinama i cijenama.'),
-      React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '10px' } },
-        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-          React.createElement('thead', {},
-            React.createElement('tr', {},
-              ...['Proizvod / Usluga', 'Jed. mjere', 'Kol./god.', 'Prod. cijena', 'Tr. materijala', 'Ukupan prihod', ''].map(h =>
-                React.createElement('th', { key: h, style: { padding: '8px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '11px', whiteSpace: 'nowrap' } }, h)
-              )
-            )
-          ),
-          React.createElement('tbody', {},
-            ...sales.map((row, ri) =>
-              React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                ...row.map((cell, ci) =>
-                  React.createElement('td', { key: ci, style: { padding: '4px', border: '1px solid #e2e8f0' } },
-                    React.createElement('input', { type: 'text', value: cell, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSales(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px 6px', background: 'transparent', boxSizing: 'border-box' } })
-                  )
-                ),
-                React.createElement('td', { style: { padding: '4px', textAlign: 'center' } },
-                  React.createElement('button', { onClick: () => setSales(p => p.filter((_, i) => i !== ri)), style: { background: 'none', border: 'none', color: '#e53e3e', cursor: 'pointer', fontSize: '14px' } }, 'x')
-                )
-              )
-            )
-          )
-        )
-      ),
-      React.createElement('button', { onClick: () => setSales(p => [...p, ['', 'kom', '0', '0.00', '0.00', '0.00']]), style: { background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj proizvod / uslugu')
-    )
+if (n === 17) return React.createElement(StepProdajniAsortiman, {
+  data: salesData,
+  onChange: setSalesData,
+})
 
     if (n === 18) return React.createElement('div', {},
       React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' } },
