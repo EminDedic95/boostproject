@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import StepProdajniAsortiman, { SalesData } from '@/app/components/financial/StepProdajniAsortiman'
+import StepNormativ, { NormativData } from '@/app/components/financial/StepNormativ'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -108,7 +109,8 @@ export default function Builder() {
   products: [],
   growthG2: 1.10,
   growthG3: 1.20,
-})
+}) 
+  const [normativData, setNormativData] = useState<NormativData>({ items: [] })
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -455,47 +457,11 @@ if (n === 17) return React.createElement(StepProdajniAsortiman, {
   onChange: setSalesData,
 })
 
-    if (n === 18) return React.createElement('div', {},
-      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' } },
-        React.createElement('div', { style: { background: 'white', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0' } },
-          React.createElement('label', { style: { display: 'block', fontWeight: '600', color: '#1a2740', marginBottom: '6px', fontSize: '13px' } }, 'Ukupna stalna sredstva (KM)'),
-          React.createElement('input', { type: 'text', value: investment.fixed, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setInvestment(p => ({...p, fixed: e.target.value})), placeholder: '0.00', style: { width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none', boxSizing: 'border-box' } })
-        ),
-        React.createElement('div', { style: { background: 'white', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0' } },
-          React.createElement('label', { style: { display: 'block', fontWeight: '600', color: '#1a2740', marginBottom: '6px', fontSize: '13px' } }, 'Ukupna obrtna sredstva (KM)'),
-          React.createElement('input', { type: 'text', value: investment.working, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setInvestment(p => ({...p, working: e.target.value})), placeholder: '0.00', style: { width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none', boxSizing: 'border-box' } })
-        )
-      ),
-      React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Struktura finansiranja'),
-      React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
-        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '13px' } },
-          React.createElement('thead', {},
-            React.createElement('tr', {},
-              ...['Izvor finansiranja', 'Iznos (KM)', 'Udio (%)'].map(h =>
-                React.createElement('th', { key: h, style: { padding: '10px 12px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '12px' } }, h)
-              )
-            )
-          ),
-          React.createElement('tbody', {},
-            ...investment.sources.map((row, ri) =>
-              React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                ...row.map((cell, ci) =>
-                  React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0' } },
-                    React.createElement('input', { type: 'text', value: cell, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setInvestment(p => ({...p, sources: p.sources.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)})), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px', background: 'transparent', boxSizing: 'border-box' } })
-                  )
-                )
-              )
-            ),
-            React.createElement('tr', { style: { background: '#f5f7fb' } },
-              React.createElement('td', { style: { padding: '10px 12px', fontWeight: '700', color: '#1a2740' } }, 'UKUPNO'),
-              React.createElement('td', { style: { padding: '10px 12px', fontWeight: '700', color: '#1a2740' } }, investment.sources.reduce((s, r) => s + (parseFloat(r[1]) || 0), 0).toFixed(2)),
-              React.createElement('td', { style: { padding: '10px 12px', fontWeight: '700', color: '#1a2740' } }, '100%')
-            )
-          )
-        )
-      )
-    )
-
+   if (n === 18) return React.createElement(StepNormativ, {
+  data: normativData,
+  products: salesData.products,
+  onChange: setNormativData,
+})
     if (n === 19) {
       const plRows = ['UKUPAN PRIHOD OD PRODAJE', 'Troskovi materijala / robe', 'BRUTO DOBIT', 'Troskovi plata (bruto)', 'Amortizacija', 'Troskovi zakupa prostora', 'Troskovi marketinga', 'Ostali operativni troskovi', 'POSLOVNI REZULTAT (EBIT)', 'Kamate na kredite', 'REZULTAT PRIJE POREZA', 'NETO PROFIT / (GUBITAK)']
       const cfRows = ['Operativni novcani tok', 'Investicioni novcani tok (ulaganja)', 'Finansijski novcani tok', 'NETO NOVCANI TOK', 'Kumulativni novcani tok']
