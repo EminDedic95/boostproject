@@ -471,55 +471,6 @@ if (n === 17) return React.createElement(StepProdajniAsortiman, {
   data: stalnaData,
   onChange: setStalnaData,
      }) 
-     React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Racun dobiti i gubitka — 3 godine'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '20px' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '50%' } }, 'STAVKA'),
-                ...['Godina 1', 'Godina 2', 'Godina 3'].map(y => React.createElement('th', { key: y, style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'right' } }, y))
-              )
-            ),
-            React.createElement('tbody', {},
-              ...plRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0', background: row.toUpperCase() === row ? '#f5f7fb' : 'white' } },
-                  React.createElement('td', { style: { padding: '6px 12px', fontWeight: row.toUpperCase() === row ? '700' : '400', color: '#1a2740', fontSize: '12px' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'right' } },
-                      React.createElement('input', { type: 'text', value: pl[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPl(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'right', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Novcani tok (Cash Flow) — 3 godine'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '50%' } }, 'CASH FLOW'),
-                ...['Godina 1', 'Godina 2', 'Godina 3'].map(y => React.createElement('th', { key: y, style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'right' } }, y))
-              )
-            ),
-            React.createElement('tbody', {},
-              ...cfRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0', background: row.startsWith('NETO') || row.startsWith('Kumulativni') ? '#f5f7fb' : 'white' } },
-                  React.createElement('td', { style: { padding: '6px 12px', fontWeight: row.startsWith('NETO') || row.startsWith('Kumulativni') ? '700' : '400', color: '#1a2740' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'right' } },
-                      React.createElement('input', { type: 'text', value: cashflow[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setCashflow(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'right', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    }
-
     if (n === 20) {
       const kpiRows = ['Ukupan prihod (KM)', 'Neto profit (KM)', 'Neto marza (%)', 'Povrat na investiciju — ROI (%)', 'Break-even tacka (kom / KM)', 'Period povrata investicije (god.)']
       const scenRows = ['Prihod', 'Neto profit', 'Neto marza (%)', 'Ocjena odrzivosti']
