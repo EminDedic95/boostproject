@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import StepProdajniAsortiman, { SalesData } from '@/app/components/financial/StepProdajniAsortiman'
 import StepNormativ, { NormativData } from '@/app/components/financial/StepNormativ'
+import StepStalnaData, { StalnaData } from '@/app/components/financial/StepStalnaData'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -111,6 +112,10 @@ export default function Builder() {
   growthG3: 1.20,
 }) 
   const [normativData, setNormativData] = useState<NormativData>({ items: [] })
+  const [stalnaData, setStalnaData] = useState<StalnaData>({
+  infrastruktura: [], zemljiste: [], oprema: [], vozila: [],
+  osnivacka: 0, obrtna: 0,
+})
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -462,11 +467,11 @@ if (n === 17) return React.createElement(StepProdajniAsortiman, {
   products: salesData.products,
   onChange: setNormativData,
 })
-    if (n === 19) {
-      const plRows = ['UKUPAN PRIHOD OD PRODAJE', 'Troskovi materijala / robe', 'BRUTO DOBIT', 'Troskovi plata (bruto)', 'Amortizacija', 'Troskovi zakupa prostora', 'Troskovi marketinga', 'Ostali operativni troskovi', 'POSLOVNI REZULTAT (EBIT)', 'Kamate na kredite', 'REZULTAT PRIJE POREZA', 'NETO PROFIT / (GUBITAK)']
-      const cfRows = ['Operativni novcani tok', 'Investicioni novcani tok (ulaganja)', 'Finansijski novcani tok', 'NETO NOVCANI TOK', 'Kumulativni novcani tok']
-      return React.createElement('div', {},
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Racun dobiti i gubitka — 3 godine'),
+   if (n === 19) return React.createElement(StepStalnaData, {
+  data: stalnaData,
+  onChange: setStalnaData,
+     }) 
+     React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Racun dobiti i gubitka — 3 godine'),
         React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '20px' } },
           React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
             React.createElement('thead', {},
