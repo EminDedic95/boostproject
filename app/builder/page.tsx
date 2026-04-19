@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import StepProdajniAsortiman, { SalesData } from '@/app/components/financial/StepProdajniAsortiman'
 import StepNormativ, { NormativData } from '@/app/components/financial/StepNormativ'
 import StepStalnaData, { StalnaData } from '@/app/components/financial/StepStalnaData'
+import StepFinansiranje, { FinansiranjeData } from '@/app/components/financial/StepFinansiranje'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -115,6 +116,16 @@ export default function Builder() {
   const [stalnaData, setStalnaData] = useState<StalnaData>({
   infrastruktura: [], zemljiste: [], oprema: [], vozila: [],
   osnivacka: 0, obrtna: 0,
+})
+  const [finansiranjeData, setFinansiranjeData] = useState<FinansiranjeData>({
+  sources: [
+    { naziv: 'Vlastita sredstva osnivaca', iznos: 0 },
+    { naziv: 'Bankovni kredit za opremu', iznos: 0 },
+    { naziv: 'Kredit za obrtna sredstva', iznos: 0 },
+    { naziv: 'EU fondovi / grant', iznos: 0 },
+    { naziv: 'Ostalo', iznos: 0 },
+  ],
+  kredit: { iznos: 0, gracePeriod: 0, rokOtplate: 36, kamatnaStopa: 5 },
 })
 
   useEffect(() => {
@@ -471,60 +482,11 @@ if (n === 17) return React.createElement(StepProdajniAsortiman, {
   data: stalnaData,
   onChange: setStalnaData,
      }) 
-    if (n === 20) {
-      const kpiRows = ['Ukupan prihod (KM)', 'Neto profit (KM)', 'Neto marza (%)', 'Povrat na investiciju — ROI (%)', 'Break-even tacka (kom / KM)', 'Period povrata investicije (god.)']
-      const scenRows = ['Prihod', 'Neto profit', 'Neto marza (%)', 'Ocjena odrzivosti']
-      return React.createElement('div', {},
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Kljucni finansijski pokazatelji — 3 godine'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '20px' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '50%' } }, 'POKAZATELJI USPJEHA'),
-                ...['Godina 1', 'Godina 2', 'Godina 3'].map(y => React.createElement('th', { key: y, style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'right' } }, y))
-              )
-            ),
-            React.createElement('tbody', {},
-              ...kpiRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                  React.createElement('td', { style: { padding: '6px 12px', color: '#1a2740', fontWeight: row.includes('Povrat') || row.includes('Period') ? '700' : '400' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'right' } },
-                      React.createElement('input', { type: 'text', value: kpi[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setKpi(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'right', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Scenarijska analiza'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '25%' } }, ''),
-                React.createElement('th', { style: { padding: '8px 12px', background: '#c0392b', color: 'white', textAlign: 'center' } }, 'PESIMISTICKI (-30%)'),
-                React.createElement('th', { style: { padding: '8px 12px', background: '#2d7a4f', color: 'white', textAlign: 'center' } }, 'BAZNI (plan)'),
-                React.createElement('th', { style: { padding: '8px 12px', background: '#2E75B6', color: 'white', textAlign: 'center' } }, 'OPTIMISTICKI (+30%)')
-              )
-            ),
-            React.createElement('tbody', {},
-              ...scenRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                  React.createElement('td', { style: { padding: '6px 12px', fontWeight: '600', color: '#1a2740' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'center' } },
-                      React.createElement('input', { type: 'text', value: scenarios[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setScenarios(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), placeholder: 'Unesite...', style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'center', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    }
+if (n === 20) return React.createElement(StepFinansiranje, {
+  data: finansiranjeData,
+  stalnaData: stalnaData,
+  onChange: setFinansiranjeData,
+})
 
     if (n === 21) return React.createElement('div', {},
       Field({ label: 'Zakljucna izjava', placeholder: 'Ja, dolje potpisani/a, izjavljujem da su svi podaci u ovom biznis planu istiniti, provjereni i realisticni...', value: conclusion.text, onChange: v => setConclusion(p => ({...p, text: v})), rows: 4 }),
