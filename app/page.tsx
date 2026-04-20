@@ -276,7 +276,7 @@ export default function Home() {
 
     React.createElement('section', { className: 'cta-band' },
       React.createElement('h2', {}, 'Započni danas - potpuno besplatno'),
-      React.createElement('p', {},  Na B/H/S jezicima. Podrska EU BOOST Balkans programa.'),
+      React.createElement('p', {}, 'Na B/H/S jezicima. Podrska EU BOOST Balkans programa.'),
       React.createElement('a', { href: '/builder', className: 'btn-white' }, 'Započni izradu biznis plana'),
       React.createElement('p', { className: 'cta-note' }, 'Besplatno - Na B/H/S jezicima')
     ),
