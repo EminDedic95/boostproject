@@ -23,11 +23,16 @@ const STEPS = [
   { n: 14, label: 'Operacije', tag: 'DIO VI', title: 'Poslovni procesi i organizacija', desc: 'Opisite kako funkcionise vase preduzece iznutra.' },
   { n: 15, label: 'Pravna forma', tag: 'DIO VI.5', title: 'Pravna forma registracije', desc: 'Navedite pravnu formu i detalje registracije preduzeca.' },
   { n: 16, label: 'Analiza rizika', tag: 'DIO VII', title: 'Analiza rizika', desc: 'Identificirajte minimum 5 rizika sa ocjenom i mjerama ublazavanja.' },
-  { n: 17, label: 'Prihodi', tag: 'DIO VIII.1', title: 'Prodajni asortiman i prihodi', desc: 'Unesite proizvode/usluge sa kolicinama i cijenama.' },
-  { n: 18, label: 'Ulaganja', tag: 'DIO VIII.2', title: 'Inicijalna ulaganja i izvori finansiranja', desc: 'Definisite ukupna ulaganja i strukturu finansiranja.' },
-  { n: 19, label: 'Finansije', tag: 'DIO VIII.3-4', title: 'Racun dobiti i gubitka i Cash Flow', desc: 'Projekcije prihoda, troskova i novcanih tokova za 3 godine.' },
-  { n: 20, label: 'KPI i scenariji', tag: 'DIO VIII.5-6', title: 'Kljucni pokazatelji i scenarijska analiza', desc: 'Finansijski KPIs i scenarijska analiza (pesimisticki/bazni/optimisticki).' },
-  { n: 21, label: 'Zakljucak', tag: 'ZAKLJUCAK', title: 'Zakljucak i izjava preduzetnika', desc: 'Zakljucna izjava i potpis preduzetnika.' },
+  { n: 17, label: 'Prodajni asortiman', tag: 'DIO VIII.1', title: 'Prodajni asortiman i prihodi', desc: 'Unesite proizvode/usluge sa kolicinama, cijenama i faktorima rasta.' },
+  { n: 18, label: 'Normativ', tag: 'DIO VIII.2', title: 'Normativ materijalnih troskova', desc: 'Definisite troskove materijala po jedinici za svaki proizvod/uslugu.' },
+  { n: 19, label: 'Stalna sredstva', tag: 'DIO VIII.3', title: 'Ulaganja u stalna sredstva', desc: 'Unesite sva planirana ulaganja u stalna sredstva po kategorijama.' },
+  { n: 20, label: 'Finansiranje', tag: 'DIO VIII.4', title: 'Finansiranje i kreditni plan', desc: 'Definisite izvore finansiranja i kreditni plan otplate.' },
+  { n: 21, label: 'Promocija', tag: 'DIO VIII.5', title: 'Troskovi promocije i marketinga', desc: 'Unesite troskove marketinga i promocije po kategorijama za 3 godine.' },
+  { n: 22, label: 'Ostali troskovi', tag: 'DIO VIII.6', title: 'Ostali troskovi i plate', desc: 'Unesite operativne troskove, amortizaciju i troskove radne snage.' },
+  { n: 23, label: 'P&L', tag: 'DIO VIII.7', title: 'Racun dobiti i gubitka', desc: 'Automatski izracun profitabilnosti na osnovu svih unesenih podataka.' },
+  { n: 24, label: 'Break-even', tag: 'DIO VIII.8', title: 'Break-even i cijena kostanja', desc: 'Automatski izracun tacke pokrica i cijene kostanja po proizvodu.' },
+  { n: 25, label: 'Cash Flow', tag: 'DIO VIII.9', title: 'Novcani tokovi — Cash Flow', desc: 'Automatski izracun novcanih tokova za 36 mjeseci.' },
+  { n: 26, label: 'Zakljucak', tag: 'ZAKLJUCAK', title: 'Zakljucak i izjava preduzetnika', desc: 'Zakljucna izjava i potpis preduzetnika.' },
 ]
 
 function Field({ label, placeholder, value, onChange, type = 'textarea', rows = 3 }: { label: string, placeholder: string, value: string, onChange: (v: string) => void, type?: string, rows?: number }) {
@@ -488,7 +493,7 @@ if (n === 20) return React.createElement(StepFinansiranje, {
   onChange: setFinansiranjeData,
 })
 
-    if (n === 21) return React.createElement('div', {},
+    if (n === 26) return React.createElement('div', {},
       Field({ label: 'Zakljucna izjava', placeholder: 'Ja, dolje potpisani/a, izjavljujem da su svi podaci u ovom biznis planu istiniti, provjereni i realisticni...', value: conclusion.text, onChange: v => setConclusion(p => ({...p, text: v})), rows: 4 }),
       React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '8px' } },
         React.createElement('div', { style: { background: 'white', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0' } },
