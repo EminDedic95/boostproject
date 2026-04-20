@@ -172,7 +172,7 @@ export default function Home() {
           React.createElement('a', { href: '/register', className: 'btn-primary' }, 'Započni izradu biznis plana'),
         ),
         React.createElement('div', { className: 'hero-trust' },
-          ...['Besplatno', 'Na B/H/S jezicima', 'Bez registracije'].map(t =>
+          ...['Besplatno', 'Na B/H/S jezicima'].map(t =>
             React.createElement('div', { key: t, className: 'trust-item' },
               React.createElement('div', { className: 'trust-check' },
                 React.createElement('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '3' },
@@ -276,9 +276,9 @@ export default function Home() {
 
     React.createElement('section', { className: 'cta-band' },
       React.createElement('h2', {}, 'Započni danas - potpuno besplatno'),
-      React.createElement('p', {}, 'Bez registracije. Na B/H/S jezicima. Podrska EU BOOST Balkans programa.'),
+      React.createElement('p', {},  Na B/H/S jezicima. Podrska EU BOOST Balkans programa.'),
       React.createElement('a', { href: '/builder', className: 'btn-white' }, 'Započni izradu biznis plana'),
-      React.createElement('p', { className: 'cta-note' }, 'Besplatno - Na B/H/S jezicima - EU certificirano')
+      React.createElement('p', { className: 'cta-note' }, 'Besplatno - Na B/H/S jezicima')
     ),
 
     React.createElement('footer', {},
