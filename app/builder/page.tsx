@@ -7,6 +7,7 @@ import StepStalnaData, { StalnaData } from '@/app/components/financial/StepStaln
 import StepFinansiranje, { FinansiranjeData } from '@/app/components/financial/StepFinansiranje'
 import StepPromocija, { PromocijaData } from '@/app/components/financial/StepPromocija'
 import StepTroskovi, { TroskoviData } from '@/app/components/financial/StepTroskovi'
+import StepPL from '@/app/components/financial/StepPL'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -527,6 +528,13 @@ if (n === 22) return React.createElement(StepTroskovi, {
   growthG2: salesData.growthG2,
   growthG3: salesData.growthG3,
   onChange: setTroskoviData,
+})
+if (n === 23) return React.createElement(StepPL, {
+  salesData,
+  stalnaData,
+  finansiranjeData,
+  promocijaData,
+  troskoviData,
 })
     if (n === 26) return React.createElement('div', {},
       Field({ label: 'Zakljucna izjava', placeholder: 'Ja, dolje potpisani/a, izjavljujem da su svi podaci u ovom biznis planu istiniti, provjereni i realisticni...', value: conclusion.text, onChange: v => setConclusion(p => ({...p, text: v})), rows: 4 }),
