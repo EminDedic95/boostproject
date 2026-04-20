@@ -5,6 +5,7 @@ import StepProdajniAsortiman, { SalesData } from '@/app/components/financial/Ste
 import StepNormativ, { NormativData } from '@/app/components/financial/StepNormativ'
 import StepStalnaData, { StalnaData } from '@/app/components/financial/StepStalnaData'
 import StepFinansiranje, { FinansiranjeData } from '@/app/components/financial/StepFinansiranje'
+import StepPromocija, { PromocijaData } from '@/app/components/financial/StepPromocija'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -131,6 +132,17 @@ export default function Builder() {
     { naziv: 'Ostalo', iznos: 0 },
   ],
   kredit: { iznos: 0, gracePeriod: 0, rokOtplate: 36, kamatnaStopa: 5 },
+})
+  const [promocijaData, setPromocijaData] = useState<PromocijaData>({
+  items: [
+    { naziv: 'Istrazivanje trzista', mjesecniIznos: 0 },
+    { naziv: 'Kreativne usluge (dizajn, foto, video)', mjesecniIznos: 0 },
+    { naziv: 'Internet oglasavanje', mjesecniIznos: 0 },
+    { naziv: 'Sajmovi, izlozbe i eventi', mjesecniIznos: 0 },
+    { naziv: 'Ostali troskovi promocije', mjesecniIznos: 0 },
+  ],
+  growthG2: 1.10,
+  growthG3: 1.20,
 })
 
   useEffect(() => {
@@ -492,7 +504,12 @@ if (n === 20) return React.createElement(StepFinansiranje, {
   stalnaData: stalnaData,
   onChange: setFinansiranjeData,
 })
-
+if (n === 21) return React.createElement(StepPromocija, {
+  data: promocijaData,
+  growthG2: salesData.growthG2,
+  growthG3: salesData.growthG3,
+  onChange: setPromocijaData,
+})
     if (n === 26) return React.createElement('div', {},
       Field({ label: 'Zakljucna izjava', placeholder: 'Ja, dolje potpisani/a, izjavljujem da su svi podaci u ovom biznis planu istiniti, provjereni i realisticni...', value: conclusion.text, onChange: v => setConclusion(p => ({...p, text: v})), rows: 4 }),
       React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '8px' } },
