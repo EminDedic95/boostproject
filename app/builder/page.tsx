@@ -6,6 +6,7 @@ import StepNormativ, { NormativData } from '@/app/components/financial/StepNorma
 import StepStalnaData, { StalnaData } from '@/app/components/financial/StepStalnaData'
 import StepFinansiranje, { FinansiranjeData } from '@/app/components/financial/StepFinansiranje'
 import StepPromocija, { PromocijaData } from '@/app/components/financial/StepPromocija'
+import StepTroskovi, { TroskoviData } from '@/app/components/financial/StepTroskovi'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -141,6 +142,16 @@ export default function Builder() {
     { naziv: 'Sajmovi, izlozbe i eventi', mjesecniIznos: 0 },
     { naziv: 'Ostali troskovi promocije', mjesecniIznos: 0 },
   ],
+  growthG2: 1.10,
+  growthG3: 1.20,
+})
+  const [troskoviData, setTroskoviData] = useState<TroskoviData>({
+  ostaliTroskovi: [
+    { naziv: 'Zakupnina poslovnog prostora', mjesecniIznos: 0 },
+    { naziv: 'Komunalije (struja, voda, internet)', mjesecniIznos: 0 },
+    { naziv: 'Ostali operativni troskovi', mjesecniIznos: 0 },
+  ],
+  zaposleni: [],
   growthG2: 1.10,
   growthG3: 1.20,
 })
@@ -509,6 +520,13 @@ if (n === 21) return React.createElement(StepPromocija, {
   growthG2: salesData.growthG2,
   growthG3: salesData.growthG3,
   onChange: setPromocijaData,
+})
+if (n === 22) return React.createElement(StepTroskovi, {
+  data: troskoviData,
+  stalnaData: stalnaData,
+  growthG2: salesData.growthG2,
+  growthG3: salesData.growthG3,
+  onChange: setTroskoviData,
 })
     if (n === 26) return React.createElement('div', {},
       Field({ label: 'Zakljucna izjava', placeholder: 'Ja, dolje potpisani/a, izjavljujem da su svi podaci u ovom biznis planu istiniti, provjereni i realisticni...', value: conclusion.text, onChange: v => setConclusion(p => ({...p, text: v})), rows: 4 }),
