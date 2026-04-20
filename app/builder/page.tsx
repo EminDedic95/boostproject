@@ -8,6 +8,7 @@ import StepFinansiranje, { FinansiranjeData } from '@/app/components/financial/S
 import StepPromocija, { PromocijaData } from '@/app/components/financial/StepPromocija'
 import StepTroskovi, { TroskoviData } from '@/app/components/financial/StepTroskovi'
 import StepPL from '@/app/components/financial/StepPL'
+import StepBreakEven from '@/app/components/financial/StepBreakEven'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -530,6 +531,13 @@ if (n === 22) return React.createElement(StepTroskovi, {
   onChange: setTroskoviData,
 })
 if (n === 23) return React.createElement(StepPL, {
+  salesData,
+  stalnaData,
+  finansiranjeData,
+  promocijaData,
+  troskoviData,
+})
+if (n === 24) return React.createElement(StepBreakEven, {
   salesData,
   stalnaData,
   finansiranjeData,
