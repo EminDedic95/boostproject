@@ -211,9 +211,9 @@ export default function Home() {
         ),
         React.createElement('div', { className: 'features-grid' },
           ...[
-            { title: 'AI asistent', desc: 'Unesite svoju poslovnu ideju - AI automatski generiše Business Model Canvas, SWOT, PEST analizu i Porterovih 5 sila prilagodenih vasem konkretnom biznisu.' },
-            { title: 'Korak po korak vodic', desc: 'Strukturirani proces kroz svih 8 dijelova biznis plana. Svaki korak je jasan i objasnjeni, a AI je tu kada zapnete.' },
-            { title: 'Resursi i vodici', desc: 'PDF materijali i video tutorijali koji detaljno objasnjanju svaki analiticki alat - Canvas, Porter, SWOT, PEST i finansijsko planiranje.' },
+            { title: 'AI asistent', desc: 'Unesite svoju poslovnu ideju - AI automatski generiše Business Model Canvas, SWOT, PEST analizu i Porterovih 5 sila prilagodenih Vašem konkretnom biznisu.' },
+            { title: 'Korak po korak vodic', desc: 'Strukturirani proces kroz svih 25 dijelova biznis plana. Svaki korak je jasan i objašnjeni, a AI je tu kada zapnete.' },
+            { title: 'Resursi i vodici', desc: 'PDF materijali i video tutorijali koji detaljno objašnjavaju svaki analiticki alat - Canvas, Porter, SWOT, PEST i finansijsko planiranje.' },
             { title: 'PDF izvoz', desc: 'Preuzmite kompletan, profesionalno formatiran biznis plan koji je odmah spreman za predaju banci, investitoru ili prijavu na grant.' },
           ].map((f, i) =>
             React.createElement('div', { key: i, className: 'feat-card reveal' + (i > 0 ? ' d' + i : '') },
