@@ -1,6 +1,15 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import StepProdajniAsortiman, { SalesData } from '@/app/components/financial/StepProdajniAsortiman'
+import StepNormativ, { NormativData } from '@/app/components/financial/StepNormativ'
+import StepStalnaData, { StalnaData } from '@/app/components/financial/StepStalnaData'
+import StepFinansiranje, { FinansiranjeData } from '@/app/components/financial/StepFinansiranje'
+import StepPromocija, { PromocijaData } from '@/app/components/financial/StepPromocija'
+import StepTroskovi, { TroskoviData } from '@/app/components/financial/StepTroskovi'
+import StepPL from '@/app/components/financial/StepPL'
+import StepBreakEven from '@/app/components/financial/StepBreakEven'
+import StepCashFlow from '@/app/components/financial/StepCashFlow'
 
 const STEPS = [
   { n: 1, label: 'Naslovna strana', tag: 'COVER', title: 'Osnovni podaci o biznisu', desc: 'Unesite osnovne informacije o vasem biznisu i preduzetnickom timu.' },
@@ -19,11 +28,16 @@ const STEPS = [
   { n: 14, label: 'Operacije', tag: 'DIO VI', title: 'Poslovni procesi i organizacija', desc: 'Opisite kako funkcionise vase preduzece iznutra.' },
   { n: 15, label: 'Pravna forma', tag: 'DIO VI.5', title: 'Pravna forma registracije', desc: 'Navedite pravnu formu i detalje registracije preduzeca.' },
   { n: 16, label: 'Analiza rizika', tag: 'DIO VII', title: 'Analiza rizika', desc: 'Identificirajte minimum 5 rizika sa ocjenom i mjerama ublazavanja.' },
-  { n: 17, label: 'Prihodi', tag: 'DIO VIII.1', title: 'Prodajni asortiman i prihodi', desc: 'Unesite proizvode/usluge sa kolicinama i cijenama.' },
-  { n: 18, label: 'Ulaganja', tag: 'DIO VIII.2', title: 'Inicijalna ulaganja i izvori finansiranja', desc: 'Definisite ukupna ulaganja i strukturu finansiranja.' },
-  { n: 19, label: 'Finansije', tag: 'DIO VIII.3-4', title: 'Racun dobiti i gubitka i Cash Flow', desc: 'Projekcije prihoda, troskova i novcanih tokova za 3 godine.' },
-  { n: 20, label: 'KPI i scenariji', tag: 'DIO VIII.5-6', title: 'Kljucni pokazatelji i scenarijska analiza', desc: 'Finansijski KPIs i scenarijska analiza (pesimisticki/bazni/optimisticki).' },
-  { n: 21, label: 'Zakljucak', tag: 'ZAKLJUCAK', title: 'Zakljucak i izjava preduzetnika', desc: 'Zakljucna izjava i potpis preduzetnika.' },
+  { n: 17, label: 'Prodajni asortiman', tag: 'DIO VIII.1', title: 'Prodajni asortiman i prihodi', desc: 'Unesite proizvode/usluge sa kolicinama, cijenama i faktorima rasta.' },
+  { n: 18, label: 'Normativ', tag: 'DIO VIII.2', title: 'Normativ materijalnih troskova', desc: 'Definisite troskove materijala po jedinici za svaki proizvod/uslugu.' },
+  { n: 19, label: 'Stalna sredstva', tag: 'DIO VIII.3', title: 'Ulaganja u stalna sredstva', desc: 'Unesite sva planirana ulaganja u stalna sredstva po kategorijama.' },
+  { n: 20, label: 'Finansiranje', tag: 'DIO VIII.4', title: 'Finansiranje i kreditni plan', desc: 'Definisite izvore finansiranja i kreditni plan otplate.' },
+  { n: 21, label: 'Promocija', tag: 'DIO VIII.5', title: 'Troskovi promocije i marketinga', desc: 'Unesite troskove marketinga i promocije po kategorijama za 3 godine.' },
+  { n: 22, label: 'Ostali troskovi', tag: 'DIO VIII.6', title: 'Ostali troskovi i plate', desc: 'Unesite operativne troskove, amortizaciju i troskove radne snage.' },
+  { n: 23, label: 'P&L', tag: 'DIO VIII.7', title: 'Racun dobiti i gubitka', desc: 'Automatski izracun profitabilnosti na osnovu svih unesenih podataka.' },
+  { n: 24, label: 'Break-even', tag: 'DIO VIII.8', title: 'Break-even i cijena kostanja', desc: 'Automatski izracun tacke pokrica i cijene kostanja po proizvodu.' },
+  { n: 25, label: 'Cash Flow', tag: 'DIO VIII.9', title: 'Novcani tokovi — Cash Flow', desc: 'Automatski izracun novcanih tokova za 36 mjeseci.' },
+  { n: 26, label: 'Zakljucak', tag: 'ZAKLJUCAK', title: 'Zakljucak i izjava preduzetnika', desc: 'Zakljucna izjava i potpis preduzetnika.' },
 ]
 
 function Field({ label, placeholder, value, onChange, type = 'textarea', rows = 3 }: { label: string, placeholder: string, value: string, onChange: (v: string) => void, type?: string, rows?: number }) {
@@ -103,6 +117,47 @@ export default function Builder() {
   const [kpi, setKpi] = useState([['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00'], ['0.00', '0.00', '0.00']])
   const [scenarios, setScenarios] = useState([['', '', ''], ['', '', ''], ['', '', ''], ['', '', '']])
   const [conclusion, setConclusion] = useState({ text: '', name: '', place: '', date: '' })
+  const [salesData, setSalesData] = useState<SalesData>({
+  products: [],
+  growthG2: 1.10,
+  growthG3: 1.20,
+}) 
+  const [normativData, setNormativData] = useState<NormativData>({ items: [] })
+  const [stalnaData, setStalnaData] = useState<StalnaData>({
+  infrastruktura: [], zemljiste: [], oprema: [], vozila: [],
+  osnivacka: 0, obrtna: 0,
+})
+  const [finansiranjeData, setFinansiranjeData] = useState<FinansiranjeData>({
+  sources: [
+    { naziv: 'Vlastita sredstva osnivaca', iznos: 0 },
+    { naziv: 'Bankovni kredit za opremu', iznos: 0 },
+    { naziv: 'Kredit za obrtna sredstva', iznos: 0 },
+    { naziv: 'EU fondovi / grant', iznos: 0 },
+    { naziv: 'Ostalo', iznos: 0 },
+  ],
+  kredit: { iznos: 0, gracePeriod: 0, rokOtplate: 36, kamatnaStopa: 5 },
+})
+  const [promocijaData, setPromocijaData] = useState<PromocijaData>({
+  items: [
+    { naziv: 'Istrazivanje trzista', mjesecniIznos: 0 },
+    { naziv: 'Kreativne usluge (dizajn, foto, video)', mjesecniIznos: 0 },
+    { naziv: 'Internet oglasavanje', mjesecniIznos: 0 },
+    { naziv: 'Sajmovi, izlozbe i eventi', mjesecniIznos: 0 },
+    { naziv: 'Ostali troskovi promocije', mjesecniIznos: 0 },
+  ],
+  growthG2: 1.10,
+  growthG3: 1.20,
+})
+  const [troskoviData, setTroskoviData] = useState<TroskoviData>({
+  ostaliTroskovi: [
+    { naziv: 'Zakupnina poslovnog prostora', mjesecniIznos: 0 },
+    { naziv: 'Komunalije (struja, voda, internet)', mjesecniIznos: 0 },
+    { naziv: 'Ostali operativni troskovi', mjesecniIznos: 0 },
+  ],
+  zaposleni: [],
+  growthG2: 1.10,
+  growthG3: 1.20,
+})
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -444,186 +499,60 @@ export default function Builder() {
       React.createElement('button', { onClick: () => setRisks(p => [...p, ['', '', '', '']]), style: { background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj rizik')
     )
 
-    if (n === 17) return React.createElement('div', {},
-      React.createElement('p', { style: { color: '#6b7a99', fontSize: '13px', marginBottom: '12px' } }, 'Unesite sve proizvode/usluge sa kolicinama i cijenama.'),
-      React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '10px' } },
-        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-          React.createElement('thead', {},
-            React.createElement('tr', {},
-              ...['Proizvod / Usluga', 'Jed. mjere', 'Kol./god.', 'Prod. cijena', 'Tr. materijala', 'Ukupan prihod', ''].map(h =>
-                React.createElement('th', { key: h, style: { padding: '8px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '11px', whiteSpace: 'nowrap' } }, h)
-              )
-            )
-          ),
-          React.createElement('tbody', {},
-            ...sales.map((row, ri) =>
-              React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                ...row.map((cell, ci) =>
-                  React.createElement('td', { key: ci, style: { padding: '4px', border: '1px solid #e2e8f0' } },
-                    React.createElement('input', { type: 'text', value: cell, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSales(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px 6px', background: 'transparent', boxSizing: 'border-box' } })
-                  )
-                ),
-                React.createElement('td', { style: { padding: '4px', textAlign: 'center' } },
-                  React.createElement('button', { onClick: () => setSales(p => p.filter((_, i) => i !== ri)), style: { background: 'none', border: 'none', color: '#e53e3e', cursor: 'pointer', fontSize: '14px' } }, 'x')
-                )
-              )
-            )
-          )
-        )
-      ),
-      React.createElement('button', { onClick: () => setSales(p => [...p, ['', 'kom', '0', '0.00', '0.00', '0.00']]), style: { background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj proizvod / uslugu')
-    )
+if (n === 17) return React.createElement(StepProdajniAsortiman, {
+  data: salesData,
+  onChange: setSalesData,
+})
 
-    if (n === 18) return React.createElement('div', {},
-      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' } },
-        React.createElement('div', { style: { background: 'white', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0' } },
-          React.createElement('label', { style: { display: 'block', fontWeight: '600', color: '#1a2740', marginBottom: '6px', fontSize: '13px' } }, 'Ukupna stalna sredstva (KM)'),
-          React.createElement('input', { type: 'text', value: investment.fixed, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setInvestment(p => ({...p, fixed: e.target.value})), placeholder: '0.00', style: { width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none', boxSizing: 'border-box' } })
-        ),
-        React.createElement('div', { style: { background: 'white', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0' } },
-          React.createElement('label', { style: { display: 'block', fontWeight: '600', color: '#1a2740', marginBottom: '6px', fontSize: '13px' } }, 'Ukupna obrtna sredstva (KM)'),
-          React.createElement('input', { type: 'text', value: investment.working, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setInvestment(p => ({...p, working: e.target.value})), placeholder: '0.00', style: { width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none', boxSizing: 'border-box' } })
-        )
-      ),
-      React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Struktura finansiranja'),
-      React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
-        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '13px' } },
-          React.createElement('thead', {},
-            React.createElement('tr', {},
-              ...['Izvor finansiranja', 'Iznos (KM)', 'Udio (%)'].map(h =>
-                React.createElement('th', { key: h, style: { padding: '10px 12px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '12px' } }, h)
-              )
-            )
-          ),
-          React.createElement('tbody', {},
-            ...investment.sources.map((row, ri) =>
-              React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                ...row.map((cell, ci) =>
-                  React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0' } },
-                    React.createElement('input', { type: 'text', value: cell, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setInvestment(p => ({...p, sources: p.sources.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)})), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px', background: 'transparent', boxSizing: 'border-box' } })
-                  )
-                )
-              )
-            ),
-            React.createElement('tr', { style: { background: '#f5f7fb' } },
-              React.createElement('td', { style: { padding: '10px 12px', fontWeight: '700', color: '#1a2740' } }, 'UKUPNO'),
-              React.createElement('td', { style: { padding: '10px 12px', fontWeight: '700', color: '#1a2740' } }, investment.sources.reduce((s, r) => s + (parseFloat(r[1]) || 0), 0).toFixed(2)),
-              React.createElement('td', { style: { padding: '10px 12px', fontWeight: '700', color: '#1a2740' } }, '100%')
-            )
-          )
-        )
-      )
-    )
-
-    if (n === 19) {
-      const plRows = ['UKUPAN PRIHOD OD PRODAJE', 'Troskovi materijala / robe', 'BRUTO DOBIT', 'Troskovi plata (bruto)', 'Amortizacija', 'Troskovi zakupa prostora', 'Troskovi marketinga', 'Ostali operativni troskovi', 'POSLOVNI REZULTAT (EBIT)', 'Kamate na kredite', 'REZULTAT PRIJE POREZA', 'NETO PROFIT / (GUBITAK)']
-      const cfRows = ['Operativni novcani tok', 'Investicioni novcani tok (ulaganja)', 'Finansijski novcani tok', 'NETO NOVCANI TOK', 'Kumulativni novcani tok']
-      return React.createElement('div', {},
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Racun dobiti i gubitka — 3 godine'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '20px' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '50%' } }, 'STAVKA'),
-                ...['Godina 1', 'Godina 2', 'Godina 3'].map(y => React.createElement('th', { key: y, style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'right' } }, y))
-              )
-            ),
-            React.createElement('tbody', {},
-              ...plRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0', background: row.toUpperCase() === row ? '#f5f7fb' : 'white' } },
-                  React.createElement('td', { style: { padding: '6px 12px', fontWeight: row.toUpperCase() === row ? '700' : '400', color: '#1a2740', fontSize: '12px' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'right' } },
-                      React.createElement('input', { type: 'text', value: pl[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPl(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'right', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Novcani tok (Cash Flow) — 3 godine'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '50%' } }, 'CASH FLOW'),
-                ...['Godina 1', 'Godina 2', 'Godina 3'].map(y => React.createElement('th', { key: y, style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'right' } }, y))
-              )
-            ),
-            React.createElement('tbody', {},
-              ...cfRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0', background: row.startsWith('NETO') || row.startsWith('Kumulativni') ? '#f5f7fb' : 'white' } },
-                  React.createElement('td', { style: { padding: '6px 12px', fontWeight: row.startsWith('NETO') || row.startsWith('Kumulativni') ? '700' : '400', color: '#1a2740' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'right' } },
-                      React.createElement('input', { type: 'text', value: cashflow[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setCashflow(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'right', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    }
-
-    if (n === 20) {
-      const kpiRows = ['Ukupan prihod (KM)', 'Neto profit (KM)', 'Neto marza (%)', 'Povrat na investiciju — ROI (%)', 'Break-even tacka (kom / KM)', 'Period povrata investicije (god.)']
-      const scenRows = ['Prihod', 'Neto profit', 'Neto marza (%)', 'Ocjena odrzivosti']
-      return React.createElement('div', {},
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Kljucni finansijski pokazatelji — 3 godine'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '20px' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '50%' } }, 'POKAZATELJI USPJEHA'),
-                ...['Godina 1', 'Godina 2', 'Godina 3'].map(y => React.createElement('th', { key: y, style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'right' } }, y))
-              )
-            ),
-            React.createElement('tbody', {},
-              ...kpiRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                  React.createElement('td', { style: { padding: '6px 12px', color: '#1a2740', fontWeight: row.includes('Povrat') || row.includes('Period') ? '700' : '400' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'right' } },
-                      React.createElement('input', { type: 'text', value: kpi[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setKpi(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'right', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '10px' } }, 'Scenarijska analiza'),
-        React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
-          React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-            React.createElement('thead', {},
-              React.createElement('tr', {},
-                React.createElement('th', { style: { padding: '8px 12px', background: '#1a2740', color: 'white', textAlign: 'left', width: '25%' } }, ''),
-                React.createElement('th', { style: { padding: '8px 12px', background: '#c0392b', color: 'white', textAlign: 'center' } }, 'PESIMISTICKI (-30%)'),
-                React.createElement('th', { style: { padding: '8px 12px', background: '#2d7a4f', color: 'white', textAlign: 'center' } }, 'BAZNI (plan)'),
-                React.createElement('th', { style: { padding: '8px 12px', background: '#2E75B6', color: 'white', textAlign: 'center' } }, 'OPTIMISTICKI (+30%)')
-              )
-            ),
-            React.createElement('tbody', {},
-              ...scenRows.map((row, ri) =>
-                React.createElement('tr', { key: ri, style: { borderBottom: '1px solid #e2e8f0' } },
-                  React.createElement('td', { style: { padding: '6px 12px', fontWeight: '600', color: '#1a2740' } }, row),
-                  ...[0, 1, 2].map(ci =>
-                    React.createElement('td', { key: ci, style: { padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'center' } },
-                      React.createElement('input', { type: 'text', value: scenarios[ri][ci], onChange: (e: React.ChangeEvent<HTMLInputElement>) => setScenarios(p => p.map((r, i) => i === ri ? r.map((c, j) => j === ci ? e.target.value : c) : r)), placeholder: 'Unesite...', style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', textAlign: 'center', background: 'transparent', boxSizing: 'border-box' } })
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    }
-
-    if (n === 21) return React.createElement('div', {},
+   if (n === 18) return React.createElement(StepNormativ, {
+  data: normativData,
+  products: salesData.products,
+  onChange: setNormativData,
+})
+   if (n === 19) return React.createElement(StepStalnaData, {
+  data: stalnaData,
+  onChange: setStalnaData,
+     }) 
+if (n === 20) return React.createElement(StepFinansiranje, {
+  data: finansiranjeData,
+  stalnaData: stalnaData,
+  onChange: setFinansiranjeData,
+})
+if (n === 21) return React.createElement(StepPromocija, {
+  data: promocijaData,
+  growthG2: salesData.growthG2,
+  growthG3: salesData.growthG3,
+  onChange: setPromocijaData,
+})
+if (n === 22) return React.createElement(StepTroskovi, {
+  data: troskoviData,
+  stalnaData: stalnaData,
+  growthG2: salesData.growthG2,
+  growthG3: salesData.growthG3,
+  onChange: setTroskoviData,
+})
+if (n === 23) return React.createElement(StepPL, {
+  salesData,
+  stalnaData,
+  finansiranjeData,
+  promocijaData,
+  troskoviData,
+})
+if (n === 24) return React.createElement(StepBreakEven, {
+  salesData,
+  stalnaData,
+  finansiranjeData,
+  promocijaData,
+  troskoviData,
+})
+if (n === 25) return React.createElement(StepCashFlow, {
+  salesData,
+  stalnaData,
+  finansiranjeData,
+  promocijaData,
+  troskoviData,
+})  
+    if (n === 26) return React.createElement('div', {},
       Field({ label: 'Zakljucna izjava', placeholder: 'Ja, dolje potpisani/a, izjavljujem da su svi podaci u ovom biznis planu istiniti, provjereni i realisticni...', value: conclusion.text, onChange: v => setConclusion(p => ({...p, text: v})), rows: 4 }),
       React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '8px' } },
         React.createElement('div', { style: { background: 'white', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0' } },
