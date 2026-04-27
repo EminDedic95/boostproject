@@ -223,18 +223,26 @@ export default function Builder() {
     setShowSaveModal(true)
   }
 
-  async function savePlan() {
-    if (!saveEmail) return
-    setGenerating(true)
-    await supabase.from('business_plans').insert({ company_name: cover.name || 'Bez naziva', form_data: { cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, sales, investment, pl, cashflow, kpi, scenarios, conclusion }, current_step: current })
-    const res = await fetch('/api/generate-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, sales, investment, pl, cashflow, kpi, scenarios, conclusion }) })
-    const html = await res.text()
-    const win = window.open('', '_blank')
-    if (win) { win.document.write(html); win.document.close(); setTimeout(() => win.print(), 500) }
-    setGenerating(false)
-    setSaved(true)
-    setTimeout(() => setShowSaveModal(false), 2000)
-  }
+ async function savePlan() {
+  if (!saveEmail) return
+  setGenerating(true)
+  await supabase.from('business_plans').insert({
+    company_name: cover.name || 'Bez naziva',
+    form_data: { cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, salesData, normativData, stalnaData, finansiranjeData, promocijaData, troskoviData, conclusion },
+    current_step: current
+  })
+  const res = await fetch('/api/generate-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, conclusion, salesData, normativData, stalnaData, finansiranjeData, promocijaData, troskoviData })
+  })
+  const html = await res.text()
+  const win = window.open('', '_blank')
+  if (win) { win.document.write(html); win.document.close(); setTimeout(() => win.print(), 500) }
+  setGenerating(false)
+  setSaved(true)
+  setTimeout(() => setShowSaveModal(false), 2000)
+}
 
   function renderStep() {
     const n = current + 1
