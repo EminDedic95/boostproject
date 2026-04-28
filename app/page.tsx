@@ -145,7 +145,7 @@ export default function Home() {
 
     React.createElement('nav', { id: 'lp-nav' },
       React.createElement('div', { className: 'nav-inner' },
-        React.createElement('a', { href: '/', className: 'nav-logo' }, 'BOOST Biznis Plan'),
+        React.createElement('a', { href: '/', className: 'nav-logo' }, 'Biznis Plan Builder'),
         React.createElement('div', { className: 'nav-links' },
           React.createElement('a', { href: '/resources' }, 'Resursi'),
           React.createElement('a', { href: '/register', className: 'nav-cta' }, 'Započni besplatno')
