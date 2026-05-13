@@ -14,7 +14,7 @@ const TOOLS = [
 ]
 
 const PDFS = [
-  { title: 'BOOST Vodic za izradu biznis plana', desc: 'Kompletan vodic kroz sve dijelove biznis plana', size: 'PDF' },
+  { title: 'YouthBiz Vodic za izradu biznis plana', desc: 'Kompletan vodic kroz sve dijelove biznis plana', size: 'PDF' },
   { title: 'Business Model Canvas - Template', desc: 'Prazan Canvas template za stampanje', size: 'PDF' },
   { title: 'SWOT Analiza - Radni list', desc: 'Radni list za SWOT analizu sa primjerima', size: 'PDF' },
   { title: 'PEST Analiza - Vodic', desc: 'Kako provesti PEST analizu korak po korak', size: 'PDF' },
@@ -36,7 +36,7 @@ export default function Resources() {
     React.createElement('nav', {
       style: { background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 32px', height: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }
     },
-      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'BOOST Biznis Plan'),
+      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'Biznis Plan'),
       React.createElement('div', { style: { display: 'flex', gap: '24px', alignItems: 'center' } },
         React.createElement('a', { href: '/resources', style: { color: '#1a2740', fontSize: '14px', textDecoration: 'none', fontWeight: '600' } }, 'Resursi'),
         React.createElement('a', { href: '/builder', style: { background: '#C9A227', color: '#1a2740', padding: '8px 20px', borderRadius: '24px', fontWeight: 'bold', textDecoration: 'none', fontSize: '14px' } }, 'Otvori builder')
@@ -115,6 +115,6 @@ export default function Resources() {
 
     React.createElement('footer', {
       style: { background: '#1a2740', color: 'rgba(255,255,255,0.5)', textAlign: 'center', padding: '24px', fontSize: '13px', marginTop: '48px' }
-    }, '2025 BOOST Balkans - Faculty of Economics Mostar')
+    }, '2025 BOOST Balkans')
   )
 }
