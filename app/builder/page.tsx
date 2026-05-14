@@ -124,7 +124,7 @@ const [motivation, setMotivation] = useState({ market: '', passion: '', autonomy
 }) 
   const [normativData, setNormativData] = useState<NormativData>({ items: [] })
   const [stalnaData, setStalnaData] = useState<StalnaData>({
-  infrastruktura: [], zemljiste: [], oprema: [], vozila: [],
+  infrastruktura: [], zemljiste: [], oprema: [], nematerijalna: [], vozila: [],
   osnivacka: 0, obrtna: 0,
 })
   const [finansiranjeData, setFinansiranjeData] = useState<FinansiranjeData>({
