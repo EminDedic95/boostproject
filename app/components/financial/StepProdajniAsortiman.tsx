@@ -1,32 +1,73 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
-// Types
 export interface Product {
   id: string
   naziv: string
+  tip: 'proizvod' | 'roba' | 'usluga'
   jm: string
   obim: number
   cijena: number
-  trMat: number // troskovi materijala po jedinici
+  trMat: number
 }
 
 export interface SalesData {
   products: Product[]
-  growthG2: number // faktor rasta godina 2 (npr 1.1 = +10%)
-  growthG3: number // faktor rasta godina 3
+  growthG2: number
+  growthG3: number
 }
 
 const DEFAULT_PRODUCT: Product = {
-  id: '', naziv: '', jm: 'kom', obim: 0, cijena: 0, trMat: 0
+  id: '', naziv: '', tip: 'proizvod', jm: 'kom', obim: 0, cijena: 0, trMat: 0
 }
 
-const JM_OPTIONS = ['kom', 'kg', 'l', 'sat', 'projekt', 'm', 'm2', 'set', 'paket', 'usluga']
+const JM_PRESET = ['kom', 'kg', 'l', 'sat', 'projekt', 'm', 'm2', 'set', 'paket', 'usluga', 'mjesec', 'godisnja pretplata']
 
 function genId() { return Math.random().toString(36).slice(2, 8) }
 
 function fmt(n: number) {
   return n.toLocaleString('bs-BA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+const TIP_LABELS: Record<string, { label: string, color: string, bg: string }> = {
+  proizvod: { label: 'Proizvod', color: '#2E75B6', bg: '#f0f7ff' },
+  roba: { label: 'Roba', color: '#C9A227', bg: '#fffbf0' },
+  usluga: { label: 'Usluga', color: '#2d7a4f', bg: '#f0faf4' },
+}
+
+interface JMInputProps {
+  value: string
+  onChange: (v: string) => void
+}
+
+function JMInput({ value, onChange }: JMInputProps) {
+  const [custom, setCustom] = useState(!JM_PRESET.includes(value))
+
+  return React.createElement('div', { style: { display: 'flex', gap: '4px', alignItems: 'center' } },
+    custom
+      ? React.createElement('input', {
+          type: 'text',
+          value,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value),
+          placeholder: 'Unesi...',
+          style: { width: '80px', border: '1px solid #e2e8f0', borderRadius: '4px', padding: '3px 6px', fontSize: '11px', outline: 'none' }
+        })
+      : React.createElement('select', {
+          value,
+          onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
+            if (e.target.value === '__custom__') { setCustom(true); onChange('') }
+            else onChange(e.target.value)
+          },
+          style: { border: '1px solid #e2e8f0', borderRadius: '4px', padding: '3px 4px', fontSize: '11px', outline: 'none', maxWidth: '90px' }
+        },
+          ...JM_PRESET.map(jm => React.createElement('option', { key: jm, value: jm }, jm)),
+          React.createElement('option', { value: '__custom__' }, '+ Ručni unos')
+        ),
+    custom && React.createElement('button', {
+      onClick: () => { setCustom(false); onChange('kom') },
+      style: { border: 'none', background: 'none', cursor: 'pointer', fontSize: '12px', color: '#6b7a99', padding: '2px' }
+    }, '↩')
+  )
 }
 
 interface Props {
@@ -35,48 +76,27 @@ interface Props {
 }
 
 export default function StepProdajniAsortiman({ data, onChange }: Props) {
-  const [activeProduct, setActiveProduct] = useState<string | null>(null)
 
   function addProduct() {
     const newP = { ...DEFAULT_PRODUCT, id: genId() }
     onChange({ ...data, products: [...data.products, newP] })
-    setActiveProduct(newP.id)
   }
 
   function removeProduct(id: string) {
     onChange({ ...data, products: data.products.filter(p => p.id !== id) })
-    if (activeProduct === id) setActiveProduct(null)
   }
 
   function updateProduct(id: string, field: keyof Product, value: string | number) {
-    onChange({
-      ...data,
-      products: data.products.map(p => p.id === id ? { ...p, [field]: value } : p)
-    })
+    onChange({ ...data, products: data.products.map(p => p.id === id ? { ...p, [field]: value } : p) })
   }
 
   function updateGrowth(field: 'growthG2' | 'growthG3', value: string) {
-    const num = parseFloat(value) || 1
-    onChange({ ...data, [field]: num })
+    onChange({ ...data, [field]: parseFloat(value) || 1 })
   }
 
-  // Calculations
-  function calcProduct(p: Product) {
-    const prihodG1 = p.obim * p.cijena
-    const trMatG1 = p.obim * p.trMat
-    const brutoG1 = prihodG1 - trMatG1
-    const prihodG2 = prihodG1 * data.growthG2
-    const prihodG3 = prihodG1 * data.growthG3
-    return { prihodG1, trMatG1, brutoG1, prihodG2, prihodG3 }
-  }
-
-  const totals = {
-    prihodG1: data.products.reduce((s, p) => s + p.obim * p.cijena, 0),
-    trMatG1: data.products.reduce((s, p) => s + p.obim * p.trMat, 0),
-    prihodG2: data.products.reduce((s, p) => s + p.obim * p.cijena * data.growthG2, 0),
-    prihodG3: data.products.reduce((s, p) => s + p.obim * p.cijena * data.growthG3, 0),
-  }
-  totals['brutoG1' as keyof typeof totals] = (totals.prihodG1 - totals.trMatG1) as unknown as number
+  const prihodG1 = data.products.reduce((s, p) => s + p.obim * p.cijena, 0)
+  const prihodG2 = prihodG1 * data.growthG2
+  const prihodG3 = prihodG1 * data.growthG3
 
   const thStyle: React.CSSProperties = { padding: '8px 10px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '11px', fontWeight: '600', whiteSpace: 'nowrap' }
   const tdStyle: React.CSSProperties = { padding: '4px', border: '1px solid #e2e8f0', verticalAlign: 'middle' }
@@ -87,10 +107,92 @@ export default function StepProdajniAsortiman({ data, onChange }: Props) {
 
     React.createElement('div', { style: { background: '#EBF4FB', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '13px', color: '#1F4E79', lineHeight: 1.6 } },
       React.createElement('strong', {}, 'Uputa: '),
-      'Unesite sve proizvode ili usluge koje planirate prodavati. Za svaki proizvod unesite godisnji obim prodaje, prodajnu cijenu i troskove materijala po jedinici. Faktori rasta automatski racunaju prihode za Godinu 2 i 3.'
+      'Unesite sve proizvode, robu ili usluge koje planirate prodavati. Za svaki stavite godišnji obim prodaje i prodajnu cijenu. Faktori rasta za G2 i G3 se definišu ispod tabele.'
     ),
 
-    React.createElement('div', { style: { background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #e2e8f0', marginBottom: '16px' } },
+    React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '12px' } },
+      React.createElement('div', { style: { overflowX: 'auto' } },
+        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: '700px' } },
+          React.createElement('thead', {},
+            React.createElement('tr', {},
+              React.createElement('th', { style: { ...thStyle, width: '30px' } }, '#'),
+              React.createElement('th', { style: { ...thStyle, minWidth: '180px' } }, 'Naziv proizvoda / usluge'),
+              React.createElement('th', { style: { ...thStyle, width: '110px' } }, 'Tip'),
+              React.createElement('th', { style: { ...thStyle, width: '100px' } }, 'Jed. mjere'),
+              React.createElement('th', { style: { ...thStyle, width: '110px' } }, 'God. obim'),
+              React.createElement('th', { style: { ...thStyle, width: '120px' } }, 'Prod. cijena'),
+              React.createElement('th', { style: { ...thStyle, width: '130px', background: '#243553' } }, 'Prihod G1'),
+              React.createElement('th', { style: { ...thStyle, width: '120px', background: '#2d4a2d' } }, 'Prihod G2'),
+              React.createElement('th', { style: { ...thStyle, width: '120px', background: '#1a3a5c' } }, 'Prihod G3'),
+              React.createElement('th', { style: { ...thStyle, width: '30px', background: '#2d3748' } }, '')
+            )
+          ),
+          React.createElement('tbody', {},
+            data.products.length === 0
+              ? React.createElement('tr', {},
+                  React.createElement('td', { colSpan: 10, style: { padding: '32px', textAlign: 'center', color: '#6b7a99', fontSize: '13px' } },
+                    'Nema stavki. Kliknite "+ Dodaj stavku" ispod.'
+                  )
+                )
+              : null,
+            ...data.products.map((p, i) => {
+              const g1 = p.obim * p.cijena
+              const tipInfo = TIP_LABELS[p.tip]
+              return React.createElement('tr', { key: p.id, style: { borderBottom: '1px solid #e2e8f0', background: i % 2 === 0 ? 'white' : '#fafafa' } },
+                React.createElement('td', { style: { ...tdStyle, textAlign: 'center', color: '#6b7a99', fontWeight: '600' } }, i + 1),
+                React.createElement('td', { style: tdStyle },
+                  React.createElement('input', { type: 'text', value: p.naziv, onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateProduct(p.id, 'naziv', e.target.value), placeholder: 'npr. Hljeb bijeli 500g', style: inputStyle })
+                ),
+                React.createElement('td', { style: tdStyle },
+                  React.createElement('select', {
+                    value: p.tip,
+                    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => updateProduct(p.id, 'tip', e.target.value),
+                    style: { width: '100%', border: 'none', outline: 'none', fontSize: '11px', padding: '4px 4px', background: tipInfo.bg, color: tipInfo.color, fontWeight: '700', borderRadius: '4px', cursor: 'pointer', boxSizing: 'border-box' }
+                  },
+                    React.createElement('option', { value: 'proizvod' }, 'Proizvod'),
+                    React.createElement('option', { value: 'roba' }, 'Roba'),
+                    React.createElement('option', { value: 'usluga' }, 'Usluga')
+                  )
+                ),
+                React.createElement('td', { style: tdStyle },
+                  React.createElement(JMInput, { value: p.jm, onChange: v => updateProduct(p.id, 'jm', v) })
+                ),
+                React.createElement('td', { style: tdStyle },
+                  React.createElement('input', { type: 'number', min: '0', value: p.obim || '', onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateProduct(p.id, 'obim', parseFloat(e.target.value) || 0), placeholder: '0', style: numStyle })
+                ),
+                React.createElement('td', { style: tdStyle },
+                  React.createElement('input', { type: 'number', min: '0', step: '0.01', value: p.cijena || '', onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateProduct(p.id, 'cijena', parseFloat(e.target.value) || 0), placeholder: '0.00', style: numStyle })
+                ),
+                React.createElement('td', { style: { ...tdStyle, background: '#EBF4FB', fontWeight: '600', textAlign: 'right' } }, fmt(g1)),
+                React.createElement('td', { style: { ...tdStyle, background: '#f0faf4', textAlign: 'right', color: '#2d7a4f' } }, fmt(g1 * data.growthG2)),
+                React.createElement('td', { style: { ...tdStyle, background: '#f0f7ff', textAlign: 'right', color: '#2E75B6' } }, fmt(g1 * data.growthG3)),
+                React.createElement('td', { style: { ...tdStyle, textAlign: 'center' } },
+                  React.createElement('button', { onClick: () => removeProduct(p.id), style: { background: 'none', border: 'none', color: '#e53e3e', cursor: 'pointer', fontSize: '16px', lineHeight: 1, padding: '2px' } }, '×')
+                )
+              )
+            }),
+            data.products.length > 0
+              ? React.createElement('tr', { style: { background: '#1a2740' } },
+                  React.createElement('td', { colSpan: 6, style: { padding: '10px 12px', color: 'white', fontWeight: '700', border: 'none' } }, 'UKUPAN PRIHOD'),
+                  React.createElement('td', { style: { padding: '10px 12px', background: '#1F4E79', color: 'white', fontWeight: '800', textAlign: 'right', border: 'none' } }, fmt(prihodG1)),
+                  React.createElement('td', { style: { padding: '10px 12px', background: '#2d4a2d', color: 'white', fontWeight: '800', textAlign: 'right', border: 'none' } }, fmt(prihodG2)),
+                  React.createElement('td', { style: { padding: '10px 12px', background: '#1a3a5c', color: 'white', fontWeight: '800', textAlign: 'right', border: 'none' } }, fmt(prihodG3)),
+                  React.createElement('td', { style: { background: '#2d3748', border: 'none' } }, '')
+                )
+              : null
+          )
+        )
+      )
+    ),
+
+    data.products.length < 12
+      ? React.createElement('button', {
+          onClick: addProduct,
+          style: { background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600', marginBottom: '28px' }
+        }, '+ Dodaj stavku')
+      : React.createElement('p', { style: { color: '#6b7a99', fontSize: '12px', marginBottom: '28px' } }, 'Maksimalan broj stavki je 12.'),
+
+    React.createElement('div', { style: { background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #e2e8f0' } },
       React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', marginBottom: '16px' } }, 'Faktori rasta prihoda po godinama'),
       React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' } },
         React.createElement('div', { style: { background: '#f5f7fb', borderRadius: '8px', padding: '14px' } },
@@ -119,98 +221,6 @@ export default function StepProdajniAsortiman({ data, onChange }: Props) {
           React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99', marginTop: '4px' } }, '1.20 = +20% rast')
         )
       )
-    ),
-
-    React.createElement('div', { style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '12px' } },
-      React.createElement('div', { style: { overflowX: 'auto' } },
-        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: '900px' } },
-          React.createElement('thead', {},
-            React.createElement('tr', {},
-              React.createElement('th', { style: { ...thStyle, width: '30px' } }, '#'),
-              React.createElement('th', { style: { ...thStyle, minWidth: '160px' } }, 'Naziv proizvoda / usluge'),
-              React.createElement('th', { style: { ...thStyle, width: '90px' } }, 'Jed. mjere'),
-              React.createElement('th', { style: { ...thStyle, width: '100px' } }, 'Godisnji obim'),
-              React.createElement('th', { style: { ...thStyle, width: '110px' } }, 'Prod. cijena / jed.'),
-              React.createElement('th', { style: { ...thStyle, width: '110px' } }, 'Tr. mat. / jed.'),
-              React.createElement('th', { style: { ...thStyle, width: '120px', background: '#243553' } }, 'Prihod G1'),
-              React.createElement('th', { style: { ...thStyle, width: '120px', background: '#243553' } }, 'Bruto dobit G1'),
-              React.createElement('th', { style: { ...thStyle, width: '110px', background: '#2d4a2d' } }, 'Prihod G2'),
-              React.createElement('th', { style: { ...thStyle, width: '110px', background: '#1a3a5c' } }, 'Prihod G3'),
-              React.createElement('th', { style: { ...thStyle, width: '30px', background: '#2d3748' } }, '')
-            )
-          ),
-          React.createElement('tbody', {},
-            data.products.length === 0
-              ? React.createElement('tr', {},
-                  React.createElement('td', { colSpan: 11, style: { padding: '32px', textAlign: 'center', color: '#6b7a99', fontSize: '13px' } },
-                    'Nema proizvoda. Kliknite "+ Dodaj proizvod" ispod.'
-                  )
-                )
-              : null,
-            ...data.products.map((p, i) => {
-              const calc = calcProduct(p)
-              return React.createElement('tr', { key: p.id, style: { borderBottom: '1px solid #e2e8f0', background: i % 2 === 0 ? 'white' : '#fafafa' } },
-                React.createElement('td', { style: { ...tdStyle, textAlign: 'center', color: '#6b7a99', fontWeight: '600' } }, i + 1),
-                React.createElement('td', { style: tdStyle },
-                  React.createElement('input', { type: 'text', value: p.naziv, onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateProduct(p.id, 'naziv', e.target.value), placeholder: 'npr. Hljeb bijeli 500g', style: inputStyle })
-                ),
-                React.createElement('td', { style: tdStyle },
-                  React.createElement('select', { value: p.jm, onChange: (e: React.ChangeEvent<HTMLSelectElement>) => updateProduct(p.id, 'jm', e.target.value), style: { ...inputStyle, cursor: 'pointer' } },
-                    ...JM_OPTIONS.map(jm => React.createElement('option', { key: jm, value: jm }, jm))
-                  )
-                ),
-                React.createElement('td', { style: tdStyle },
-                  React.createElement('input', { type: 'number', min: '0', value: p.obim || '', onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateProduct(p.id, 'obim', parseFloat(e.target.value) || 0), placeholder: '0', style: numStyle })
-                ),
-                React.createElement('td', { style: tdStyle },
-                  React.createElement('input', { type: 'number', min: '0', step: '0.01', value: p.cijena || '', onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateProduct(p.id, 'cijena', parseFloat(e.target.value) || 0), placeholder: '0.00', style: numStyle })
-                ),
-                React.createElement('td', { style: tdStyle },
-                  React.createElement('input', { type: 'number', min: '0', step: '0.01', value: p.trMat || '', onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateProduct(p.id, 'trMat', parseFloat(e.target.value) || 0), placeholder: '0.00', style: numStyle })
-                ),
-                React.createElement('td', { style: { ...tdStyle, background: '#EBF4FB', fontWeight: '600', textAlign: 'right' } }, fmt(calc.prihodG1)),
-                React.createElement('td', { style: { ...tdStyle, background: calc.brutoG1 >= 0 ? '#f0faf4' : '#fef5f5', fontWeight: '600', textAlign: 'right', color: calc.brutoG1 >= 0 ? '#2d7a4f' : '#c0392b' } }, fmt(calc.brutoG1)),
-                React.createElement('td', { style: { ...tdStyle, background: '#f0faf4', textAlign: 'right', color: '#2d7a4f' } }, fmt(calc.prihodG2)),
-                React.createElement('td', { style: { ...tdStyle, background: '#f0f7ff', textAlign: 'right', color: '#2E75B6' } }, fmt(calc.prihodG3)),
-                React.createElement('td', { style: { ...tdStyle, textAlign: 'center' } },
-                  React.createElement('button', { onClick: () => removeProduct(p.id), style: { background: 'none', border: 'none', color: '#e53e3e', cursor: 'pointer', fontSize: '16px', lineHeight: 1, padding: '2px' } }, 'x')
-                )
-              )
-            }),
-            data.products.length > 0
-              ? React.createElement('tr', { style: { background: '#1a2740', fontWeight: '700' } },
-                  React.createElement('td', { colSpan: 6, style: { ...tdStyle, background: '#1a2740', color: 'white', fontWeight: '700', padding: '10px 12px', border: 'none' } }, 'UKUPNO'),
-                  React.createElement('td', { style: { ...tdStyle, background: '#1F4E79', color: 'white', fontWeight: '700', textAlign: 'right', border: 'none' } }, fmt(totals.prihodG1)),
-                  React.createElement('td', { style: { ...tdStyle, background: totals.prihodG1 - totals.trMatG1 >= 0 ? '#2d7a4f' : '#c0392b', color: 'white', fontWeight: '700', textAlign: 'right', border: 'none' } }, fmt(totals.prihodG1 - totals.trMatG1)),
-                  React.createElement('td', { style: { ...tdStyle, background: '#2d4a2d', color: 'white', fontWeight: '700', textAlign: 'right', border: 'none' } }, fmt(totals.prihodG2)),
-                  React.createElement('td', { style: { ...tdStyle, background: '#1a3a5c', color: 'white', fontWeight: '700', textAlign: 'right', border: 'none' } }, fmt(totals.prihodG3)),
-                  React.createElement('td', { style: { ...tdStyle, background: '#2d3748', border: 'none' } }, '')
-                )
-              : null
-          )
-        )
-      )
-    ),
-
-    data.products.length < 12
-      ? React.createElement('button', {
-          onClick: addProduct,
-          style: { background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600', marginBottom: '20px' }
-        }, '+ Dodaj proizvod / uslugu')
-      : React.createElement('p', { style: { color: '#6b7a99', fontSize: '12px', marginBottom: '20px' } }, 'Maksimalan broj proizvoda je 12.'),
-
-    data.products.length > 0 && React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' } },
-      ...[
-        { label: 'Ukupan prihod G1', value: fmt(totals.prihodG1), color: '#1a2740', bg: '#EBF4FB' },
-        { label: 'Bruto dobit G1', value: fmt(totals.prihodG1 - totals.trMatG1), color: totals.prihodG1 - totals.trMatG1 >= 0 ? '#2d7a4f' : '#c0392b', bg: totals.prihodG1 - totals.trMatG1 >= 0 ? '#f0faf4' : '#fef5f5' },
-        { label: 'Marza bruto dobiti', value: totals.prihodG1 > 0 ? ((totals.prihodG1 - totals.trMatG1) / totals.prihodG1 * 100).toFixed(1) + '%' : '0%', color: '#1a2740', bg: '#f5f7fb' },
-        { label: 'Ukupan prihod G2', value: fmt(totals.prihodG2), color: '#2d7a4f', bg: '#f0faf4' },
-        { label: 'Ukupan prihod G3', value: fmt(totals.prihodG3), color: '#2E75B6', bg: '#f0f7ff' },
-        { label: 'Rast G1 → G3', value: totals.prihodG1 > 0 ? '+' + ((totals.prihodG3 / totals.prihodG1 - 1) * 100).toFixed(1) + '%' : '0%', color: '#C9A227', bg: '#fffbf0' },
-      ].map((stat, i) => React.createElement('div', { key: i, style: { background: stat.bg, borderRadius: '10px', padding: '14px 16px', border: '1px solid #e2e8f0' } },
-        React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' } }, stat.label),
-        React.createElement('div', { style: { fontSize: '18px', fontWeight: '800', color: stat.color } }, stat.value)
-      ))
     )
   )
 }
