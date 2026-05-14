@@ -95,8 +95,7 @@ export default function Builder() {
 
   const [cover, setCover] = useState({ name: '', entrepreneur: '', date: '', version: '', email: '' })
   const [summary, setSummary] = useState({ idea: '', investment: '', effects: '', usp: '' })
-  const [idea, setIdea] = useState({ products: '', specific: '', customers: '', marketSize: '', painPoint: '', businessModel: '', milestones: '' })
-  const [bio, setBio] = useState({ name: '', dob: '', education: '', experience: '', achievements: '', linkedin: '' })
+  const [idea, setIdea] = useState({ name: '', products: '', specific: '', customers: '', marketSize: '', painPoint: '', businessModel: '', milestones: '' })  const [bio, setBio] = useState({ name: '', dob: '', education: '', experience: '', achievements: '', linkedin: '' })
   const [motivation, setMotivation] = useState({ market: '', passion: '', autonomy: '', financial: '', social: '', eduQual: '', profSkills: '', ref1: '', ref2: '' })
   const [canvas, setCanvas] = useState<Record<string, string>>({})
   const [vision, setVision] = useState('')
@@ -262,17 +261,16 @@ export default function Builder() {
       Field({ label: 'Konkurentske prednosti (USP) — sto vas razlikuje?', placeholder: 'Zasto ce kupci odabrati vas a ne konkurenciju?', value: summary.usp, onChange: v => setSummary(p => ({...p, usp: v})) })
     )
 
-    if (n === 3) return React.createElement('div', {},
-      Field({ label: 'Naziv biznisa', placeholder: 'Naziv vaseg biznisa ili projekta', value: idea.products.split('||')[0] || '', onChange: v => setIdea(p => ({...p, products: v})), type: 'input' }),
-      Field({ label: 'Detaljno opisite sto nudite — karakteristike, prednosti, razlikovanje', placeholder: 'Opisite proizvode/usluge detaljno...', value: idea.products, onChange: v => setIdea(p => ({...p, products: v})), rows: 4 }),
-      Field({ label: 'Specificni atributi koji diferenciraju od konkurencije', placeholder: 'Sta vas cini jedinstvenim na trzistu?', value: idea.specific, onChange: v => setIdea(p => ({...p, specific: v})) }),
-      Field({ label: 'Ko su kljucni kupci? (demografija, geografija, psihografija)', placeholder: 'Opisite vasu ciljnu grupu...', value: idea.customers, onChange: v => setIdea(p => ({...p, customers: v})) }),
-      Field({ label: 'Velicina ciljnog trzista (procjena)', placeholder: 'npr. 50.000 potencijalnih kupaca u BiH...', value: idea.marketSize, onChange: v => setIdea(p => ({...p, marketSize: v})), type: 'input' }),
-      Field({ label: 'Koji pain point adresira vas biznis? Kako to dokazujete?', placeholder: 'Opisite problem koji rjesavate...', value: idea.painPoint, onChange: v => setIdea(p => ({...p, painPoint: v})) }),
-      Field({ label: 'Kako generirate prihod? (direktna prodaja / pretplata / B2B / B2C)', placeholder: 'Opisite poslovni model...', value: idea.businessModel, onChange: v => setIdea(p => ({...p, businessModel: v})) }),
-      Field({ label: 'Kljucni koraci i rokovi: osnivanje > pilot > rast > ekspanzija', placeholder: 'Navedite milestones sa rokovima...', value: idea.milestones, onChange: v => setIdea(p => ({...p, milestones: v})), rows: 4 })
-    )
-
+   if (n === 3) return React.createElement('div', {},
+  Field({ label: 'Naziv biznisa', placeholder: 'Naziv vaseg biznisa ili projekta', value: idea.name, onChange: v => setIdea(p => ({...p, name: v})), type: 'input' }),
+  Field({ label: 'Detaljno opisite sto nudite: karakteristike, prednosti, razlikovanje', placeholder: 'Opisite proizvode/usluge detaljno...', value: idea.products, onChange: v => setIdea(p => ({...p, products: v})), rows: 4 }),
+  Field({ label: 'Specificni atributi koji diferenciraju od konkurencije', placeholder: 'Sta vas cini jedinstvenim na trzistu?', value: idea.specific, onChange: v => setIdea(p => ({...p, specific: v})) }),
+  Field({ label: 'Ko su kljucni kupci? (demografija, geografija, psihografija)', placeholder: 'Opisite vasu ciljnu grupu...', value: idea.customers, onChange: v => setIdea(p => ({...p, customers: v})) }),
+  Field({ label: 'Velicina ciljnog trzista (procjena)', placeholder: 'npr. 50.000 potencijalnih kupaca u BiH...', value: idea.marketSize, onChange: v => setIdea(p => ({...p, marketSize: v})), type: 'input' }),
+  Field({ label: 'Koju potrebu kupca zadovoljava ili koji problem rjesava vas biznis?', placeholder: 'Opisite problem koji rjesavate...', value: idea.painPoint, onChange: v => setIdea(p => ({...p, painPoint: v})) }),
+  Field({ label: 'Na koji nacin planirate ostvarivati prihod?', placeholder: 'Opisite poslovni model...', value: idea.businessModel, onChange: v => setIdea(p => ({...p, businessModel: v})) }),
+  Field({ label: 'Kljucni koraci i rokovi: osnivanje > pilot > rast > ekspanzija', placeholder: 'Navedite milestones sa rokovima...', value: idea.milestones, onChange: v => setIdea(p => ({...p, milestones: v})), rows: 4 })
+)
     if (n === 4) return React.createElement('div', {},
       Field({ label: 'Ime i prezime', placeholder: 'Puno ime i prezime', value: bio.name, onChange: v => setBio(p => ({...p, name: v})), type: 'input' }),
       Field({ label: 'Datum i mjesto rodjenja', placeholder: 'npr. 01.01.1985., Mostar', value: bio.dob, onChange: v => setBio(p => ({...p, dob: v})), type: 'input' }),
