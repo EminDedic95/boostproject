@@ -99,9 +99,9 @@ export default function Resources() {
             React.createElement('div', { style: { background: '#1a2740', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
               React.createElement('div', { style: { width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
                 React.createElement('div', { style: { width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderLeft: '18px solid white', marginLeft: '4px' } })
-              ) */
+              ) 
             ),
-
+*/
             React.createElement('div', { style: { padding: '16px' } },
               React.createElement('span', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px' } }, video.step),
               React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '600', margin: '8px 0 4px' } }, video.title),
