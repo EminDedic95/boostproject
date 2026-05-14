@@ -88,7 +88,6 @@ export default function Resources() {
           )
         )
       ),
-/*
       React.createElement('h2', { style: { color: '#1a2740', fontSize: '18px', fontWeight: 'bold', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' } },
         React.createElement('span', { style: { background: '#FFF8E7', color: '#C9A227', fontSize: '12px', padding: '3px 10px', borderRadius: '20px' } }, 'VIDEO'),
         'Video tutorijali'
@@ -103,7 +102,6 @@ export default function Resources() {
               )
             ),
 
-            */
             React.createElement('div', { style: { padding: '16px' } },
               React.createElement('span', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px' } }, video.step),
               React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '600', margin: '8px 0 4px' } }, video.title),
