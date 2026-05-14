@@ -36,7 +36,7 @@ const STEPS = [
   { n: 22, label: 'Ostali troskovi', tag: 'DIO VIII.6', title: 'Ostali troskovi i plate', desc: 'Unesite operativne troskove, amortizaciju i troskove radne snage.' },
   { n: 23, label: 'P&L', tag: 'DIO VIII.7', title: 'Racun dobiti i gubitka', desc: 'Automatski izracun profitabilnosti na osnovu svih unesenih podataka.' },
   { n: 24, label: 'Break-even', tag: 'DIO VIII.8', title: 'Break-even i cijena kostanja', desc: 'Automatski izracun tacke pokrica i cijene kostanja po proizvodu.' },
-  { n: 25, label: 'Cash Flow', tag: 'DIO VIII.9', title: 'Novcani tokovi — Cash Flow', desc: 'Automatski izracun novcanih tokova za 36 mjeseci.' },
+  { n: 25, label: 'Cash Flow', tag: 'DIO VIII.9', title: 'Novcani tokovi - Cash Flow', desc: 'Automatski izracun novcanih tokova za 36 mjeseci.' },
   { n: 26, label: 'Zakljucak', tag: 'ZAKLJUCAK', title: 'Zakljucak i izjava preduzetnika', desc: 'Zakljucna izjava i potpis preduzetnika.' },
 ]
 
@@ -432,7 +432,6 @@ export default function Builder() {
     if (n === 14) return React.createElement('div', {},
       Field({ label: 'Kljucni poslovni procesi', placeholder: 'Opisite glavne procese od narudzbe do isporuke...', value: operations.processes, onChange: v => setOperations(p => ({...p, processes: v})), rows: 4 }),
       Field({ label: 'Organizacijska struktura i tim', placeholder: 'Ko su kljucni ljudi, koje su uloge i odgovornosti?', value: operations.structure, onChange: v => setOperations(p => ({...p, structure: v})), rows: 4 }),
-      Field({ label: 'Oprema i tehnologija', placeholder: 'Koja oprema, alati i tehnologija su potrebni?', value: operations.equipment, onChange: v => setOperations(p => ({...p, equipment: v})) }),
       Field({ label: 'Lokacija i poslovni prostor', placeholder: 'Gdje ce se odvijati poslovanje? Kupovina ili najam?', value: operations.location, onChange: v => setOperations(p => ({...p, location: v})) })
     )
 
