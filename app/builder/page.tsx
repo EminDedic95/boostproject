@@ -582,7 +582,7 @@ if (n === 25) return React.createElement(StepCashFlow, {
 
   return React.createElement('div', { style: { fontFamily: 'Segoe UI, sans-serif', height: '100vh', display: 'grid', gridTemplateRows: 'auto 1fr', overflow: 'hidden' } },
     React.createElement('nav', { style: { background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 32px', height: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
-      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'BOOST Biznis Plan'),
+      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'Biznis Plan'),
       React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '16px' } },
         React.createElement('a', { href: '/resources', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Resursi'),
         React.createElement('a', { href: '/profile', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Profil'),
@@ -597,7 +597,7 @@ if (n === 25) return React.createElement(StepCashFlow, {
         React.createElement('button', { onClick: () => setSidebarOpen(!sidebarOpen), style: { position: 'absolute', top: '16px', right: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer', fontSize: '10px', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.1)' } }, sidebarOpen ? '<' : '>'),
         sidebarOpen && React.createElement('div', { style: { overflowY: 'auto', height: '100%' } },
           React.createElement('div', { style: { padding: '12px 16px', borderBottom: '1px solid #e2e8f0', background: '#f5f7fb' } },
-            React.createElement('p', { style: { fontSize: '11px', fontWeight: '700', color: '#6b7a99', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 } }, 'BOOST Biznis Plan')
+            React.createElement('p', { style: { fontSize: '11px', fontWeight: '700', color: '#6b7a99', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 } }, 'Biznis Plan')
           ),
           ...STEPS.map((s, i) =>
             React.createElement('div', { key: i, onClick: () => setCurrent(i), style: { display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 16px', borderLeft: i === current ? '3px solid #C9A227' : '3px solid transparent', background: i === current ? '#FFF8E7' : 'transparent', cursor: 'pointer' } },
