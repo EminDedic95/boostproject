@@ -93,13 +93,13 @@ export default function Resources() {
         'Video tutorijali'
       ),
 
-      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' } },
+ /*     React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' } },
         ...VIDEOS.map(video =>
           React.createElement('div', { key: video.title, style: { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' } },
             React.createElement('div', { style: { background: '#1a2740', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
               React.createElement('div', { style: { width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
                 React.createElement('div', { style: { width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderLeft: '18px solid white', marginLeft: '4px' } })
-              )
+              ) */
             ),
 
             React.createElement('div', { style: { padding: '16px' } },
