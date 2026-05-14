@@ -309,34 +309,33 @@ export default function Builder() {
       )
     )
 
-    if (n === 7) return React.createElement('div', {},
-      Field({ label: 'Vizija poslovanja', placeholder: 'npr. Postati vodeći regionalni pruzalac [usluge] u [regiji] do [godine]', value: vision, onChange: setVision, rows: 2 }),
-      React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', margin: '16px 0 10px' } }, 'SMART Ciljevi (minimum 3)'),
-      React.createElement('div', { style: { overflowX: 'auto', background: 'white', borderRadius: '10px', border: '1px solid #e2e8f0' } },
-        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-          React.createElement('thead', {},
-            React.createElement('tr', {},
-              ...['Cilj', 'Specificnost', 'Mjerljivost', 'Dostiznost', 'Relevantnost', 'Rok'].map(h =>
-                React.createElement('th', { key: h, style: { padding: '8px 10px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '11px', whiteSpace: 'nowrap' } }, h)
-              )
-            )
-          ),
-          React.createElement('tbody', {},
-            ...smartGoals.map((row, ri) =>
-              React.createElement('tr', { key: ri },
-                ...row.map((cell, ci) =>
-                  React.createElement('td', { key: ci, style: { border: '1px solid #e2e8f0', padding: '4px' } },
-                    React.createElement('input', { type: 'text', value: cell, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { const nr = smartGoals.map((r, rr) => rr === ri ? r.map((c, cc) => cc === ci ? e.target.value : c) : r); setSmartGoals(nr) }, style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px 6px', background: 'transparent', boxSizing: 'border-box' } })
-                  )
-                )
+  if (n === 7) return React.createElement('div', {},
+  Field({ label: 'Vizija poslovanja', placeholder: 'npr. Postati vodeći regionalni pruzalac [usluge] u [regiji] do [godine]', value: vision, onChange: setVision, rows: 2 }),
+  React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', margin: '16px 0 10px' } }, 'SMART Ciljevi (minimum 3)'),
+  React.createElement('div', { style: { overflowX: 'auto', background: 'white', borderRadius: '10px', border: '1px solid #e2e8f0' } },
+    React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px', tableLayout: 'fixed' } },
+      React.createElement('thead', {},
+        React.createElement('tr', {},
+          ...['Cilj', 'Specificnost', 'Mjerljivost', 'Dostiznost', 'Relevantnost', 'Rok'].map((h, hi) =>
+            React.createElement('th', { key: h, style: { padding: '8px 10px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '11px', width: hi === 0 ? '20%' : hi === 5 ? '10%' : '17%' } }, h)
+          )
+        )
+      ),
+      React.createElement('tbody', {},
+        ...smartGoals.map((row, ri) =>
+          React.createElement('tr', { key: ri },
+            ...row.map((cell, ci) =>
+              React.createElement('td', { key: ci, style: { border: '1px solid #e2e8f0', padding: '4px', verticalAlign: 'top' } },
+                React.createElement('textarea', { value: cell, onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => { const nr = smartGoals.map((r, rr) => rr === ri ? r.map((c, cc) => cc === ci ? e.target.value : c) : r); setSmartGoals(nr) }, style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px 6px', background: 'transparent', boxSizing: 'border-box', resize: 'none', minHeight: '60px', fontFamily: 'inherit', lineHeight: 1.5 }, rows: 3 })
               )
             )
           )
         )
-      ),
-      React.createElement('button', { onClick: () => setSmartGoals(p => [...p, ['', '', '', '', '', '']]), style: { marginTop: '10px', background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '6px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj cilj')
+      )
     )
-
+  ),
+  React.createElement('button', { onClick: () => setSmartGoals(p => [...p, ['', '', '', '', '', '']]), style: { marginTop: '10px', background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '6px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj cilj')
+)
     if (n === 8) return React.createElement('div', {},
       Field({ label: 'Izjava o misiji — sto radimo? Za koga? Koje vrijednosti zastupamo?', placeholder: 'Nasa misija je da...', value: mission.statement, onChange: v => setMission(p => ({...p, statement: v})), rows: 3 }),
       React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', margin: '16px 0 10px' } }, 'Abellov okvir'),
