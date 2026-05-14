@@ -19,7 +19,7 @@ const PDFS = [
   { title: 'PEST Analiza - Vodic', desc: 'Kako provesti PEST analizu korak po korak', size: 'PDF' },
   { title: 'Finansijske projekcije - Template', desc: 'Excel template za finansijske projekcije', size: 'XLSX' },
 ]
-
+/*
 const VIDEOS = [
   { title: 'Kako ispuniti Business Model Canvas', step: 'DIO II', duration: 'Uskoro dostupno' },
   { title: 'PEST analiza - Vodic', step: 'DIO III', duration: 'Uskoro dostupno' },
@@ -28,7 +28,7 @@ const VIDEOS = [
   { title: 'Finansijske projekcije korak po korak', step: 'DIO IX', duration: 'Uskoro dostupno' },
   { title: 'Socijalno preduzetnistvo', step: 'DIO X', duration: 'Uskoro dostupno' },
 ]
-
+*/
 export default function Resources() {
   return React.createElement('div', { style: { fontFamily: 'Segoe UI, sans-serif', minHeight: '100vh', background: '#f5f7fb' } },
 
@@ -88,7 +88,7 @@ export default function Resources() {
           )
         )
       ),
-
+/*
       React.createElement('h2', { style: { color: '#1a2740', fontSize: '18px', fontWeight: 'bold', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' } },
         React.createElement('span', { style: { background: '#FFF8E7', color: '#C9A227', fontSize: '12px', padding: '3px 10px', borderRadius: '20px' } }, 'VIDEO'),
         'Video tutorijali'
@@ -102,6 +102,8 @@ export default function Resources() {
                 React.createElement('div', { style: { width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderLeft: '18px solid white', marginLeft: '4px' } })
               )
             ),
+
+            */
             React.createElement('div', { style: { padding: '16px' } },
               React.createElement('span', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px' } }, video.step),
               React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '600', margin: '8px 0 4px' } }, video.title),
