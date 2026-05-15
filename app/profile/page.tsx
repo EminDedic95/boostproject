@@ -71,7 +71,7 @@ export default function ProfilePage() {
 
       React.createElement('div', { style: { marginBottom: '48px' } },
         React.createElement('h1', { style: { color: '#1a2740', fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' } }, 'Zdravo, ' + firstName + '!'),
-        React.createElement('p', { style: { color: '#6b7a99', fontSize: '16px' } }, 'Sta zelite raditi danas?')
+        React.createElement('p', { style: { color: '#6b7a99', fontSize: '16px' } }, 'Šta želite raditi danas?')
       ),
 
       React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' } },
@@ -84,7 +84,7 @@ export default function ProfilePage() {
           React.createElement('div', { style: { position: 'absolute', bottom: '-30px', right: '30px', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(201,162,39,0.1)' } }),
           React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', display: 'inline-block', marginBottom: '20px', letterSpacing: '0.06em' } }, 'BIZNIS PLAN'),
           React.createElement('h2', { style: { color: 'white', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', lineHeight: 1.2 } }, 'Izradi biznis plan'),
-          React.createElement('p', { style: { color: 'rgba(255,255,255,0.65)', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Korak-po-korak vodić kroz 26 sekcija profesionalnog biznis plana uz AI podrsku.'),
+          React.createElement('p', { style: { color: 'rgba(255,255,255,0.65)', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Korak-po-korak vodić kroz 26 sekcija profesionalnog biznis plana uz AI podršku.'),
           planStep > 0
             ? React.createElement('div', {},
                 React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '6px' } },
