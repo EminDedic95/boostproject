@@ -51,7 +51,7 @@ export default function ProfilePage() {
   const firstName = profile?.name ? profile.name.split(' ')[0] : user?.email?.split('@')[0] || ''
 
   const profileLabels: Record<string, { label: string, color: string }> = {
-    pocetnik: { label: 'Pocetnik preduzetnik', color: '#2E75B6' },
+    pocetnik: { label: 'Početnik preduzetnik', color: '#2E75B6' },
     srednji: { label: 'U razvoju', color: '#C9A227' },
     napredan: { label: 'Iskusan preduzetnik', color: '#2d7a4f' },
   }
@@ -84,7 +84,7 @@ export default function ProfilePage() {
           React.createElement('div', { style: { position: 'absolute', bottom: '-30px', right: '30px', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(201,162,39,0.1)' } }),
           React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', display: 'inline-block', marginBottom: '20px', letterSpacing: '0.06em' } }, 'BIZNIS PLAN'),
           React.createElement('h2', { style: { color: 'white', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', lineHeight: 1.2 } }, 'Izradi biznis plan'),
-          React.createElement('p', { style: { color: 'rgba(255,255,255,0.65)', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Korak-po-korak vodic kroz 26 sekcija profesionalnog biznis plana uz AI podrsku.'),
+          React.createElement('p', { style: { color: 'rgba(255,255,255,0.65)', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Korak-po-korak vodić kroz 26 sekcija profesionalnog biznis plana uz AI podrsku.'),
           planStep > 0
             ? React.createElement('div', {},
                 React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '6px' } },
@@ -96,7 +96,7 @@ export default function ProfilePage() {
                 ),
                 React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Nastavi plan')
               )
-            : React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Zapocni izradu')
+            : React.createElement('div', { style: { background: '#C9A227', color: '#1a2740', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Započni izradu')
         ),
 
         React.createElement('div', {
@@ -105,8 +105,8 @@ export default function ProfilePage() {
         },
           React.createElement('div', { style: { position: 'absolute', top: '-20px', right: '-20px', width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(45,122,79,0.06)' } }),
           React.createElement('div', { style: { background: '#f0faf4', color: '#2d7a4f', fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', display: 'inline-block', marginBottom: '20px', letterSpacing: '0.06em', border: '1px solid rgba(45,122,79,0.2)' } }, 'UCENJE'),
-          React.createElement('h2', { style: { color: '#1a2740', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', lineHeight: 1.2 } }, 'Putanja ucenja'),
-          React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Procijenite znanje, dobijte personalizovani plan ucenja sa teorijom, videima i kvizovima.'),
+          React.createElement('h2', { style: { color: '#1a2740', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', lineHeight: 1.2 } }, 'Putanja učenja'),
+          React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', marginBottom: '28px', lineHeight: 1.6 } }, 'Procijenite znanje, dobijte personalizovani plan učenja sa teorijom i kvizovima.'),
           learningProfile
             ? React.createElement('div', {},
                 profileInfo && React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' } },
@@ -122,7 +122,7 @@ export default function ProfilePage() {
                 ),
                 React.createElement('div', { style: { background: '#1a2740', color: 'white', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Nastavi ucenje')
               )
-            : React.createElement('div', { style: { background: '#1a2740', color: 'white', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Zapocni procjenu')
+            : React.createElement('div', { style: { background: '#1a2740', color: 'white', padding: '11px 28px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', display: 'inline-block' } }, 'Započni procjenu')
         )
       ),
 
@@ -140,7 +140,7 @@ export default function ProfilePage() {
           React.createElement('div', { style: { width: '36px', height: '36px', borderRadius: '10px', background: '#FFEBEB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#c0392b', flexShrink: 0 } }, 'PDF'),
           React.createElement('div', {},
             React.createElement('div', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, 'PDF materijali'),
-            React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99', marginTop: '2px' } }, 'Vodici i templates')
+            React.createElement('div', { style: { fontSize: '11px', color: '#6b7a99', marginTop: '2px' } }, 'Vodići i templejti')
           )
         ),
 
