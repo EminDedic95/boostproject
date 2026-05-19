@@ -26,7 +26,7 @@ export default function Resources() {
     React.createElement('nav', {
       style: { background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 32px', height: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }
     },
-      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'BOOST Biznis Plan'),
+      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'Biznis Plan'),
       React.createElement('div', { style: { display: 'flex', gap: '24px', alignItems: 'center' } },
         React.createElement('a', { href: '/resources', style: { color: '#1a2740', fontSize: '14px', textDecoration: 'none', fontWeight: '600' } }, 'Resursi'),
         React.createElement('a', { href: '/profile', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Profil'),
