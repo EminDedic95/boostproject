@@ -282,7 +282,7 @@ export default function Home() {
     ),
 
     React.createElement('footer', {},
-      React.createElement('span', { className: 'footer-logo' }, 'BOOST Biznis Plan'),
+      React.createElement('span', { className: 'footer-logo' }, 'Biznis Plan Builder'),
       React.createElement('div', { className: 'footer-links' },
         React.createElement('a', { href: '#' }, 'O projektu'),
         React.createElement('a', { href: '/resources' }, 'Resursi'),
