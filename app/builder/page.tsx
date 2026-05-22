@@ -639,7 +639,7 @@ if (n === 25) return React.createElement(StepCashFlow, {
           ),
           React.createElement('div', { style: { flex: 1, overflowY: 'auto', padding: '16px 20px' } },
             React.createElement('div', { style: { background: '#f5f7fb', borderRadius: '12px', padding: '14px' } },
-              React.createElement('p', { style: { fontSize: '13px', color: '#1a2740', lineHeight: 1.6, margin: 0 } }, 'Zdravo! Nalazite se na koraku ' + step.title + '. Postavite mi pitanje i pomoci cu vam na osnovu BOOST vodica.')
+              React.createElement('p', { style: { fontSize: '13px', color: '#1a2740', lineHeight: 1.6, margin: 0 } }, 'Zdravo! Nalazite se na koraku ' + step.title + '. Postavite mi pitanje i pomoci cu vam na osnovu našeg vodića.')
             )
           ),
           React.createElement('div', { style: { padding: '12px 16px', borderTop: '1px solid #e2e8f0' } },
