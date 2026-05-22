@@ -60,7 +60,7 @@ export default function ProfilePage() {
   return React.createElement('div', { style: { fontFamily: 'Segoe UI, sans-serif', minHeight: '100vh', background: '#f5f7fb' } },
 
     React.createElement('nav', { style: { background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 32px', height: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
-      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'BOOST Biznis Plan'),
+      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'Biznis Plan'),
       React.createElement('div', { style: { display: 'flex', gap: '16px', alignItems: 'center' } },
         React.createElement('span', { style: { fontSize: '14px', color: '#6b7a99' } }, user?.email),
         React.createElement('button', { onClick: handleSignOut, style: { background: 'none', border: '1px solid #e2e8f0', color: '#6b7a99', padding: '6px 16px', borderRadius: '20px', fontSize: '13px', cursor: 'pointer' } }, 'Odjava')
