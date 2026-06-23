@@ -591,23 +591,8 @@ if (n === 25) return React.createElement(StepCashFlow, {
       )
     ),
     React.createElement('div', { style: { display: 'grid', gridTemplateColumns: gridCols, overflow: 'hidden', transition: 'grid-template-columns 0.3s ease' } },
-      React.createElement('aside', { style: { borderRight: '1px solid #e2e8f0', background: 'white', overflow: 'hidden', position: 'relative' } },
-        React.createElement('button', { onClick: () => setSidebarOpen(!sidebarOpen), style: { position: 'absolute', top: '16px', right: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer', fontSize: '10px', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.1)' } }, sidebarOpen ? '<' : '>'),
-        sidebarOpen && React.createElement('div', { style: { overflowY: 'auto', height: '100%' } },
-          React.createElement('div', { style: { padding: '12px 16px', borderBottom: '1px solid #e2e8f0', background: '#f5f7fb' } },
-            React.createElement('p', { style: { fontSize: '11px', fontWeight: '700', color: '#6b7a99', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 } }, 'Biznis Plan')
-          ),
-          ...STEPS.map((s, i) =>
-            React.createElement('div', { key: i, onClick: () => setCurrent(i), style: { display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 16px', borderLeft: i === current ? '3px solid #C9A227' : '3px solid transparent', background: i === current ? '#FFF8E7' : 'transparent', cursor: 'pointer' } },
-              React.createElement('div', { style: { width: '22px', height: '22px', borderRadius: '50%', flexShrink: 0, background: i === current ? '#C9A227' : i < current ? '#2d7a4f' : '#f5f7fb', border: i === current ? 'none' : '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 'bold', color: i === current ? '#1a2740' : i < current ? 'white' : '#6b7a99' } }, i < current ? 'v' : s.n),
-              React.createElement('div', {},
-                React.createElement('div', { style: { fontSize: '13px', color: i === current ? '#1a2740' : '#6b7a99', fontWeight: i === current ? '600' : '400', lineHeight: 1.3 } }, s.label),
-                React.createElement('div', { style: { fontSize: '11px', color: i === current ? '#C9A227' : '#9fa6b4', fontWeight: '600' } }, s.tag)
-              )
-            )
-          )
-        )
-      ),      React.createElement('main', { style: { background: '#f5f7fb', overflowY: 'auto', padding: '28px 36px' } },
+     )
+    ),     React.createElement('main', { style: { background: '#f5f7fb', overflowY: 'auto', padding: '28px 36px' } },
         React.createElement('div', { style: { maxWidth: '100%' } },
           React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' } },
             React.createElement('span', { style: { background: '#EBF4FB', color: '#1F4E79', fontSize: '11px', fontWeight: '700', padding: '2px 10px', borderRadius: '20px', letterSpacing: '0.06em' } }, step.tag),
