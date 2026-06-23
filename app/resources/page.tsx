@@ -9,11 +9,11 @@ const TOOLS = [
   { title: 'Matrica konkurentske analize', desc: 'Uporedite sebe sa do 3 konkurenta po kljucnim kriterijima sa ocjenama.', href: '/tools/competitive', tag: 'ALAT' },
   { title: 'Problem-Solution Fit Canvas', desc: 'Provjerite da li vase rjesenje zaista adresira stvarni problem kupaca.', href: '/tools/psf', tag: 'ALAT' },
   { title: '7Ps Marketing Mix', desc: 'Definisite svih 7 elemenata marketinskog miksa: Proizvod, Cijena, Mjesto, Promocija, Ljudi, Procesi, Fizicki dokazi.', href: '/tools/7ps', tag: 'ALAT' },
- ]
+]
 
 const PDFS = [
-  { title: 'YouthBiz Vodic za izradu biznis plana', desc: 'Kompletan vodic kroz sve dijelove biznis plana', size: 'PDF' },
-  { title: 'Finansijske projekcije - Template', desc: 'Excel template za finansijske projekcije', size: 'XLSX' },
+  { title: 'YouthBiz Vodic za izradu biznis plana', desc: 'Kompletan vodic kroz sve dijelove biznis plana', size: 'PDF', file: '/documents/Vodic za izradu biznis plana.pdf' },
+  { title: 'Finansijske projekcije - Template', desc: 'Excel template za finansijske projekcije', size: 'XLSX', file: '/documents/Finansijske projekcije - Template.xlsx' },
 ]
 
 export default function Resources() {
@@ -70,8 +70,10 @@ export default function Resources() {
               ),
               React.createElement('p', { style: { color: '#6b7a99', fontSize: '13px', margin: 0 } }, pdf.desc)
             ),
-            React.createElement('button', {
-              style: { background: '#1a2740', color: 'white', border: 'none', padding: '8px 20px', borderRadius: '20px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', flexShrink: 0, marginLeft: '16px' }
+            React.createElement('a', {
+              href: pdf.file,
+              download: true,
+              style: { background: '#1a2740', color: 'white', border: 'none', padding: '8px 20px', borderRadius: '20px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', flexShrink: 0, marginLeft: '16px', textDecoration: 'none', display: 'inline-block' }
             }, 'Preuzmi')
           )
         )
