@@ -91,7 +91,6 @@ export default function Builder() {
   const [saved, setSaved] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [aiOpen, setAiOpen] = useState(true)
 
   const [cover, setCover] = useState({ name: '', entrepreneur: '', date: '', version: '', email: '' })
   const [summary, setSummary] = useState({ idea: '', investment: '', effects: '', usp: '' })
@@ -578,7 +577,7 @@ if (n === 25) return React.createElement(StepCashFlow, {
     return React.createElement('div', {}, React.createElement('p', {}, 'Korak u izradi...'))
   }
 
-  const gridCols = [sidebarOpen ? '240px' : '40px', '1fr', aiOpen ? '300px' : '40px'].join(' ')
+  const gridCols = [sidebarOpen ? '240px' : '40px', '1fr'].join(' ')
 
   return React.createElement('div', { style: { fontFamily: 'Segoe UI, sans-serif', height: '100vh', display: 'grid', gridTemplateRows: 'auto 1fr', overflow: 'hidden' } },
     React.createElement('nav', { style: { background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 32px', height: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
@@ -592,13 +591,6 @@ if (n === 25) return React.createElement(StepCashFlow, {
         )
       )
     ),
-    React.createElement('div', { style: { display: 'grid', gridTemplateColumns: gridCols, overflow: 'hidden', transition: 'grid-template-columns 0.3s ease' } },
-      React.createElement('aside', { style: { borderRight: '1px solid #e2e8f0', background: 'white', overflow: 'hidden', position: 'relative' } },
-        React.createElement('button', { onClick: () => setSidebarOpen(!sidebarOpen), style: { position: 'absolute', top: '16px', right: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer', fontSize: '10px', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.1)' } }, sidebarOpen ? '<' : '>'),
-        sidebarOpen && React.createElement('div', { style: { overflowY: 'auto', height: '100%' } },
-          React.createElement('div', { style: { padding: '12px 16px', borderBottom: '1px solid #e2e8f0', background: '#f5f7fb' } },
-            React.createElement('p', { style: { fontSize: '11px', fontWeight: '700', color: '#6b7a99', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 } }, 'Biznis Plan')
-          ),
           ...STEPS.map((s, i) =>
             React.createElement('div', { key: i, onClick: () => setCurrent(i), style: { display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 16px', borderLeft: i === current ? '3px solid #C9A227' : '3px solid transparent', background: i === current ? '#FFF8E7' : 'transparent', cursor: 'pointer' } },
               React.createElement('div', { style: { width: '22px', height: '22px', borderRadius: '50%', flexShrink: 0, background: i === current ? '#C9A227' : i < current ? '#2d7a4f' : '#f5f7fb', border: i === current ? 'none' : '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 'bold', color: i === current ? '#1a2740' : i < current ? 'white' : '#6b7a99' } }, i < current ? 'v' : s.n),
