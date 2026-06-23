@@ -144,7 +144,7 @@ export default function ProfilePage() {
           )
         ),
 
-        React.createElement('a', { href: 'https://youthbizcatalyst.discourse.group/', target: '_blank', style: { background: 'white', borderRadius: '12px', padding: '18px 20px', border: '1px solid #e2e8f0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' } },
+        React.createElement('a', { href: 'https://youthbizcatalystproject.discourse.group/invites/6umqqtYZdp', target: '_blank', style: { background: 'white', borderRadius: '12px', padding: '18px 20px', border: '1px solid #e2e8f0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' } },
           React.createElement('div', { style: { width: '36px', height: '36px', borderRadius: '10px', background: '#f0faf4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#2d7a4f', flexShrink: 0 } }, 'Z'),
           React.createElement('div', {},
             React.createElement('div', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, 'Zajednica'),
