@@ -14,9 +14,6 @@ const TOOLS = [
 
 const PDFS = [
   { title: 'YouthBiz Vodic za izradu biznis plana', desc: 'Kompletan vodic kroz sve dijelove biznis plana', size: 'PDF' },
-  { title: 'Business Model Canvas - Template', desc: 'Prazan Canvas template za stampanje', size: 'PDF' },
-  { title: 'SWOT Analiza - Radni list', desc: 'Radni list za SWOT analizu sa primjerima', size: 'PDF' },
-  { title: 'PEST Analiza - Vodic', desc: 'Kako provesti PEST analizu korak po korak', size: 'PDF' },
   { title: 'Finansijske projekcije - Template', desc: 'Excel template za finansijske projekcije', size: 'XLSX' },
 ]
 
