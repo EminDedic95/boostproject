@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { P, Example, Tabs, Accordion, Icons, BigIcons, T } from '../LearnComponents'
-import { LessonModule, Lesson } from '../LessonModule'
+import { LessonModule, Lesson, ExamQuestion } from '../LessonModule'
 import { ProfitSim, ScenarioPicker, RevealGrid, DragMatch, IdeaSentence } from '../LearnWidgets'
 
 const b = (t: string) => <strong style={{ color: T.navy }}>{t}</strong>
@@ -244,6 +244,21 @@ const LESSONS: Lesson[] = [
   },
 ]
 
+const EXAM: ExamQuestion[] = [
+  { lesson: 0, q: 'Koja je najveća korist pisanja biznis plana za samog preduzetnika?', options: ['Ispunjava formalni uslov banke', 'Otkriva rupe u ideji dok su još na papiru, a ne nakon šest mjeseci poslovanja', 'Povećava broj stranica dokumentacije'], answer: 1 },
+  { lesson: 0, q: 'Šta banka prvenstveno traži u planu?', options: ['Dokaz da možete uredno vraćati kredit', 'Najbrži mogući rast prihoda', 'Društveni doprinos zajednici'], answer: 0 },
+  { lesson: 0, q: 'Zašto pretjerano optimistične projekcije štete planu koji ide u banku?', options: ['Jer banke ne vole velike brojeve', 'Jer referent prepozna nerealnost i izgubi povjerenje u cijeli plan', 'Jer se tada traži veći kolateral'], answer: 1 },
+  { lesson: 0, q: 'Kada se piše sažetak biznis plana?', options: ['Prvi, da odredi smjer ostatka plana', 'Zadnji, kada već znate šta u planu piše', 'Nije obavezan dio plana'], answer: 1 },
+  { lesson: 1, q: 'Šta znači opisati proizvod kroz korist, a ne kroz osobinu?', options: ['Navesti tehničke specifikacije što detaljnije', 'Opisati šta kupac dobija, a ne kako je proizvod napravljen', 'Navesti cijenu odmah uz opis'], answer: 1 },
+  { lesson: 1, q: 'Kako provjeriti je li problem koji rješavate dovoljno velik?', options: ['Pitati kako ga kupac danas rješava i koliko ga to košta u novcu, vremenu ili živcima', 'Provjeriti koliko konkurenata postoji', 'Izračunati vlastitu maržu'], answer: 0 },
+  { lesson: 1, q: 'Šta NIJE dobar opis konkurentske prednosti?', options: ['Jedini radimo nedjeljom u naselju', 'Kvalitet i povoljne cijene', 'Dostavljamo u roku od dva sata'], answer: 1 },
+  { lesson: 2, q: 'Čemu služi opis ideje u jednoj rečenici?', options: ['Da zamijeni cijeli biznis plan', 'Da otkrije koji element ideje nedostaje i posluži kao prva rečenica sažetka', 'Da se koristi kao slogan u oglasima'], answer: 1 },
+  { lesson: 3, q: 'Zašto biografija preduzetnika ulazi u biznis plan?', options: ['Zato što ideju izvodi osoba, pa finansijer procjenjuje i nju', 'Zato što je to zakonska obaveza', 'Zato što popunjava prazan prostor u dokumentu'], answer: 0 },
+  { lesson: 3, q: 'Koja tvrdnja o sebi ima najveću težinu u planu?', options: ['Ona koju treća strana može potvrditi — preporuka, nagrada, raniji klijent', 'Ona koja je najopširnije opisana', 'Ona koja zvuči najskromnije'], answer: 0 },
+  { lesson: 4, q: 'Cijena je 25 KM, varijabilni trošak 10 KM. Koliko ostaje po komadu?', options: ['25 KM', '15 KM', '10 KM'], answer: 1 },
+  { lesson: 4, q: 'Zašto marža po komadu nije isto što i zarada?', options: ['Jer se iz marže tek plaćaju najam, plate i ostali fiksni troškovi', 'Jer se marža računa tek na kraju godine', 'Jer marža uključuje i porez'], answer: 0 },
+]
+
 export default function Module1() {
   return (
     <LessonModule
@@ -264,6 +279,7 @@ export default function Module1() {
         'Kako razlika između cijene i troška određuje sudbinu biznisa',
       ]}
       lessons={LESSONS}
+      exam={EXAM}
       taskTitle="Vaš zadatak"
       taskIntro="Prije sljedećeg modula pripremite ove elemente (napredak se čuva):"
       tasks={[
