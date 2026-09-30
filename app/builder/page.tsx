@@ -36,7 +36,7 @@ const STEPS = [
   { n: 22, label: 'Ostali troskovi', tag: 'DIO VIII.6', title: 'Ostali troskovi i plate', desc: 'Unesite operativne troskove, amortizaciju i troskove radne snage.' },
   { n: 23, label: 'P&L', tag: 'DIO VIII.7', title: 'Racun dobiti i gubitka', desc: 'Automatski izracun profitabilnosti na osnovu svih unesenih podataka.' },
   { n: 24, label: 'Break-even', tag: 'DIO VIII.8', title: 'Break-even i cijena kostanja', desc: 'Automatski izracun tacke pokrica i cijene kostanja po proizvodu.' },
-  { n: 25, label: 'Cash Flow', tag: 'DIO VIII.9', title: 'Novcani tokovi — Cash Flow', desc: 'Automatski izracun novcanih tokova za 36 mjeseci.' },
+  { n: 25, label: 'Cash Flow', tag: 'DIO VIII.9', title: 'Novcani tokovi - Cash Flow', desc: 'Automatski izracun novcanih tokova za 36 mjeseci.' },
   { n: 26, label: 'Zakljucak', tag: 'ZAKLJUCAK', title: 'Zakljucak i izjava preduzetnika', desc: 'Zakljucna izjava i potpis preduzetnika.' },
 ]
 
@@ -91,13 +91,12 @@ export default function Builder() {
   const [saved, setSaved] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [aiOpen, setAiOpen] = useState(true)
 
   const [cover, setCover] = useState({ name: '', entrepreneur: '', date: '', version: '', email: '' })
   const [summary, setSummary] = useState({ idea: '', investment: '', effects: '', usp: '' })
-  const [idea, setIdea] = useState({ products: '', specific: '', customers: '', marketSize: '', painPoint: '', businessModel: '', milestones: '' })
+  const [idea, setIdea] = useState({ name: '', products: '', specific: '', customers: '', marketSize: '', painPoint: '', businessModel: '', milestones: '' })
   const [bio, setBio] = useState({ name: '', dob: '', education: '', experience: '', achievements: '', linkedin: '' })
-  const [motivation, setMotivation] = useState({ market: '', passion: '', autonomy: '', financial: '', social: '', eduQual: '', profSkills: '', ref1: '', ref2: '' })
+const [motivation, setMotivation] = useState({ market: '', passion: '', autonomy: '', financial: '', social: '', eduQual: '', profSkills: '', ref1: '', ref2: '' })
   const [canvas, setCanvas] = useState<Record<string, string>>({})
   const [vision, setVision] = useState('')
   const [smartGoals, setSmartGoals] = useState([['Cilj 1', '', '', '', '', ''], ['Cilj 2', '', '', '', '', ''], ['Cilj 3', '', '', '', '', '']])
@@ -124,7 +123,7 @@ export default function Builder() {
 }) 
   const [normativData, setNormativData] = useState<NormativData>({ items: [] })
   const [stalnaData, setStalnaData] = useState<StalnaData>({
-  infrastruktura: [], zemljiste: [], oprema: [], vozila: [],
+  infrastruktura: [], zemljiste: [], oprema: [], nematerijalna: [], vozila: [],
   osnivacka: 0, obrtna: 0,
 })
   const [finansiranjeData, setFinansiranjeData] = useState<FinansiranjeData>({
@@ -223,18 +222,26 @@ export default function Builder() {
     setShowSaveModal(true)
   }
 
-  async function savePlan() {
-    if (!saveEmail) return
-    setGenerating(true)
-    await supabase.from('business_plans').insert({ company_name: cover.name || 'Bez naziva', form_data: { cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, sales, investment, pl, cashflow, kpi, scenarios, conclusion }, current_step: current })
-    const res = await fetch('/api/generate-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, sales, investment, pl, cashflow, kpi, scenarios, conclusion }) })
-    const html = await res.text()
-    const win = window.open('', '_blank')
-    if (win) { win.document.write(html); win.document.close(); setTimeout(() => win.print(), 500) }
-    setGenerating(false)
-    setSaved(true)
-    setTimeout(() => setShowSaveModal(false), 2000)
-  }
+ async function savePlan() {
+  if (!saveEmail) return
+  setGenerating(true)
+  await supabase.from('business_plans').insert({
+    company_name: cover.name || 'Bez naziva',
+    form_data: { cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, salesData, normativData, stalnaData, finansiranjeData, promocijaData, troskoviData, conclusion },
+    current_step: current
+  })
+  const res = await fetch('/api/generate-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cover, summary, idea, bio, motivation, canvas, vision, smartGoals, mission, pest, porter, swot, market, marketing, operations, legal, risks, conclusion, salesData, normativData, stalnaData, finansiranjeData, promocijaData, troskoviData })
+  })
+  const html = await res.text()
+  const win = window.open('', '_blank')
+  if (win) { win.document.write(html); win.document.close(); setTimeout(() => win.print(), 500) }
+  setGenerating(false)
+  setSaved(true)
+  setTimeout(() => setShowSaveModal(false), 2000)
+}
 
   function renderStep() {
     const n = current + 1
@@ -254,17 +261,16 @@ export default function Builder() {
       Field({ label: 'Konkurentske prednosti (USP) — sto vas razlikuje?', placeholder: 'Zasto ce kupci odabrati vas a ne konkurenciju?', value: summary.usp, onChange: v => setSummary(p => ({...p, usp: v})) })
     )
 
-    if (n === 3) return React.createElement('div', {},
-      Field({ label: 'Naziv biznisa', placeholder: 'Naziv vaseg biznisa ili projekta', value: idea.products.split('||')[0] || '', onChange: v => setIdea(p => ({...p, products: v})), type: 'input' }),
-      Field({ label: 'Detaljno opisite sto nudite — karakteristike, prednosti, razlikovanje', placeholder: 'Opisite proizvode/usluge detaljno...', value: idea.products, onChange: v => setIdea(p => ({...p, products: v})), rows: 4 }),
-      Field({ label: 'Specificni atributi koji diferenciraju od konkurencije', placeholder: 'Sta vas cini jedinstvenim na trzistu?', value: idea.specific, onChange: v => setIdea(p => ({...p, specific: v})) }),
-      Field({ label: 'Ko su kljucni kupci? (demografija, geografija, psihografija)', placeholder: 'Opisite vasu ciljnu grupu...', value: idea.customers, onChange: v => setIdea(p => ({...p, customers: v})) }),
-      Field({ label: 'Velicina ciljnog trzista (procjena)', placeholder: 'npr. 50.000 potencijalnih kupaca u BiH...', value: idea.marketSize, onChange: v => setIdea(p => ({...p, marketSize: v})), type: 'input' }),
-      Field({ label: 'Koji pain point adresira vas biznis? Kako to dokazujete?', placeholder: 'Opisite problem koji rjesavate...', value: idea.painPoint, onChange: v => setIdea(p => ({...p, painPoint: v})) }),
-      Field({ label: 'Kako generirate prihod? (direktna prodaja / pretplata / B2B / B2C)', placeholder: 'Opisite poslovni model...', value: idea.businessModel, onChange: v => setIdea(p => ({...p, businessModel: v})) }),
-      Field({ label: 'Kljucni koraci i rokovi: osnivanje > pilot > rast > ekspanzija', placeholder: 'Navedite milestones sa rokovima...', value: idea.milestones, onChange: v => setIdea(p => ({...p, milestones: v})), rows: 4 })
-    )
-
+   if (n === 3) return React.createElement('div', {},
+  Field({ label: 'Naziv biznisa', placeholder: 'Naziv vaseg biznisa ili projekta', value: idea.name, onChange: v => setIdea(p => ({...p, name: v})), type: 'input' }),
+  Field({ label: 'Detaljno opisite sto nudite: karakteristike, prednosti, razlikovanje', placeholder: 'Opisite proizvode/usluge detaljno...', value: idea.products, onChange: v => setIdea(p => ({...p, products: v})), rows: 4 }),
+  Field({ label: 'Specificni atributi koji diferenciraju od konkurencije', placeholder: 'Sta vas cini jedinstvenim na trzistu?', value: idea.specific, onChange: v => setIdea(p => ({...p, specific: v})) }),
+  Field({ label: 'Ko su kljucni kupci? (demografija, geografija, psihografija)', placeholder: 'Opisite vasu ciljnu grupu...', value: idea.customers, onChange: v => setIdea(p => ({...p, customers: v})) }),
+  Field({ label: 'Velicina ciljnog trzista (procjena)', placeholder: 'npr. 50.000 potencijalnih kupaca u BiH...', value: idea.marketSize, onChange: v => setIdea(p => ({...p, marketSize: v})), type: 'input' }),
+  Field({ label: 'Koju potrebu kupca zadovoljava ili koji problem rjesava vas biznis?', placeholder: 'Opisite problem koji rjesavate...', value: idea.painPoint, onChange: v => setIdea(p => ({...p, painPoint: v})) }),
+  Field({ label: 'Na koji nacin planirate ostvarivati prihod?', placeholder: 'Opisite poslovni model...', value: idea.businessModel, onChange: v => setIdea(p => ({...p, businessModel: v})) }),
+  Field({ label: 'Kljucni koraci i rokovi: osnivanje > pilot > rast > ekspanzija', placeholder: 'Navedite milestones sa rokovima...', value: idea.milestones, onChange: v => setIdea(p => ({...p, milestones: v})), rows: 4 })
+)
     if (n === 4) return React.createElement('div', {},
       Field({ label: 'Ime i prezime', placeholder: 'Puno ime i prezime', value: bio.name, onChange: v => setBio(p => ({...p, name: v})), type: 'input' }),
       Field({ label: 'Datum i mjesto rodjenja', placeholder: 'npr. 01.01.1985., Mostar', value: bio.dob, onChange: v => setBio(p => ({...p, dob: v})), type: 'input' }),
@@ -303,34 +309,33 @@ export default function Builder() {
       )
     )
 
-    if (n === 7) return React.createElement('div', {},
-      Field({ label: 'Vizija poslovanja', placeholder: 'npr. Postati vodeći regionalni pruzalac [usluge] u [regiji] do [godine]', value: vision, onChange: setVision, rows: 2 }),
-      React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', margin: '16px 0 10px' } }, 'SMART Ciljevi (minimum 3)'),
-      React.createElement('div', { style: { overflowX: 'auto', background: 'white', borderRadius: '10px', border: '1px solid #e2e8f0' } },
-        React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
-          React.createElement('thead', {},
-            React.createElement('tr', {},
-              ...['Cilj', 'Specificnost', 'Mjerljivost', 'Dostiznost', 'Relevantnost', 'Rok'].map(h =>
-                React.createElement('th', { key: h, style: { padding: '8px 10px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '11px', whiteSpace: 'nowrap' } }, h)
-              )
-            )
-          ),
-          React.createElement('tbody', {},
-            ...smartGoals.map((row, ri) =>
-              React.createElement('tr', { key: ri },
-                ...row.map((cell, ci) =>
-                  React.createElement('td', { key: ci, style: { border: '1px solid #e2e8f0', padding: '4px' } },
-                    React.createElement('input', { type: 'text', value: cell, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { const nr = smartGoals.map((r, rr) => rr === ri ? r.map((c, cc) => cc === ci ? e.target.value : c) : r); setSmartGoals(nr) }, style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px 6px', background: 'transparent', boxSizing: 'border-box' } })
-                  )
-                )
+  if (n === 7) return React.createElement('div', {},
+  Field({ label: 'Vizija poslovanja', placeholder: 'npr. Postati vodeći regionalni pruzalac [usluge] u [regiji] do [godine]', value: vision, onChange: setVision, rows: 2 }),
+  React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', margin: '16px 0 10px' } }, 'SMART Ciljevi (minimum 3)'),
+  React.createElement('div', { style: { overflowX: 'auto', background: 'white', borderRadius: '10px', border: '1px solid #e2e8f0' } },
+    React.createElement('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px', tableLayout: 'fixed' } },
+      React.createElement('thead', {},
+        React.createElement('tr', {},
+          ...['Cilj', 'Specificnost', 'Mjerljivost', 'Dostiznost', 'Relevantnost', 'Rok'].map((h, hi) =>
+            React.createElement('th', { key: h, style: { padding: '8px 10px', background: '#1a2740', color: 'white', textAlign: 'left', fontSize: '11px', width: hi === 0 ? '20%' : hi === 5 ? '10%' : '17%' } }, h)
+          )
+        )
+      ),
+      React.createElement('tbody', {},
+        ...smartGoals.map((row, ri) =>
+          React.createElement('tr', { key: ri },
+            ...row.map((cell, ci) =>
+              React.createElement('td', { key: ci, style: { border: '1px solid #e2e8f0', padding: '4px', verticalAlign: 'top' } },
+                React.createElement('textarea', { value: cell, onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => { const nr = smartGoals.map((r, rr) => rr === ri ? r.map((c, cc) => cc === ci ? e.target.value : c) : r); setSmartGoals(nr) }, style: { width: '100%', border: 'none', outline: 'none', fontSize: '12px', padding: '4px 6px', background: 'transparent', boxSizing: 'border-box', resize: 'none', minHeight: '60px', fontFamily: 'inherit', lineHeight: 1.5 }, rows: 3 })
               )
             )
           )
         )
-      ),
-      React.createElement('button', { onClick: () => setSmartGoals(p => [...p, ['', '', '', '', '', '']]), style: { marginTop: '10px', background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '6px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj cilj')
+      )
     )
-
+  ),
+  React.createElement('button', { onClick: () => setSmartGoals(p => [...p, ['', '', '', '', '', '']]), style: { marginTop: '10px', background: 'white', border: '1px dashed #C9A227', color: '#C9A227', padding: '6px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' } }, '+ Dodaj cilj')
+)
     if (n === 8) return React.createElement('div', {},
       Field({ label: 'Izjava o misiji — sto radimo? Za koga? Koje vrijednosti zastupamo?', placeholder: 'Nasa misija je da...', value: mission.statement, onChange: v => setMission(p => ({...p, statement: v})), rows: 3 }),
       React.createElement('h3', { style: { color: '#1a2740', fontSize: '14px', fontWeight: '700', margin: '16px 0 10px' } }, 'Abellov okvir'),
@@ -427,7 +432,6 @@ export default function Builder() {
     if (n === 14) return React.createElement('div', {},
       Field({ label: 'Kljucni poslovni procesi', placeholder: 'Opisite glavne procese od narudzbe do isporuke...', value: operations.processes, onChange: v => setOperations(p => ({...p, processes: v})), rows: 4 }),
       Field({ label: 'Organizacijska struktura i tim', placeholder: 'Ko su kljucni ljudi, koje su uloge i odgovornosti?', value: operations.structure, onChange: v => setOperations(p => ({...p, structure: v})), rows: 4 }),
-      Field({ label: 'Oprema i tehnologija', placeholder: 'Koja oprema, alati i tehnologija su potrebni?', value: operations.equipment, onChange: v => setOperations(p => ({...p, equipment: v})) }),
       Field({ label: 'Lokacija i poslovni prostor', placeholder: 'Gdje ce se odvijati poslovanje? Kupovina ili najam?', value: operations.location, onChange: v => setOperations(p => ({...p, location: v})) })
     )
 
@@ -573,11 +577,10 @@ if (n === 25) return React.createElement(StepCashFlow, {
     return React.createElement('div', {}, React.createElement('p', {}, 'Korak u izradi...'))
   }
 
-  const gridCols = [sidebarOpen ? '240px' : '40px', '1fr', aiOpen ? '300px' : '40px'].join(' ')
-
+  const gridCols = [sidebarOpen ? '240px' : '40px', '1fr'].join(' ')
   return React.createElement('div', { style: { fontFamily: 'Segoe UI, sans-serif', height: '100vh', display: 'grid', gridTemplateRows: 'auto 1fr', overflow: 'hidden' } },
     React.createElement('nav', { style: { background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 32px', height: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
-      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'BOOST Biznis Plan'),
+      React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'Biznis Plan'),
       React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '16px' } },
         React.createElement('a', { href: '/resources', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Resursi'),
         React.createElement('a', { href: '/profile', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Profil'),
@@ -592,7 +595,7 @@ if (n === 25) return React.createElement(StepCashFlow, {
         React.createElement('button', { onClick: () => setSidebarOpen(!sidebarOpen), style: { position: 'absolute', top: '16px', right: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer', fontSize: '10px', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.1)' } }, sidebarOpen ? '<' : '>'),
         sidebarOpen && React.createElement('div', { style: { overflowY: 'auto', height: '100%' } },
           React.createElement('div', { style: { padding: '12px 16px', borderBottom: '1px solid #e2e8f0', background: '#f5f7fb' } },
-            React.createElement('p', { style: { fontSize: '11px', fontWeight: '700', color: '#6b7a99', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 } }, 'BOOST Biznis Plan')
+            React.createElement('p', { style: { fontSize: '11px', fontWeight: '700', color: '#6b7a99', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 } }, 'Biznis Plan')
           ),
           ...STEPS.map((s, i) =>
             React.createElement('div', { key: i, onClick: () => setCurrent(i), style: { display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 16px', borderLeft: i === current ? '3px solid #C9A227' : '3px solid transparent', background: i === current ? '#FFF8E7' : 'transparent', cursor: 'pointer' } },
@@ -619,29 +622,6 @@ if (n === 25) return React.createElement(StepCashFlow, {
             current === totalSteps - 1
               ? React.createElement('button', { onClick: generatePDF, style: { background: '#C9A227', color: '#1a2740', border: 'none', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer' } }, 'Preuzmi biznis plan')
               : React.createElement('button', { onClick: () => setCurrent(current + 1), style: { background: '#1a2740', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '24px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer' } }, 'Naprijed')
-          )
-        )
-      ),
-      React.createElement('aside', { style: { borderLeft: '1px solid #e2e8f0', background: 'white', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' } },
-        React.createElement('button', { onClick: () => setAiOpen(!aiOpen), style: { position: 'absolute', top: '16px', left: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer', fontSize: '10px', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.1)' } }, aiOpen ? '>' : '<'),
-        aiOpen && React.createElement(React.Fragment, {},
-          React.createElement('div', { style: { padding: '16px 20px', borderBottom: '1px solid #e2e8f0' } },
-            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
-              React.createElement('div', { style: { width: '8px', height: '8px', borderRadius: '50%', background: '#2d7a4f' } }),
-              React.createElement('span', { style: { fontSize: '13px', fontWeight: '600', color: '#1a2740' } }, 'AI asistent'),
-              React.createElement('span', { style: { fontSize: '11px', color: '#6b7a99', marginLeft: 'auto' } }, 'BOOST vodic')
-            )
-          ),
-          React.createElement('div', { style: { flex: 1, overflowY: 'auto', padding: '16px 20px' } },
-            React.createElement('div', { style: { background: '#f5f7fb', borderRadius: '12px', padding: '14px' } },
-              React.createElement('p', { style: { fontSize: '13px', color: '#1a2740', lineHeight: 1.6, margin: 0 } }, 'Zdravo! Nalazite se na koraku ' + step.title + '. Postavite mi pitanje i pomoci cu vam na osnovu BOOST vodica.')
-            )
-          ),
-          React.createElement('div', { style: { padding: '12px 16px', borderTop: '1px solid #e2e8f0' } },
-            React.createElement('div', { style: { display: 'flex', gap: '8px' } },
-              React.createElement('input', { type: 'text', placeholder: 'Postavite pitanje...', style: { flex: 1, padding: '10px 14px', borderRadius: '24px', border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none' } }),
-              React.createElement('button', { style: { background: '#1a2740', color: 'white', border: 'none', width: '38px', height: '38px', borderRadius: '50%', cursor: 'pointer', fontSize: '16px' } }, '^')
-            )
           )
         )
       )
