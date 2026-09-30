@@ -446,7 +446,7 @@ function FinalExam({ exam, lessonTitles, passed, onPass, onGoLesson }: { exam: E
       if (chosenOriginal === exam[d.qi].answer) correct++
       else weak.add(exam[d.qi].lesson)
     })
-    setResult({ correct, weakLessons: [...weak].sort((a, b) => a - b) })
+    setResult({ correct, weakLessons: Array.from(weak).sort((a, b) => a - b) })
     if (correct === draw.length) onPass()
   }
 
