@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { P, Example, Tabs, Icons, BigIcons, T } from '../LearnComponents'
-import { LessonModule, Lesson } from '../LessonModule'
+import { LessonModule, Lesson, ExamQuestion } from '../LessonModule'
 import { RevealGrid, ScenarioPicker, PersonaBuilder, CanvasBuilder, SortBuckets } from '../LearnWidgets'
 
 const b = (t: string) => <strong style={{ color: T.navy }}>{t}</strong>
@@ -232,6 +232,21 @@ const LESSONS: Lesson[] = [
   },
 ]
 
+const EXAM: ExamQuestion[] = [
+  { lesson: 0, q: 'Koji je najčešći razlog propasti malog biznisa?', options: ['Previsoki troškovi zakupa', 'Premalo ljudi treba proizvod dovoljno da bi ga platili', 'Nedovoljno zaposlenih'], answer: 1 },
+  { lesson: 0, q: 'Koje pitanje potencijalnom kupcu daje najupotrebljiviji odgovor?', options: ['Biste li ovo kupili?', 'Sviđa li vam se ova ideja?', 'Kako danas rješavate taj problem i koliko vas to košta?'], answer: 2 },
+  { lesson: 0, q: 'Šta znači realno procijeniti veličinu tržišta za pekaru u naselju?', options: ['Broj stanovnika cijele države', 'Broj domaćinstava koja realno mogu doći do vas', 'Broj svih pekara u zemlji'], answer: 1 },
+  { lesson: 1, q: 'Koja dimenzija kupca najviše govori o tome kako ćete mu prodavati?', options: ['Ponašanje — kada, gdje i zašto kupuje', 'Demografija — dob i prihod', 'Geografija — udaljenost'], answer: 0 },
+  { lesson: 1, q: 'Kako provjeriti je li profil kupca stvaran?', options: ['Provjeriti odgovara li statističkom prosjeku', 'Sjetiti se konkretne osobe koja odgovara opisu', 'Uporediti ga s profilom konkurencije'], answer: 1 },
+  { lesson: 1, q: 'Koliko profila kupca je dovoljno za mali biznis na početku?', options: ['Jedan, najviše dva', 'Najmanje pet', 'Po jedan za svaki proizvod'], answer: 0 },
+  { lesson: 2, q: 'Od kojih blokova se počinje popunjavati Business Model Canvas?', options: ['Od strukture troškova', 'Od korisničkih segmenata i vrijednosne ponude', 'Od ključnih partnera'], answer: 1 },
+  { lesson: 2, q: 'Šta je vrijednosna ponuda?', options: ['Opis proizvoda i njegovih osobina', 'Razlog zbog kojeg kupac bira vas', 'Spisak cijena'], answer: 1 },
+  { lesson: 2, q: 'Ko spada u ključne partnere?', options: ['Svi s kim ste ikada sarađivali', 'Oni bez kojih poslovni model ne funkcioniše', 'Isključivo dobavljači sirovina'], answer: 1 },
+  { lesson: 3, q: 'Supermarket koji prodaje hljeb je za pekaru:', options: ['Direktni konkurent', 'Indirektni konkurent', 'Nije konkurent'], answer: 1 },
+  { lesson: 3, q: 'Gdje najlakše saznate na šta se kupci žale kod konkurencije?', options: ['U njihovim finansijskim izvještajima', 'U recenzijama na Googleu i komentarima na mrežama', 'Kroz zvaničnu statistiku'], answer: 1 },
+  { lesson: 4, q: 'Zašto tvrdnja da ste istovremeno najjeftiniji i najkvalitetniji slabi plan?', options: ['Zato što su to strategije koje se međusobno isključuju', 'Zato što se smije navesti samo jedna prednost', 'Zato što kupci ne gledaju cijenu'], answer: 0 },
+]
+
 export default function Module2() {
   return (
     <LessonModule
@@ -252,6 +267,7 @@ export default function Module2() {
         'Kako pronaći tržišnu prazninu i odabrati strategiju razlikovanja',
       ]}
       lessons={LESSONS}
+      exam={EXAM}
       taskTitle="Vaš zadatak"
       taskIntro="Prije sljedećeg modula pripremite ove elemente (napredak se čuva):"
       tasks={[
