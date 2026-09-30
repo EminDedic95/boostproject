@@ -40,34 +40,6 @@ const QUESTIONS = [
   },
 ]
 
-const RESOURCES = {
-  tools: [
-    { title: 'Business Model Canvas', desc: 'Mapirajte vas poslovni model kroz 9 kljucnih blokova.', href: '/tools/canvas', tag: 'ALAT' },
-    { title: 'SWOT Analiza', desc: 'Analizirajte snage, slabosti, prilike i prijetnje.', href: '/tools/swot', tag: 'ALAT' },
-    { title: 'PEST Analiza', desc: 'Istrazite vanjsko okruzenje vaseg biznisa.', href: '/tools/pest', tag: 'ALAT' },
-    { title: 'Porterovih 5 sila', desc: 'Analizirajte konkurentske sile u industriji.', href: '/tools/porter', tag: 'ALAT' },
-    { title: 'Value Proposition Canvas', desc: 'Uskladite ponudu sa potrebama kupaca.', href: '/tools/vpc', tag: 'ALAT' },
-    { title: 'Problem-Solution Fit', desc: 'Provjerite da li rjesavate pravi problem.', href: '/tools/psf', tag: 'ALAT' },
-    { title: 'Konkurentska matrica', desc: 'Uporedite sebe sa konkurentima.', href: '/tools/competitive', tag: 'ALAT' },
-    { title: 'AARRR Funnel', desc: 'Mapirajte rast vaseg biznisa.', href: '/tools/aarrr', tag: 'ALAT' },
-    { title: '7Ps Marketing Mix', desc: 'Definisite svih 7 elemenata marketinga.', href: '/tools/7ps', tag: 'ALAT' },
-  ],
-  pdfs: [
-    { title: 'BOOST Vodic za izradu biznis plana', desc: 'Kompletan vodic kroz sve dijelove biznis plana', tag: 'PDF' },
-    { title: 'Business Model Canvas - Template', desc: 'Prazan Canvas template za stampanje', tag: 'PDF' },
-    { title: 'SWOT Analiza - Radni list', desc: 'Radni list za SWOT analizu sa primjerima', tag: 'PDF' },
-    { title: 'PEST Analiza - Vodic', desc: 'Kako provesti PEST analizu korak po korak', tag: 'PDF' },
-    { title: 'Finansijske projekcije - Template', desc: 'Excel template za finansijske projekcije', tag: 'XLSX' },
-  ],
-  videos: [
-    { title: 'Kako ispuniti Business Model Canvas', step: 'DIO II' },
-    { title: 'PEST analiza - Vodic', step: 'DIO III' },
-    { title: 'SWOT analiza za pocetnike', step: 'DIO IV' },
-    { title: 'Analiza trzista i konkurencije', step: 'DIO V' },
-    { title: 'Finansijske projekcije korak po korak', step: 'DIO IX' },
-  ],
-}
-
 type Level = 1 | 2 | 3
 
 const PROFILES: Record<Level, { label: string, sublabel: string, color: string, bg: string, desc: string }> = {
@@ -189,15 +161,15 @@ export default function LearnPage() {
       level === 1 && React.createElement('div', {},
         React.createElement('div', { style: { background: 'white', borderRadius: '16px', padding: '40px', border: '1px solid #e2e8f0', marginBottom: '16px' } },
           React.createElement('h2', { style: { color: '#1a2740', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' } }, 'Vas sljedeci korak: ucite prije nego gradite'),
-          React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', lineHeight: 1.7, marginBottom: '28px' } }, 'Preporucujemo da pocnete sa BOOST Vodicem za izradu biznis plana — kompletan materijal koji ce vas provesti kroz sve kljucne koncepte. Kada budete spremni, nasi alati i builder ce cekati.'),
+          React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', lineHeight: 1.7, marginBottom: '28px' } }, 'Preporucujemo da pocnete sa edukativnim modulima — pet kratkih, interaktivnih lekcija koje vas vode kroz sve kljucne koncepte. Kada ih zavrsite, builder ce vas cekati.'),
           React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' } },
-            React.createElement('a', { href: '/resources', style: { background: '#1a2740', color: 'white', padding: '14px 24px', borderRadius: '12px', fontWeight: 'bold', fontSize: '15px', textDecoration: 'none', display: 'block', textAlign: 'center' } },
+            React.createElement('a', { href: '/learn/module-1', style: { background: '#1a2740', color: 'white', padding: '14px 24px', borderRadius: '12px', fontWeight: 'bold', fontSize: '15px', textDecoration: 'none', display: 'block', textAlign: 'center' } },
               React.createElement('div', { style: { fontSize: '11px', fontWeight: '600', color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.06em' } }, 'KORAK 1'),
-              'Preuzmi BOOST Vodic'
+              'Pocni Modul 1'
             ),
             React.createElement('a', { href: '/resources', style: { background: '#f5f7fb', color: '#1a2740', padding: '14px 24px', borderRadius: '12px', fontWeight: 'bold', fontSize: '15px', textDecoration: 'none', display: 'block', textAlign: 'center', border: '1px solid #e2e8f0' } },
               React.createElement('div', { style: { fontSize: '11px', fontWeight: '600', color: '#6b7a99', marginBottom: '4px', letterSpacing: '0.06em' } }, 'KORAK 2'),
-              'Istrazite sve resurse'
+              'Svi moduli i resursi'
             )
           )
         )
@@ -209,7 +181,7 @@ export default function LearnPage() {
           React.createElement('p', { style: { color: '#6b7a99', fontSize: '14px', lineHeight: 1.7, marginBottom: '24px' } }, 'Builder ce vas provesti kroz sve 21 sekciju profesionalnog biznis plana. Od opisivanja ideje, analize trzista, do finansijskih projekcija.'),
           React.createElement('a', { href: '/builder', style: { background: '#1a2740', color: 'white', padding: '14px 40px', borderRadius: '32px', fontWeight: 'bold', fontSize: '16px', textDecoration: 'none', display: 'inline-block', marginBottom: '16px' } }, 'Otvori BOOST Builder'),
           React.createElement('div', {},
-            React.createElement('a', { href: '/resources', style: { color: '#6b7a99', fontSize: '13px', textDecoration: 'underline' } }, 'Ili pogledajte resurse i alate')
+            React.createElement('a', { href: '/resources', style: { color: '#6b7a99', fontSize: '13px', textDecoration: 'underline' } }, 'Ili prvo prodjite edukativne module')
           )
         )
       ),
