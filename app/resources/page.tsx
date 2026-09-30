@@ -1,4 +1,5 @@
 import React from 'react'
+import EdukativniModuli from './EdukativniModuli'
 
 const TOOLS = [
   { title: 'Business Model Canvas', desc: 'Interaktivni Canvas model sa 9 blokova. Popunite i preuzmite kao PDF.', href: '/tools/canvas', tag: 'ALAT' },
@@ -25,6 +26,7 @@ export default function Resources() {
       React.createElement('a', { href: '/', style: { color: '#1a2740', fontSize: '17px', fontWeight: 'bold', textDecoration: 'none' } }, 'Biznis Plan'),
       React.createElement('div', { style: { display: 'flex', gap: '24px', alignItems: 'center' } },
         React.createElement('a', { href: '/resources', style: { color: '#1a2740', fontSize: '14px', textDecoration: 'none', fontWeight: '600' } }, 'Resursi'),
+        React.createElement('a', { href: '/learn', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Procjena znanja'),
         React.createElement('a', { href: '/profile', style: { color: '#6b7a99', fontSize: '14px', textDecoration: 'none' } }, 'Profil'),
         React.createElement('a', { href: '/builder', style: { background: '#C9A227', color: '#1a2740', padding: '8px 20px', borderRadius: '24px', fontWeight: 'bold', textDecoration: 'none', fontSize: '14px' } }, 'Otvori builder')
       )
@@ -34,6 +36,8 @@ export default function Resources() {
 
       React.createElement('h1', { style: { color: '#1a2740', fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' } }, 'Resursi i materijali'),
       React.createElement('p', { style: { color: '#6b7a99', fontSize: '15px', marginBottom: '48px' } }, 'Vodici, alati i materijali koji ce vam pomoci u izradi biznis plana.'),
+
+      React.createElement(EdukativniModuli, { key: 'moduli' }),
 
       React.createElement('h2', { style: { color: '#1a2740', fontSize: '18px', fontWeight: 'bold', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' } },
         React.createElement('span', { style: { background: '#FFF8E7', color: '#C9A227', fontSize: '12px', padding: '3px 10px', borderRadius: '20px' } }, 'ALATI'),
