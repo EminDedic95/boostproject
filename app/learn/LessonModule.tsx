@@ -14,6 +14,15 @@ export type Lesson = {
   check: { q: string, options: string[], answer: number, why: string }
 }
 
+export type ExamQuestion = {
+  q: string
+  options: string[]
+  answer: number
+  lesson: number   // indeks lekcije (0-based) na koju se pitanje odnosi
+}
+
+export const EXAM_SIZE = 8
+
 export type LessonModuleProps = {
   moduleId: number
   n: number
@@ -22,6 +31,7 @@ export type LessonModuleProps = {
   meta: { icon: React.ReactNode, text: string }[]
   goals: string[]
   lessons: Lesson[]
+  exam: ExamQuestion[]
   taskTitle: string
   taskIntro: string
   tasks: string[]
@@ -37,6 +47,8 @@ export function LessonModule(p: LessonModuleProps) {
   const [maxSeen, setMaxSeen] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [tasksDone, setTasksDone] = useState<number[]>([])
+  const [passed, setPassed] = useState(false)
+  const [skipped, setSkipped] = useState(false)
   const [ready, setReady] = useState(false)
   const [resumeAsked, setResumeAsked] = useState(false)
   const topRef = useRef<HTMLDivElement>(null)
@@ -54,6 +66,8 @@ export function LessonModule(p: LessonModuleProps) {
         if (s.answers) setAnswers(s.answers)
         if (s.tasksDone) setTasksDone(s.tasksDone)
         if (typeof s.maxSeen === 'number') setMaxSeen(Math.min(s.maxSeen, lastStep))
+        if (s.passed) setPassed(true)
+        if (s.skipped) setSkipped(true)
       }
     } catch { /* ignore */ }
     setReady(true)
@@ -62,8 +76,8 @@ export function LessonModule(p: LessonModuleProps) {
   // ── snimanje ──
   useEffect(() => {
     if (!ready) return
-    try { localStorage.setItem(SK, JSON.stringify({ step, maxSeen, answers, tasksDone })) } catch { /* ignore */ }
-  }, [SK, ready, step, maxSeen, answers, tasksDone])
+    try { localStorage.setItem(SK, JSON.stringify({ step, maxSeen, answers, tasksDone, passed, skipped })) } catch { /* ignore */ }
+  }, [SK, ready, step, maxSeen, answers, tasksDone, passed, skipped])
 
   // ── skrol na vrh pri promjeni koraka ──
   useEffect(() => {
@@ -73,31 +87,22 @@ export function LessonModule(p: LessonModuleProps) {
 
   // ── završetak modula ──
   useEffect(() => {
-    if (step !== lastStep) return
+    if (!passed) return
     try {
       const done: number[] = JSON.parse(localStorage.getItem('learn_completed') || '[]')
       if (!done.includes(p.moduleId)) {
         done.push(p.moduleId)
         localStorage.setItem('learn_completed', JSON.stringify(done))
       }
+      const size = Math.min(EXAM_SIZE, p.exam.length)
+      const all = JSON.parse(localStorage.getItem('learn_quiz') || '{}')
+      all[p.moduleId] = { correct: size, total: size }
+      localStorage.setItem('learn_quiz', JSON.stringify(all))
     } catch { /* ignore */ }
-  }, [step, lastStep, p.moduleId])
+  }, [passed, p.moduleId, p.exam.length])
 
   const correctCount = p.lessons.reduce((s, l, i) => s + (answers[i] === l.check.answer ? 1 : 0), 0)
   const answeredCount = p.lessons.filter((_, i) => answers[i] !== undefined).length
-
-  // ── rezultat u biblioteku modula ──
-  useEffect(() => {
-    if (step !== lastStep || answeredCount === 0) return
-    try {
-      const all = JSON.parse(localStorage.getItem('learn_quiz') || '{}')
-      const prev = all[p.moduleId]
-      if (!prev || correctCount > prev.correct) {
-        all[p.moduleId] = { correct: correctCount, total }
-        localStorage.setItem('learn_quiz', JSON.stringify(all))
-      }
-    } catch { /* ignore */ }
-  }, [step, lastStep, correctCount, answeredCount, total, p.moduleId])
 
   function go(s: number) {
     setStep(s)
@@ -154,6 +159,13 @@ export function LessonModule(p: LessonModuleProps) {
             correct={correctCount}
             total={total}
             answered={answeredCount}
+            exam={p.exam}
+            lessonTitles={p.lessons.map(l => l.title)}
+            passed={passed}
+            skipped={skipped}
+            onPass={() => setPassed(true)}
+            onSkip={() => setSkipped(true)}
+            onGoLesson={n => go(n)}
             taskTitle={p.taskTitle}
             taskIntro={p.taskIntro}
             tasks={p.tasks}
@@ -324,31 +336,26 @@ function CheckQuestion({ check, answer, onAnswer }: { check: Lesson['check'], an
   )
 }
 
-// ── ZAVRŠETAK ──
-function FinishStep({ correct, total, answered, taskTitle, taskIntro, tasks, tasksDone, onToggleTask, nextN, nextTitle, onReview, onBack }: { correct: number, total: number, answered: number, taskTitle: string, taskIntro: string, tasks: string[], tasksDone: number[], onToggleTask: (i: number) => void, nextN: number | null, nextTitle: string | null, onReview: () => void, onBack: () => void }) {
-  const verdict = answered === 0
-    ? 'Niste odgovarali na provjere — možete se vratiti i proći ih kroz lekcije.'
-    : correct === total ? 'Sve tačno. Gradivo ovog modula vam je jasno.'
-    : correct >= total / 2 ? 'Dobro. Vratite se na lekcije gdje ste pogriješili prije nego nastavite.'
-    : 'Vrijedi ponoviti lekcije prije sljedećeg modula — vratite se kroz brojeve gore.'
-
+// ── ZAVRŠETAK: završni test + zadatak ──
+function FinishStep({ correct, total, answered, exam, lessonTitles, passed, skipped, onPass, onSkip, onGoLesson, taskTitle, taskIntro, tasks, tasksDone, onToggleTask, nextN, nextTitle, onReview, onBack }: { correct: number, total: number, answered: number, exam: ExamQuestion[], lessonTitles: string[], passed: boolean, skipped: boolean, onPass: () => void, onSkip: () => void, onGoLesson: (n: number) => void, taskTitle: string, taskIntro: string, tasks: string[], tasksDone: number[], onToggleTask: (i: number) => void, nextN: number | null, nextTitle: string | null, onReview: () => void, onBack: () => void }) {
+  const unlocked = passed || skipped
   return (
     <div className="lr-fade">
       <div style={{ padding: '30px 0 0' }}>
         <span style={{ display: 'inline-block', fontSize: '13px', fontWeight: 700, color: T.goldDeep }}>Završetak modula</span>
-        <h1 style={{ fontFamily: serif, fontSize: 'clamp(28px, 5vw, 36px)', fontWeight: 600, margin: '6px 0 18px', lineHeight: 1.15 }}>Modul je završen</h1>
-      </div>
-
-      <div className="lr-pad lr-pop" style={{ background: T.navy, borderRadius: '20px', padding: '30px 34px', display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
-        <div style={{ fontFamily: serif, fontSize: '48px', fontWeight: 600, color: T.gold, lineHeight: 1 }}>{correct}/{total}</div>
-        <div style={{ flex: 1, minWidth: '200px' }}>
-          <div style={{ color: 'white', fontWeight: 600, fontSize: '15px', marginBottom: '3px' }}>Tačnih provjera</div>
-          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.55 }}>{verdict}</div>
-        </div>
-        {correct < total && (
-          <button className="lr-btn-reset" onClick={onReview} style={{ padding: '10px 20px', borderRadius: '100px', border: `1.5px solid ${T.gold}`, color: T.gold, fontSize: '13px', fontWeight: 600, background: 'transparent' }}>Ponovi lekcije</button>
+        <h1 style={{ fontFamily: serif, fontSize: 'clamp(28px, 5vw, 36px)', fontWeight: 600, margin: '6px 0 12px', lineHeight: 1.15 }}>Završni test</h1>
+        <p style={{ fontSize: '16px', color: T.inkSoft, margin: '0 0 6px', maxWidth: '62ch' }}>
+          Osam pitanja iz svih lekcija. Za prolaz su potrebni <strong style={{ color: T.navy }}>svi tačni odgovori</strong> — svaki pokušaj donosi drugačija pitanja.
+        </p>
+        {answered > 0 && (
+          <p style={{ fontSize: '13.5px', color: T.inkSoft, margin: '10px 0 0' }}>
+            Kroz lekcije ste tačno odgovorili na {correct} od {total} provjera.
+            {correct < total && <> <button className="lr-btn-reset" onClick={onReview} style={{ color: T.goldDeep, textDecoration: 'underline', fontSize: '13.5px', fontWeight: 600 }}>Ponovite lekcije</button> prije testa.</>}
+          </p>
         )}
       </div>
+
+      <FinalExam exam={exam} lessonTitles={lessonTitles} passed={passed} onPass={onPass} onGoLesson={onGoLesson} />
 
       <div className="lr-pad" style={{ background: T.card, border: `1px solid ${T.line}`, borderRadius: '20px', padding: '30px 34px', margin: '20px 0 0' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
@@ -370,17 +377,168 @@ function FinishStep({ correct, total, answered, taskTitle, taskIntro, tasks, tas
       </div>
 
       <div className="lr-cta-row" style={{ textAlign: 'center', padding: '36px 0 80px' }}>
-        <p style={{ fontSize: '15px', color: T.inkSoft, margin: '0 0 18px' }}>{nextN ? 'Spremni ste za sljedeći modul?' : 'Završili ste sve module. Vrijeme je da napišete svoj plan.'}</p>
-        {nextN && (
-          <a href={`/learn/module-${nextN}`} className="lr-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: T.gold, color: T.navy, padding: '15px 32px', borderRadius: '100px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}>
-            Modul {nextN}: {nextTitle} →
-          </a>
+        {nextN ? (
+          unlocked ? (
+            <>
+              <p style={{ fontSize: '15px', color: T.inkSoft, margin: '0 0 18px' }}>{passed ? 'Test je položen. Spremni ste za sljedeći modul.' : 'Test niste položili, ali možete nastaviti.'}</p>
+              <a href={`/learn/module-${nextN}`} className="lr-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: T.gold, color: T.navy, padding: '15px 32px', borderRadius: '100px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}>
+                Modul {nextN}: {nextTitle} →
+              </a>
+              <a href="/builder" className="lr-ghost" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'transparent', color: T.navy, border: `1.5px solid ${T.line}`, padding: '15px 32px', borderRadius: '100px', fontWeight: 700, fontSize: '15px', textDecoration: 'none', marginLeft: '10px' }}>Otvori builder</a>
+            </>
+          ) : (
+            <>
+              <p style={{ fontSize: '15px', color: T.inkSoft, margin: '0 0 18px' }}>Položite završni test da otključate sljedeći modul.</p>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: T.line, color: '#8b93a3', padding: '15px 32px', borderRadius: '100px', fontWeight: 700, fontSize: '15px', cursor: 'not-allowed' }}>
+                <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: '16px', height: '16px', stroke: '#8b93a3', fill: 'none', strokeWidth: 2 }}><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                Modul {nextN}: {nextTitle}
+              </span>
+              <div style={{ marginTop: '16px' }}>
+                <button className="lr-btn-reset" onClick={onSkip} style={{ color: T.inkSoft, fontSize: '13px', textDecoration: 'underline' }}>Preskoči test ovaj put →</button>
+              </div>
+            </>
+          )
+        ) : (
+          <>
+            <p style={{ fontSize: '15px', color: T.inkSoft, margin: '0 0 18px' }}>Završili ste sve module. Vrijeme je da napišete svoj plan.</p>
+            <a href="/builder" className="lr-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: T.gold, color: T.navy, padding: '15px 32px', borderRadius: '100px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}>Otvori builder</a>
+          </>
         )}
-        <a href="/builder" className={nextN ? 'lr-ghost' : 'lr-cta'} style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: nextN ? 'transparent' : T.gold, color: T.navy, border: nextN ? `1.5px solid ${T.line}` : 'none', padding: '15px 32px', borderRadius: '100px', fontWeight: 700, fontSize: '15px', textDecoration: 'none', marginLeft: nextN ? '10px' : 0 }}>Otvori builder</a>
         <div style={{ marginTop: '18px' }}>
           <button className="lr-btn-reset" onClick={onBack} style={{ color: T.inkSoft, fontSize: '13px', textDecoration: 'underline' }}>← Nazad na zadnju lekciju</button>
         </div>
       </div>
+    </div>
+  )
+}
+
+// ── ZAVRŠNI TEST ──
+type Drawn = { qi: number, order: number[] }
+
+function shuffle<X>(arr: X[]): X[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const t = a[i]; a[i] = a[j]; a[j] = t
+  }
+  return a
+}
+
+function FinalExam({ exam, lessonTitles, passed, onPass, onGoLesson }: { exam: ExamQuestion[], lessonTitles: string[], passed: boolean, onPass: () => void, onGoLesson: (n: number) => void }) {
+  const size = Math.min(EXAM_SIZE, exam.length)
+  const [draw, setDraw] = useState<Drawn[] | null>(null)
+  const [picks, setPicks] = useState<Record<number, number>>({})
+  const [result, setResult] = useState<null | { correct: number, weakLessons: number[] }>(null)
+  const [attempt, setAttempt] = useState(1)
+
+  // izvlačenje tek na klijentu — inače se server i browser ne poklope
+  useEffect(() => {
+    if (passed) return
+    setDraw(shuffle(exam.map((_, i) => i)).slice(0, size).map(qi => ({ qi, order: shuffle(exam[qi].options.map((_, k) => k)) })))
+  }, [exam, size, passed, attempt])
+
+  function submit() {
+    if (!draw) return
+    let correct = 0
+    const weak = new Set<number>()
+    draw.forEach((d, idx) => {
+      const chosenOriginal = d.order[picks[idx]]
+      if (chosenOriginal === exam[d.qi].answer) correct++
+      else weak.add(exam[d.qi].lesson)
+    })
+    setResult({ correct, weakLessons: [...weak].sort((a, b) => a - b) })
+    if (correct === draw.length) onPass()
+  }
+
+  function retry() {
+    setPicks({})
+    setResult(null)
+    setAttempt(a => a + 1)
+  }
+
+  if (passed) {
+    return (
+      <div className="lr-pad lr-pop" style={{ background: T.navy, borderRadius: '20px', padding: '30px 34px', margin: '24px 0 0', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+        <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: T.green, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: '26px', height: '26px', stroke: 'white', fill: 'none', strokeWidth: 3 }}><polyline points="20 6 9 17 4 12" /></svg>
+        </div>
+        <div style={{ flex: 1, minWidth: '200px' }}>
+          <div style={{ color: 'white', fontFamily: serif, fontSize: '22px', fontWeight: 600, marginBottom: '3px' }}>Test položen</div>
+          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px' }}>Svih {size} odgovora tačno. Sljedeći modul je otključan.</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!draw) {
+    return <div className="lr-pad" style={{ background: T.card, border: `1px solid ${T.line}`, borderRadius: '20px', padding: '30px', margin: '24px 0 0', color: T.inkSoft, fontSize: '14px' }}>Priprema pitanja…</div>
+  }
+
+  const allAnswered = draw.every((_, idx) => picks[idx] !== undefined)
+
+  return (
+    <div className="lr-pad" style={{ background: T.card, border: `1px solid ${T.line}`, borderRadius: '20px', padding: '30px 34px', margin: '24px 0 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap', marginBottom: '20px' }}>
+        <span style={{ fontSize: '12.5px', fontWeight: 700, color: T.goldDeep }}>Pokušaj {attempt}</span>
+        <span style={{ fontSize: '13px', color: T.inkSoft }}>{Object.keys(picks).length} od {draw.length} odgovoreno</span>
+      </div>
+
+      {draw.map((d, idx) => {
+        const q = exam[d.qi]
+        return (
+          <div key={`${attempt}-${idx}`} style={{ marginBottom: '26px' }}>
+            <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '12px', lineHeight: 1.45 }}>
+              <span style={{ color: T.goldDeep }}>{idx + 1}.</span> {q.q}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
+              {d.order.map((origIdx, oi) => {
+                const sel = picks[idx] === oi
+                return (
+                  <button
+                    key={oi}
+                    data-exam-opt={`${idx}-${oi}`}
+                    disabled={!!result}
+                    className={`lr-btn-reset ${result ? '' : 'lr-opt'}`}
+                    onClick={() => setPicks(p => ({ ...p, [idx]: oi }))}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '13px 17px', border: `1.5px solid ${sel ? T.gold : T.line}`, borderRadius: '12px', fontSize: '14.5px', background: sel ? T.goldWash : T.paper, color: T.ink, textAlign: 'left', cursor: result ? 'default' : 'pointer', transition: 'background 0.15s, border-color 0.15s' }}
+                  >
+                    <span style={{ width: '19px', height: '19px', borderRadius: '50%', border: `2px solid ${sel ? T.gold : T.line}`, background: sel ? T.gold : 'transparent', flexShrink: 0 }} />
+                    <span>{q.options[origIdx]}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
+
+      {!result && (
+        <button
+          className="lr-btn-reset"
+          disabled={!allAnswered}
+          onClick={submit}
+          style={{ padding: '13px 30px', borderRadius: '100px', background: allAnswered ? T.navy : T.line, color: allAnswered ? 'white' : '#8b93a3', fontSize: '14.5px', fontWeight: 700, cursor: allAnswered ? 'pointer' : 'default' }}
+        >Predaj test</button>
+      )}
+
+      {result && (
+        <div className="lr-fade" style={{ padding: '20px 22px', borderRadius: '14px', background: T.redWash, border: `1px solid ${T.red}33` }}>
+          <div style={{ fontWeight: 700, fontSize: '16px', color: T.red, marginBottom: '6px' }}>{result.correct} od {draw.length} tačno — za prolaz trebaju svi</div>
+          <p style={{ fontSize: '14px', color: T.ink, margin: '0 0 12px', lineHeight: 1.6 }}>
+            Ne prikazujemo koja su pitanja pogrešna, jer sljedeći pokušaj donosi drugačija. Vratite se na lekcije ispod i pokušajte ponovo.
+          </p>
+          {result.weakLessons.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '14px' }}>
+              {result.weakLessons.map(li => (
+                <button key={li} className="lr-btn-reset lr-chip" onClick={() => onGoLesson(li + 1)} style={{ padding: '7px 14px', borderRadius: '100px', border: `1.5px solid ${T.line}`, background: T.card, color: T.navy, fontSize: '12.5px', fontWeight: 600 }}>
+                  Lekcija {li + 1}: {lessonTitles[li]}
+                </button>
+              ))}
+            </div>
+          )}
+          <button className="lr-btn-reset lr-cta" onClick={retry} style={{ padding: '11px 24px', borderRadius: '100px', background: T.gold, color: T.navy, fontSize: '14px', fontWeight: 700 }}>Pokušaj ponovo</button>
+        </div>
+      )}
     </div>
   )
 }
